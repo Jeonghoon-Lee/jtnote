@@ -1,0 +1,13 @@
+5/2/2019 Jeonghoon
+1. Done since last scrum:
+	-First scrum
+2. To do until next scrum:
+	-Complete database mockup
+	-Create database on Azure
+
+5/2/2019 Taylor
+1. Done since last scrum:
+	-First scrum
+2. To do until next scrum:
+	-Finish interface mockup
+	-Integrate Material Design XAML library
