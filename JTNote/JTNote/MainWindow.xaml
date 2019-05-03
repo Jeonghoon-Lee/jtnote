@@ -122,7 +122,7 @@
                                 <StackPanel HorizontalAlignment="Stretch">
                                     <TextBlock Margin="0,15,0,10">
                                         <TextBlock.Inlines>
-                                            <Run FontWeight="Bold" FontSize="16" Text="Example note title"></Run>
+                                            <Run FontWeight="Bold" FontSize="16" Text="Example note title AAAAAAAAA"></Run>
                                         </TextBlock.Inlines>
                                     </TextBlock>
                                     <TextBlock TextWrapping="Wrap">
