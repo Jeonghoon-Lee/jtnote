@@ -11,3 +11,22 @@
 2. To do until next scrum:
 	-Finish interface mockup
 	-Integrate Material Design XAML library
+
+
+5/3/2019 Jeonghoon
+1. Done since last scrum:
+	-Database mockup completed.
+	-Created Azure database and tested connection in Visual Studio with test table.
+2. To do until next scrum:
+	-Create registration page, including MD5 hashing for password.
+	-Create ability to save new users to database.
+	-Create Login window.
+	-Create ability to add tags to a note.
+
+5/3/2019 Taylor
+1. Done since last scrum:
+	-Main page mockup created with Material Design look and feel.
+	-Basic mockups for Login/Register, Edit Note, and Share Note pages done.
+2. To do until next scrum:
+	-Finish making main page interactive.
+	-Create functionality for Add Note page including Rich Text box and saving to DB.
