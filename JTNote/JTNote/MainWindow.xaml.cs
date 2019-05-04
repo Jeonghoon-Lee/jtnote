@@ -33,6 +33,12 @@ namespace JTNote
                 Close(); // close the main window, terminate the program
             }
 
+            LoginRegister loginDlg = new LoginRegister();
+            if (loginDlg.ShowDialog() != true)
+            {
+                Close();
+            }              
+
             InitializeComponent();
         }
     }
