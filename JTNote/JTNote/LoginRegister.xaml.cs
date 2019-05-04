@@ -23,5 +23,15 @@ namespace JTNote
         {
             InitializeComponent();
         }
+
+        private void ButtonLogin_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
+
+        private void ButtonRegister_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

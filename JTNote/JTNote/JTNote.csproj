@@ -88,6 +88,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Database.cs" />
+    <Compile Include="Globals.cs" />
     <Compile Include="LoginRegister.xaml.cs">
       <DependentUpon>LoginRegister.xaml</DependentUpon>
     </Compile>

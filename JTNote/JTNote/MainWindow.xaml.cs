@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,16 @@ namespace JTNote
     {
         public MainWindow()
         {
+            try
+            {
+                Globals.Db = new Database();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Fatal error: unable to connect to database\n" + ex.Message, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close(); // close the main window, terminate the program
+            }
+
             InitializeComponent();
         }
     }

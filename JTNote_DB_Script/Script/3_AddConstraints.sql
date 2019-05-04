@@ -80,3 +80,11 @@ alter table Dbo.MessageReceivers
 		references Dbo.Users (Id)
 ;
 go
+
+
+-- Email in Users table is unique
+alter table Dbo.Users
+	add constraint uq_Users_Email
+		unique (Email)
+;
+go

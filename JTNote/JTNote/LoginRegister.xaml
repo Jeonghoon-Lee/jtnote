@@ -5,34 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JTNote"
         mc:Ignorable="d"
-        Title="LoginRegister" Height="613.079" Width="460.354">
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Title="JTNote" Height="623.079" Width="468.354">
     <Grid>
 
         <TabControl HorizontalAlignment="Left" Height="296" Margin="10,277,0,0" VerticalAlignment="Top" Width="432">
             <TabItem Header="Login">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="126,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="21*"/>
+                        <ColumnDefinition Width="121*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="63,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" Grid.Column="1"/>
                     <Label Content="Email:" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="126,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
-                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top"/>
-                    <Button Content="Login" HorizontalAlignment="Left" Margin="140,211,0,0" VerticalAlignment="Top" Width="141" Height="28"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="63,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" Grid.Column="1"/>
+                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <Button Click="ButtonLogin_Click" Content="Login" HorizontalAlignment="Left" Margin="77,211,0,0" VerticalAlignment="Top" Width="141" Height="28" Grid.Column="1"/>
                 </Grid>
 
             </TabItem>
             <TabItem Header="Register">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="6*"/>
-                        <ColumnDefinition Width="205*"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="114.346,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" Grid.Column="1"/>
-                    <Label Content="Email:" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="114.346,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" Grid.Column="1"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="114.346,88,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" Grid.Column="1"/>
-                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <Label Content="Re-Enter Password:" HorizontalAlignment="Left" Margin="10,86,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <CheckBox Content="I accept the terms and conditions" HorizontalAlignment="Left" Margin="96.346,160,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-                    <Button Content="Register" HorizontalAlignment="Left" Margin="128.346,211,0,0" VerticalAlignment="Top" Width="141" Height="28" Grid.Column="1"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="126,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
+                    <Label Content="Email:" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="126,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="126,88,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
+                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Re-Enter Password:" HorizontalAlignment="Left" Margin="10,86,0,0" VerticalAlignment="Top"/>
+                    <CheckBox Content="I accept the terms and conditions" HorizontalAlignment="Left" Margin="108,160,0,0" VerticalAlignment="Top"/>
+                    <Button Click="ButtonRegister_Click" Content="Register" IsEnabled="False" HorizontalAlignment="Left" Margin="140,211,0,0" VerticalAlignment="Top" Width="141" Height="28"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Forgot Password">
@@ -52,7 +57,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBlock HorizontalAlignment="Left" Margin="69,34,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top">
+        <TextBlock HorizontalAlignment="Left" Margin="69,34,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top">
             <Run FontSize="100">JTNote</Run>"
         </TextBlock>
 
