@@ -32,10 +32,21 @@ namespace JTNote
             catch (SqlException ex)
             {
                 MessageBox.Show("Fatal error: unable to connect to database\n" + ex.Message, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close(); // close the main window, terminate the program
+                Close();    // set close the main window, terminate the program
+                return;
             }
 
+            LoginRegister loginDlg = new LoginRegister();
+            if (loginDlg.ShowDialog() != true)
+            {
+                Close();    // set close the main window event
+                return;
+            }              
+
             InitializeComponent();
+
+            // Set login user information onto title bar
+            Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
         }
 
         void LoadAllNotes()
