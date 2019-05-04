@@ -40,7 +40,7 @@ namespace JTNote
                 }
 
                 User loginUser = Globals.Db.GetUser(loginEmail);
-                string enteredPassword = tbLoginPassword.Password;
+                string enteredPassword = pbLoginPassword.Password;
 
                 if (loginUser.Email != loginEmail || !MD5Hash.VerifyMd5Hash(enteredPassword, loginUser.Password))
                 {
@@ -158,6 +158,16 @@ namespace JTNote
                 return;
             }
             tbRegister.IsEnabled = true;
+        }
+
+        private void TbLoginEmail_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tbLoginEmail.Text == "")
+            {
+                btLogin.IsEnabled = false;
+                return;
+            }
+            btLogin.IsEnabled = true;
         }
     }
 }
