@@ -76,7 +76,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MD5Hash.cs" />
     <Compile Include="RegexUtils.cs" />
+    <Compile Include="User.cs" />
     <Page Include="LoginRegister.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

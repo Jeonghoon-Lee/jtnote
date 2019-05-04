@@ -9,5 +9,6 @@ namespace JTNote
     class Globals
     {
         public static Database Db;
+        public static User LoginUser;
     }
 }

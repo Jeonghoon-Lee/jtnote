@@ -9,16 +9,16 @@
         ResizeMode="NoResize"
         Title="JTNote" Height="623.079" Width="468.354">
     <Grid Background="{DynamicResource PrimaryHueMidBrush}">
-        <TabControl HorizontalAlignment="Left" Height="296" Margin="10,277,0,0" VerticalAlignment="Top" Width="432">
+        <TabControl Name="tcLoginRegister" HorizontalAlignment="Left" Height="296" Margin="10,277,0,0" VerticalAlignment="Top" Width="432">
             <TabItem Header="Login">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
                     <Label Content="Email:" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="126,59,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
                     <Label Content="Password:" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="tbLoginEmail" HorizontalAlignment="Left" Height="23" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
+                    <TextBox Name="tbLoginPassword" HorizontalAlignment="Left" Height="23" Margin="126,59,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
                     <Button Click="ButtonLogin_Click" Content="Login" HorizontalAlignment="Left" Margin="140,211,0,0" VerticalAlignment="Top" Width="141" Height="28"/>
                 </Grid>
             </TabItem>
