@@ -20,9 +20,9 @@ go
 create table Dbo.Users
 (
 	Id int identity(1, 1) not null,
-	UserName nvarchar(30) not null,
+	UserName nvarchar(30) null,		-- future use
 	Email nvarchar(50) not null,	-- length 320 is recommended (64:local part + 255:domain part)
-	Password char(32) not null,
+	Password nchar(33) not null,
 
 	constraint pk_Users primary key clustered (Id asc)
 )

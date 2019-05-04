@@ -35,7 +35,16 @@ namespace JTNote
                 Close(); // close the main window, terminate the program
             }
 
+            LoginRegister loginDlg = new LoginRegister();
+            if (loginDlg.ShowDialog() != true)
+            {
+                Close();
+            }              
+
             InitializeComponent();
+
+            // Set login user information onto title bar
+            Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
         }
 
         void LoadAllNotes()
