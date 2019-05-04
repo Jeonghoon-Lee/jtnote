@@ -60,5 +60,25 @@ namespace JTNote
             user.Id = (int)cmdInsert.ExecuteScalar();
             return user.Id;   // return generated id
         }
+
+        public User GetUser(string email)
+        {
+            User user = new User();
+
+            SqlCommand cmdSelect = new SqlCommand("SELECT * FROM Users WHERE Email=@Email", conn);
+            cmdSelect.Parameters.AddWithValue("Email", email);
+
+            using (SqlDataReader reader = cmdSelect.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    user.Id = (int)reader["Id"];
+                    user.UserName = (string)reader["UserName"];
+                    user.Email = email;
+                    user.Password = (string)reader["Password"];
+                }
+            }
+            return user;
+        }
     }
 }

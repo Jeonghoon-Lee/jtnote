@@ -33,23 +33,21 @@ namespace JTNote
         }
 
         // Verify a hash against a string.
+        // if two string is same, return true; otherwise, false
         public static bool VerifyMd5Hash(string input, string hash)
         {
-            using (MD5 md5Hash = MD5.Create())
+            // Hash the input.
+            string hashOfInput = GetMd5Hash(input);
+
+            // Create a StringComparer an compare the hashes.
+            StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+
+            if (0 != comparer.Compare(hashOfInput, hash))
             {
-                // Hash the input.
-                string hashOfInput = GetMd5Hash(input);
-
-                // Create a StringComparer an compare the hashes.
-                StringComparer comparer = StringComparer.OrdinalIgnoreCase;
-
-                if (0 != comparer.Compare(hashOfInput, hash))
-                {
-                    return false;
-                }
-
-                return true;
+                return false;
             }
+
+            return true;
         }
     }
 }

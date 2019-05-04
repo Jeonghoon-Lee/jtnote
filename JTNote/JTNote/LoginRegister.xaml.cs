@@ -30,7 +30,33 @@ namespace JTNote
 
         private void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            try
+            {
+                string loginEmail = tbLoginEmail.Text;
+                if (loginEmail == "")
+                {
+                    MessageBox.Show("Error: please enter email address", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                User loginUser = Globals.Db.GetUser(loginEmail);
+                string enteredPassword = tbLoginPassword.Password;
+
+                if (loginUser.Email != loginEmail || !MD5Hash.VerifyMd5Hash(enteredPassword, loginUser.Password))
+                {
+                    MessageBox.Show("Error: login failed", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                DialogResult = true;
+                // Save login user information for future use
+                Globals.LoginUser = loginUser;
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error: unable to login\nPlease try again\n" + ex.Message, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
         }
 
         private void ButtonRegister_Click(object sender, RoutedEventArgs e)
@@ -52,7 +78,7 @@ namespace JTNote
                 // TODO: userName will use future.
                 string userName = "";
                 string email = tbRegisterEmail.Text;
-                string password = MD5Hash.GetMd5Hash(tblRegPasswdError1.Text);
+                string password = MD5Hash.GetMd5Hash(pbRegisterPasswd1.Password);
 
                 if (Globals.Db.ExistsEmail(email))
                 {
