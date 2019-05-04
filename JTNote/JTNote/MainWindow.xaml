@@ -110,7 +110,7 @@
                 </Grid.ColumnDefinitions>
 
                 <DockPanel HorizontalAlignment="Stretch">
-                    <Menu DockPanel.Dock="Top" IsMainMenu="False" MinWidth="300" HorizontalAlignment="Stretch">
+                    <Menu Name="mnuCentrePane" DockPanel.Dock="Top" IsMainMenu="False" MinWidth="300" HorizontalAlignment="Stretch">
                         <Menu.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel Orientation="Vertical"/>

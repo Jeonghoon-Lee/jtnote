@@ -21,6 +21,8 @@ namespace JTNote
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Create lists of items for main window display
+        List<Note> allNotesList = new List<Note>();
         public MainWindow()
         {
             try
@@ -34,6 +36,12 @@ namespace JTNote
             }
 
             InitializeComponent();
+        }
+
+        void LoadAllNotes()
+        {
+            // TODO (in progress): Load list of all notes from DB
+
         }
     }
 }
