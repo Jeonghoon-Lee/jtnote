@@ -80,5 +80,29 @@ namespace JTNote
             }
             return user;
         }
+
+        public void DeleteUserById()
+        {
+            // TODO: When user is deleted, we should delete all of the related notes, tags and notebooks.
+        }
+
+        public List<Tag> GetTagsByUserId(int userId)
+        {
+            List<Tag> list = new List<Tag>();
+
+            string queryStr = string.Format("SELECT * FROM Tags WHERE UserId = {0}", userId);
+            SqlCommand cmdSelect = new SqlCommand(queryStr, conn);
+            using (SqlDataReader reader = cmdSelect.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int id = (int)reader["Id"];
+                    string name = (string)reader["Name"];
+
+                    list.Add(new Tag() { Id = id, Name = name, UserId = userId});
+                }
+            }
+            return list;
+        }
     }
 }
