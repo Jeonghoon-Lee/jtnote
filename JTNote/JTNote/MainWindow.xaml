@@ -11,7 +11,7 @@
         TextElement.FontSize="14"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         WindowStartupLocation="CenterScreen"        
-        Title="JTNote - thetaylorg@gmail.com" Height="850" Width="1300">
+        Title="JTNote" Height="850" Width="1300">
     <Window.Resources>
         <ControlTemplate x:Key="MenuItemControlTemplate1" TargetType="{x:Type MenuItem}">
             <Grid x:Name="Grid" SnapsToDevicePixels="True">
@@ -130,8 +130,8 @@
                                     <ColumnDefinition Width="40"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Width="210" Grid.Column="0" VerticalAlignment="Center">Notes (20)</TextBlock>
-                                <Label Grid.Column="1" ToolTip="Create a new note.">
+                                <TextBlock Name="tbSidebarNotesTitle" Width="210" Grid.Column="0" VerticalAlignment="Center">Notes</TextBlock>
+                                <Label Name="lblSidebarNewNote" Grid.Column="1" ToolTip="Create a new note.">
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                 </Label>
                             </Grid>
@@ -141,8 +141,20 @@
                     <MenuItem Header="Notebooks (2)">
 
                     </MenuItem>
-                    <MenuItem Header="Trash (30)">
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <Grid Width="250">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="190"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
 
+                                <TextBlock Name="tbSidebarTrashTitle" Width="210" Grid.Column="0" VerticalAlignment="Center">Trash</TextBlock>
+                                <Label Name="lblSidebarEmptyTrash" Grid.Column="1" ToolTip="Create a new note.">
+                                    <materialDesign:PackIcon Kind="TrashCan" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                </Label>
+                            </Grid>
+                        </MenuItem.Header>
                     </MenuItem>
                 </Menu>
             </StackPanel>
@@ -155,16 +167,16 @@
                 </Grid.ColumnDefinitions>
 
                 <DockPanel HorizontalAlignment="Stretch">
-                    <ListView Name="lvCentrePane">
+                    <ListView Name="lvCentrePane" SelectionChanged="LvCentrePane_SelectionChanged" Width="Auto">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel HorizontalAlignment="Stretch">
+                                <StackPanel>
                                     <TextBlock Margin="0,15,0,10">
                                         <TextBlock.Inlines>
                                             <Run FontWeight="Bold" FontSize="16" Text="{Binding Title}"></Run>
                                         </TextBlock.Inlines>
                                     </TextBlock>
-                                    <TextBlock TextWrapping="Wrap" Width="Auto" Text="{Binding Content}" /> <!--TODO: Bind this to a method that truncates the note-->
+                                    <TextBlock TextWrapping="Wrap" Width="Auto" Text="{Binding TruncatedContent}" /> <!--TODO: Bind this to a method that truncates the note-->
                                     <StackPanel Orientation="Horizontal" Margin="0,10,0,15">
                                         <materialDesign:PackIcon Margin="0,0,5,0" ToolTip="Last updated" VerticalAlignment="Center" Kind="Update" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                         <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
@@ -185,12 +197,21 @@
 
                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
-                <StackPanel Grid.Column="2" MinWidth="100">
+                <StackPanel Name="spRightPane" Grid.Column="2" MinWidth="100">
                     <StackPanel Orientation="Horizontal" Margin="15,15,0,0">
                         <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                        <Run FontSize="24" Text="This note is selected"></Run>
+                        <Run FontSize="24" Text="{Binding Title}"></Run>
                         </TextBlock>
                         <Button ToolTip="Edit this note." Style="{StaticResource MaterialDesignFloatingActionLightButton}" Content="{materialDesign:PackIcon Kind=Edit}" Margin="20,0,15,0" Width="25" Height="25"/>
+                        <Button ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=TrashCan}" Margin="0,0,15,0" Width="25" Height="25">
+                            <Button.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Red.xaml"/>
+                                    </ResourceDictionary.MergedDictionaries>
+                                </ResourceDictionary>
+                            </Button.Resources>
+                        </Button>
                         <Button ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=Share}" Width="25" Height="25"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="15">
@@ -199,9 +220,7 @@
                             Work, Memo, Meeting
                         </TextBlock>
                     </StackPanel>
-                    <TextBlock Padding="15" TextWrapping="Wrap">
-                        This is the body of text for this note which has been selected for preview in the pane on the right-hand side. You can double-click the entry in the middle pane, or click the Edit button above, to make modifications to it. <LineBreak/><LineBreak/> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </TextBlock>
+                    <TextBox Padding="15" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" IsReadOnly="True" Text="{Binding Content}" />
                 </StackPanel>
             </Grid>
 

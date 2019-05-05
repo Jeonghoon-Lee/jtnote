@@ -17,6 +17,18 @@ namespace JTNote
         public bool IsDeleted { get; set; } = false;
         public DateTime LastUpdatedDate { get; set; } = DateTime.Today;
 
+        public string TruncatedContent
+        {
+            get
+            {
+                if (Content.Length > 50)
+                    return Content.Substring(0, 100) + "...";
+                else
+                    return Content;
+            }
+            private set { }
+        }
+
         public Note(int id, int userId, string title, string content, int? notebookId, bool isDeleted, DateTime lastUpdatedDate)
         {
             if (title == null || title == "")

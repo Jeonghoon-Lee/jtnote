@@ -54,6 +54,15 @@ namespace JTNote
 
             // Set default bindings for window elements
             lvCentrePane.ItemsSource = allNotesList;
+
+            if (lvCentrePane.Items.Count > 0)
+                lvCentrePane.SelectedIndex = 0;
+
+            spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
+
+            // Set counts for sidebar items - TODO: Replace these with bindings?
+            tbSidebarNotesTitle.Text = string.Format("Notes ({0})", allNotesList.Count);
+            tbSidebarTrashTitle.Text = string.Format("Trash ({0})", trashList.Count);
         }
 
         void LoadAllNotes()
@@ -87,6 +96,11 @@ namespace JTNote
                 else
                     throw ex;
             }
+        }
+
+        private void LvCentrePane_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
         }
     }
 }
