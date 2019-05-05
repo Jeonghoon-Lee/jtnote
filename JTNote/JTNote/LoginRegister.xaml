@@ -15,10 +15,10 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Email:" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top"/>
-                    <TextBox Name="tbLoginEmail" HorizontalAlignment="Left" Height="23" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" TextChanged="TbLoginEmail_TextChanged"/>
-                    <PasswordBox Name="pbLoginPassword" HorizontalAlignment="Left" Height="23" Margin="126,59,0,0" Password="" VerticalAlignment="Top" Width="286"/>
+                    <Label Content="Email:" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="tbLoginEmail" HorizontalAlignment="Left" Height="Auto" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" TextChanged="TbLoginEmail_TextChanged"/>
+                    <PasswordBox Name="pbLoginPassword" HorizontalAlignment="Left" Height="Auto" Margin="126,59,0,0" Password="" VerticalAlignment="Top" Width="286"/>
                     <Button Name="btLogin" IsEnabled="False" Click="ButtonLogin_Click" Content="Login" HorizontalAlignment="Left" Margin="140,211,0,0" VerticalAlignment="Top" Width="141" Height="28"/>
                 </Grid>
             </TabItem>
@@ -62,7 +62,7 @@
         </TabControl>
 
         <TextBlock HorizontalAlignment="Center" Margin="0,160,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top">
-            <Run Foreground="LightGray" FontFamily="Times New Roman" FontSize="60" FontWeight="Bold" FontStyle="Italic">JTnote</Run>"
+            <Run Foreground="LightGray" FontFamily="Times New Roman" FontSize="60" FontWeight="Bold" FontStyle="Italic">JTnote</Run>
         </TextBlock>
         <Image HorizontalAlignment="Left" Margin="175,50,0,0" VerticalAlignment="Top" Width="100">
             <Image.Source>
