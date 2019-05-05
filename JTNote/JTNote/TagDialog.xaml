@@ -1,0 +1,17 @@
+﻿<Window x:Class="JTNote.TagDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:JTNote"
+        mc:Ignorable="d"
+        Title="Create Tag" Height="142.055" Width="377.648">
+    <Grid>
+        <StackPanel HorizontalAlignment="Left" Height="37" Margin="10,10,0,0" VerticalAlignment="Top" Width="335" Orientation="Horizontal">
+            <Label Content="Tag Name: " VerticalAlignment="Center" Width="80"/>
+            <TextBox Name="tbTag" Height="23" TextWrapping="Wrap" Text="" Margin="0,7" Width="245" TextChanged="TbTag_TextChanged"/>
+        </StackPanel>
+        <Button IsEnabled="False" Name="btCreateUpdate" Content="Create" HorizontalAlignment="Left" Margin="54,62,0,0" VerticalAlignment="Top" Width="120" Click="ButtonCreateUpdate_Click" Height="26"/>
+        <Button IsCancel="True" Content="Cancel" HorizontalAlignment="Left" Margin="184,62,0,0" VerticalAlignment="Top" Width="120" Height="26"/>
+    </Grid>
+</Window>

@@ -47,6 +47,9 @@ namespace JTNote
 
             // Set login user information onto title bar
             Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
+
+            // Load tag list from database
+            Globals.ReloadTagList();
         }
 
         void LoadAllNotes()

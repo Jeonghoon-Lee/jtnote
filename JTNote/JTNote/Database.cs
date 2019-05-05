@@ -104,5 +104,33 @@ namespace JTNote
             }
             return list;
         }
+
+        public bool CreateTag(Tag tag)
+        {
+            SqlCommand cmdInsert = new SqlCommand("INSERT INTO Tags (Name, UserId) OUTPUT INSERTED.ID VALUES (@Name, @UserId)", conn);
+
+            cmdInsert.Parameters.AddWithValue("Name", tag.Name);
+            cmdInsert.Parameters.AddWithValue("UserId", tag.UserId);
+
+            return cmdInsert.ExecuteNonQuery() > 0;
+        }
+
+        public bool UpdateTag(Tag tag)
+        {
+            SqlCommand cmdUpdate = new SqlCommand("UPDATE Tags SET Name=@Name WHERE Id=@Id;", conn);
+
+            cmdUpdate.Parameters.AddWithValue("Id", tag.Id);
+            cmdUpdate.Parameters.AddWithValue("Name", tag.Name);
+
+            return cmdUpdate.ExecuteNonQuery() > 0;
+        }
+
+        public bool DeleteTag(int tagId)
+        {
+            SqlCommand cmdUpdate = new SqlCommand("DELETE FROM Tags WHERE Id=@Id;", conn);
+
+            cmdUpdate.Parameters.AddWithValue("Id", tagId);
+            return cmdUpdate.ExecuteNonQuery() > 0;
+        }
     }
 }
