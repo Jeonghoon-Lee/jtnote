@@ -12,6 +12,51 @@
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         WindowStartupLocation="CenterScreen"        
         Title="JTNote - thetaylorg@gmail.com" Height="850" Width="1300">
+    <Window.Resources>
+        <ControlTemplate x:Key="MenuItemControlTemplate1" TargetType="{x:Type MenuItem}">
+            <Grid x:Name="Grid" SnapsToDevicePixels="True">
+                <Rectangle x:Name="OuterBorder" RadiusY="2" RadiusX="2"/>
+                <Rectangle x:Name="Bg" Fill="{TemplateBinding Background}" Margin="1" RadiusY="1" RadiusX="1" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1"/>
+                <Rectangle x:Name="InnerBorder" Margin="2"/>
+                <DockPanel x:Name="DockPanel">
+                    <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" Margin="4,0,6,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                    <Path x:Name="GlyphPanel" Data="M0,5.1L1.7,5.2 3.4,7.1 8,0.4 9.2,0 3.3,10.8z" Fill="{TemplateBinding Foreground}" FlowDirection="LeftToRight" Margin="7,0,0,0" Visibility="Collapsed" VerticalAlignment="Center"/>
+                    <ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                </DockPanel>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Icon" Value="{x:Null}">
+                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                </Trigger>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Stroke" TargetName="Bg" Value="#90717070"/>
+                    <Setter Property="Stroke" TargetName="OuterBorder" Value="#50FFFFFF"/>
+                    <Setter Property="Stroke" TargetName="InnerBorder" Value="#50FFFFFF"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="Stroke" TargetName="Bg" Value="#E0717070"/>
+                    <Setter Property="Fill" TargetName="Bg">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#28717070" Offset="0"/>
+                                <GradientStop Color="#50717070" Offset="0.75"/>
+                                <GradientStop Color="#90717070" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Stroke" TargetName="InnerBorder" Value="#50747272"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="#FF9A9A9A"/>
+                    <Setter Property="Fill" TargetName="GlyphPanel" Value="#FF848589"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top" IsMainMenu="True">
             <Menu.Resources>
@@ -110,97 +155,32 @@
                 </Grid.ColumnDefinitions>
 
                 <DockPanel HorizontalAlignment="Stretch">
-                    <Menu Name="mnuCentrePane" DockPanel.Dock="Top" IsMainMenu="False" MinWidth="300" HorizontalAlignment="Stretch">
-                        <Menu.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel Orientation="Vertical"/>
-                            </ItemsPanelTemplate>
-                        </Menu.ItemsPanel>
-
-                        <MenuItem Height="Auto" MinWidth="300">
-                            <MenuItem.Header>
+                    <ListView Name="lvCentrePane">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
                                 <StackPanel HorizontalAlignment="Stretch">
                                     <TextBlock Margin="0,15,0,10">
                                         <TextBlock.Inlines>
-                                            <Run FontWeight="Bold" FontSize="16" Text="Example note title"></Run>
+                                            <Run FontWeight="Bold" FontSize="16" Text="{Binding Title}"></Run>
                                         </TextBlock.Inlines>
                                     </TextBlock>
-                                    <TextBlock TextWrapping="Wrap">
-                                        This is the example preview body of a note. This will be truncated, but will still wrap a couple lines...
-                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Width="Auto" Text="{Binding Content}" /> <!--TODO: Bind this to a method that truncates the note-->
                                     <StackPanel Orientation="Horizontal" Margin="0,10,0,15">
                                         <materialDesign:PackIcon Margin="0,0,5,0" ToolTip="Last updated" VerticalAlignment="Center" Kind="Update" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                         <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                            <Run FontSize="12">May 5, 2019</Run>
+                                            <Run FontSize="12" Text="{Binding LastUpdatedDate, StringFormat=d}" />
                                         </TextBlock>
 
                                         <materialDesign:PackIcon Margin="10,0,5,0" VerticalAlignment="Center" Kind="TagOutline" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                         <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                            <Run FontSize="12">Personal, Reminder</Run>
+                                            <Run FontSize="12">Demo, Tags, Replace, With, Dynamic</Run>
                                         </TextBlock>
 
                                     </StackPanel>
                                 </StackPanel>
-                            </MenuItem.Header>
-                        </MenuItem>
-
-                        <MenuItem Height="Auto" MinWidth="300" Background="{DynamicResource PrimaryHueLightBrush}">
-                            <MenuItem.Header>
-                                <StackPanel HorizontalAlignment="Stretch">
-                                    <TextBlock Margin="0,15,0,10">
-                                        <TextBlock.Inlines>
-                                            <Run FontWeight="Bold" FontSize="16" Text="This note is selected"></Run>
-                                        </TextBlock.Inlines>
-                                    </TextBlock>
-                                    <TextBlock TextWrapping="Wrap">
-                                        This is the body of text for this note which has been selected for preview in the pane...
-                                    </TextBlock>
-                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,15">
-                                        <materialDesign:PackIcon Margin="0,0,5,0" ToolTip="Last updated" VerticalAlignment="Center" Kind="Update" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
-                                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                            <Run FontSize="12">May 1, 2019</Run>
-                                        </TextBlock>
-
-                                        <materialDesign:PackIcon Margin="10,0,5,0" VerticalAlignment="Center" Kind="TagOutline" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
-                                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                            <Run FontSize="12">Grocery List, Personal</Run>
-                                        </TextBlock>
-
-                                    </StackPanel>
-                                </StackPanel>
-                            </MenuItem.Header>
-                        </MenuItem>
-
-                        <MenuItem Height="Auto" MinWidth="300">
-                            <MenuItem.Header>
-                                <StackPanel HorizontalAlignment="Stretch">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="0,15,0,10" VerticalAlignment="Center">
-                                            <TextBlock.Inlines>
-                                                <Run FontWeight="Bold" FontSize="16" Text="Shared note"></Run>
-                                            </TextBlock.Inlines>
-                                        </TextBlock>
-                                        <materialDesign:PackIcon Margin="10,0,0,0" VerticalAlignment="Center" Kind="FolderAccount" Foreground="{DynamicResource SecondaryAccentBrush}"/>
-                                    </StackPanel>
-                                    <TextBlock TextWrapping="Wrap">
-                                        This is how a note that was shared with another user will appear, notice the icon...
-                                    </TextBlock>
-                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,15">
-                                        <materialDesign:PackIcon Margin="0,0,5,0" ToolTip="Last updated" VerticalAlignment="Center" Kind="Update" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
-                                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                            <Run FontSize="12">April 28, 2019</Run>
-                                        </TextBlock>
-
-                                        <materialDesign:PackIcon Margin="10,0,5,0" VerticalAlignment="Center" Kind="TagOutline" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
-                                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                            <Run FontSize="12">Work, Memo, Meeting</Run>
-                                        </TextBlock>
-
-                                    </StackPanel>
-                                </StackPanel>
-                            </MenuItem.Header>
-                        </MenuItem>
-                    </Menu>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </DockPanel>
 
                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />

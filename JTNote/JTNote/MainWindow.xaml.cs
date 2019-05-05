@@ -23,6 +23,7 @@ namespace JTNote
     {
         // Create lists of items for main window display
         List<Note> allNotesList = new List<Note>();
+        List<Note> trashList = new List<Note>();
         public MainWindow()
         {
             try
@@ -31,7 +32,7 @@ namespace JTNote
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Fatal error: unable to connect to database\n" + ex.Message, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Fatal error: unable to connect to database\n" + ex.Message, "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();    // set close the main window, terminate the program
                 return;
             }
@@ -47,12 +48,45 @@ namespace JTNote
 
             // Set login user information onto title bar
             Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
+
+            // Load all notes for logged in user
+            LoadAllNotes();
+
+            // Set default bindings for window elements
+            lvCentrePane.ItemsSource = allNotesList;
         }
 
         void LoadAllNotes()
         {
-            // TODO (in progress): Load list of all notes from DB
+            allNotesList.Clear(); // Clear existing notes list to refresh
 
+            try
+            {
+                // Populate notes lists from DB
+                Globals.Db.GetAllNotesByUserId(Globals.LoginUser.Id).ForEach(note =>
+                {
+                    if (note.IsDeleted)
+                        trashList.Add(note); // Add notes flagged for deletion to trash
+                    else
+                        allNotesList.Add(note); // Add all other notes to main notes list
+                });
+            }
+            catch (Exception ex)
+            {
+                // Check for known fatal exceptions, notify user and terminate program if they occur
+                if (ex is SqlException || ex is System.IO.IOException)
+                {
+                    MessageBox.Show(string.Format("Fatal error: unable to connect to the database.{0}{1}", Environment.NewLine, ex.Message), "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Close();
+                }
+                else if (ex is InvalidCastException || ex is ArgumentException)
+                {
+                    MessageBox.Show(string.Format("Fatal error: unable to load notes from the database due to corrupt data.{0}{1}", Environment.NewLine, ex.Message), "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Close();
+                }
+                else
+                    throw ex;
+            }
         }
     }
 }

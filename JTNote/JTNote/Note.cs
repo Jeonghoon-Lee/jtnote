@@ -7,31 +7,44 @@ using System.Threading.Tasks;
 
 namespace JTNote
 {
-    class Note
+    public class Note
     {
-        int Id { get; set; }
-        int UserId { get; set; }
-        string Title { get; set; }
-        string Content { get; set; } // May have to change typing as this will be XML for RTB?
-        int? NotebookId { get; set; } = null;
-        bool IsDeleted { get; set; } = false;
-        DateTime LastUpdatedDate { get; set; } = DateTime.Today;
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; } // TODO: May have to change typing as this will be XML for RTB?
+        public int? NotebookId { get; set; } = null;
+        public bool IsDeleted { get; set; } = false;
+        public DateTime LastUpdatedDate { get; set; } = DateTime.Today;
 
-        public Note(int id)
+        public Note(int id, int userId, string title, string content, int? notebookId, bool isDeleted, DateTime lastUpdatedDate)
         {
-            // Autoload from DB based on given ID (call ReloadNote()), throw new NullReferenceException? if ID doesn't exist
+            if (title == null || title == "")
+                throw new ArgumentException("Error loading data: Title must contain text."); // Title cannot be blank, there is an error if so
+
             Id = id;
-            ReloadNote();
-        }
-
-        public Note()
-        {
-            // !! Class used for interface testing only using directly entered data !!
+            Title = title;
+            Content = content;
+            NotebookId = notebookId;
+            IsDeleted = isDeleted;
+            LastUpdatedDate = lastUpdatedDate;
         }
 
         public void ReloadNote()
         {
-            // TODO: Reload note data from DB, use for updates etc
+            Note updatedInfo = Globals.Db.GetNoteById(Id);
+
+            Title = updatedInfo.Title;
+            Content = updatedInfo.Content;
+            NotebookId = updatedInfo.NotebookId;
+            IsDeleted = updatedInfo.IsDeleted;
+            LastUpdatedDate = updatedInfo.LastUpdatedDate;
+        }
+
+        // TODO: Testing listview with this, delete later
+        public override string ToString()
+        {
+            return "Test value, title: " + Title;
         }
     }
 }
