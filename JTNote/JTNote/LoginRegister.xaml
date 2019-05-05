@@ -15,10 +15,10 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Email:" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top"/>
-                    <TextBox Name="tbLoginEmail" HorizontalAlignment="Left" Height="23" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" TextChanged="TbLoginEmail_TextChanged"/>
-                    <PasswordBox Name="pbLoginPassword" HorizontalAlignment="Left" Height="23" Margin="126,59,0,0" Password="" VerticalAlignment="Top" Width="286"/>
+                    <Label Content="Email:" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="tbLoginEmail" HorizontalAlignment="Left" Height="Auto" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" TextChanged="TbLoginEmail_TextChanged"/>
+                    <PasswordBox Name="pbLoginPassword" HorizontalAlignment="Left" Height="Auto" Margin="126,59,0,0" Password="" VerticalAlignment="Top" Width="286"/>
                     <Button Name="btLogin" IsEnabled="False" Click="ButtonLogin_Click" Content="Login" HorizontalAlignment="Left" Margin="140,211,0,0" VerticalAlignment="Top" Width="141" Height="28"/>
                 </Grid>
             </TabItem>
@@ -27,18 +27,18 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Email:" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Re-Enter Password:" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Email:" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Re-Enter Password:" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top"/>
                     
-                    <TextBox Name="tbRegisterEmail" HorizontalAlignment="Left" Height="23" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" TextChanged="TextBoxEmailRegister_TextChanged"/>
-                    <TextBlock Name="tblRegEmailError" HorizontalAlignment="Left" Margin="126,44,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
+                    <TextBox Name="tbRegisterEmail" HorizontalAlignment="Left" Height="Auto" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" TextChanged="TextBoxEmailRegister_TextChanged"/>
+                    <TextBlock Name="tblRegEmailError" HorizontalAlignment="Left" Margin="126,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
                     
-                    <PasswordBox Name="pbRegisterPasswd1" HorizontalAlignment="Left" Height="23" Margin="126,59,0,0" Password="" VerticalAlignment="Top" Width="286" PasswordChanged="PasswordBoxRegister_PasswordChanged"/>
-                    <TextBlock Name="tblRegPasswdError1" HorizontalAlignment="Left" Margin="126,83,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
+                    <PasswordBox Name="pbRegisterPasswd1" HorizontalAlignment="Left" Height="Auto" Margin="126,59,0,0" Password="" VerticalAlignment="Top" Width="286" PasswordChanged="PasswordBoxRegister_PasswordChanged"/>
+                    <TextBlock Name="tblRegPasswdError1" HorizontalAlignment="Left" Margin="126,88,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
                     
-                    <PasswordBox Name="pbRegisterPasswd2" HorizontalAlignment="Left" Height="23" Margin="126,98,0,0" Password="" VerticalAlignment="Top" Width="286" PasswordChanged="PasswordBoxRegister_PasswordChanged"/>
-                    <TextBlock Name="tblRegPasswdError2" HorizontalAlignment="Left" Margin="126,122,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
+                    <PasswordBox Name="pbRegisterPasswd2" HorizontalAlignment="Left" Height="Auto" Margin="126,98,0,0" Password="" VerticalAlignment="Top" Width="286" PasswordChanged="PasswordBoxRegister_PasswordChanged"/>
+                    <TextBlock Name="tblRegPasswdError2" HorizontalAlignment="Left" Margin="126,127,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
                     
                     <CheckBox Name="cbRegisterAccept" Content="I accept the terms and conditions" HorizontalAlignment="Left" Margin="109,160,0,0" VerticalAlignment="Top" Click="CbRegisterAccept_Click"/>
                     <Button Name="tbRegister" Click="ButtonRegister_Click" Content="Register" IsEnabled="False" HorizontalAlignment="Left" Margin="140,211,0,0" VerticalAlignment="Top" Width="141" Height="28"/>
@@ -62,7 +62,7 @@
         </TabControl>
 
         <TextBlock HorizontalAlignment="Center" Margin="0,160,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top">
-            <Run Foreground="LightGray" FontFamily="Times New Roman" FontSize="60" FontWeight="Bold" FontStyle="Italic">JTnote</Run>"
+            <Run Foreground="LightGray" FontFamily="Times New Roman" FontSize="60" FontWeight="Bold" FontStyle="Italic">JTnote</Run>
         </TextBlock>
         <Image HorizontalAlignment="Left" Margin="175,50,0,0" VerticalAlignment="Top" Width="100">
             <Image.Source>

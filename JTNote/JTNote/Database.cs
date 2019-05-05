@@ -86,11 +86,64 @@ namespace JTNote
             // TODO: When user is deleted, we should delete all of the related notes, tags and notebooks.
         }
 
+        public List<Note> GetAllNotesByUserId(int userId)
+        {
+            List<Note> returnList = new List<Note>();
+
+            SqlCommand cmdSelect = new SqlCommand("SELECT * FROM Notes WHERE UserId=@UserId", conn);
+            cmdSelect.Parameters.AddWithValue("UserId", userId);
+            using (SqlDataReader reader = cmdSelect.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int id = (int)reader["Id"];
+                    string title = (string)reader["Title"];
+                    string content = (string)reader["Content"]; // TODO: Change to decode of XML blob when implementing formatting!
+                    int? notebookId = reader["NotebookId"] as int?;
+                    bool isDeleted = (byte)reader["IsDeleted"] == 1 ? true : false;                        
+                    DateTime lastUpdatedDate = (DateTime)reader["LastUpdatedDate"];
+
+                    returnList.Add(new Note(id, userId, title, content, notebookId, isDeleted, lastUpdatedDate));
+                }
+            }
+            return returnList;
+        }
+
+        public Note GetNoteById(int noteId)
+        {
+            SqlCommand cmdSelect = new SqlCommand("SELECT * FROM Notes WHERE UserId=@UserId AND Id=@NoteId", conn);
+            cmdSelect.Parameters.AddWithValue("UserId", Globals.LoginUser.Id);
+            cmdSelect.Parameters.AddWithValue("UserId", noteId);
+
+            using (SqlDataReader reader = cmdSelect.ExecuteReader())
+            {
+                int id = 0;
+                string title = null, content = null;
+                int? notebookId = null;
+                bool isDeleted = false;
+                DateTime lastUpdatedDate = DateTime.Today;
+
+                while (reader.Read())
+                {
+                    id = (int)reader["Id"];
+                    title = (string)reader["Title"];
+                    content = (string)reader["Content"]; // TODO: Change to decode of XML blob when implementing formatting!
+                    notebookId = reader["NotebookId"] as int?;
+                    isDeleted = (byte)reader["IsDeleted"] == 1 ? true : false;
+                    lastUpdatedDate = (DateTime)reader["LastUpdatedDate"];
+                }
+
+                return new Note(id, Globals.LoginUser.Id, title, content, notebookId, isDeleted, lastUpdatedDate);
+            }
+        }
+
+        /* Database methode : Handing tags */
         public List<Tag> GetTagsByUserId(int userId)
         {
             List<Tag> list = new List<Tag>();
 
             string queryStr = string.Format("SELECT * FROM Tags WHERE UserId = {0}", userId);
+
             SqlCommand cmdSelect = new SqlCommand(queryStr, conn);
             using (SqlDataReader reader = cmdSelect.ExecuteReader())
             {
@@ -99,7 +152,7 @@ namespace JTNote
                     int id = (int)reader["Id"];
                     string name = (string)reader["Name"];
 
-                    list.Add(new Tag() { Id = id, Name = name, UserId = userId});
+                    list.Add(new Tag() { Id = id, Name = name, UserId = userId });
                 }
             }
             return list;
