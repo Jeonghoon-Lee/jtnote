@@ -92,7 +92,7 @@
                     <materialDesign:PackIcon Kind="Search" Margin="0,15,10,10" Width="20" Height="20"/>
                 </Label>
             </StackPanel>
-            <Button Grid.Column="1" HorizontalAlignment="Right" Margin="10" ToolTip="Synchronize local notes with remote database." Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}">
+            <Button Grid.Column="1" HorizontalAlignment="Right" Margin="10" ToolTip="Synchronize local notes with remote database." Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" Click="BtnResync_Click">
                 <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="Refresh" />
                     <TextBlock Margin="10,0,0,0">Sync</TextBlock>
@@ -111,18 +111,30 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" HorizontalAlignment="Left" Background="{DynamicResource PrimaryHueLightBrush}">
-                <Menu IsMainMenu="False" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+                <Menu Name="mnuSidebar" IsMainMenu="False" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
                     <Menu.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel Orientation="Vertical"/>
                         </ItemsPanelTemplate>
                     </Menu.ItemsPanel>
 
-                    <MenuItem Header="Tags">
+                    <MenuItem Name="miSidebarTagsItem" Width="460">
+                        <MenuItem.Header>
+                            <Grid Width="250">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="190"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
 
+                                <TextBlock Name="tbSidebarTagsTitle" Width="210" Grid.Column="0" VerticalAlignment="Center">Tags</TextBlock>
+                                <Label Name="lblSidebarNewTag" Grid.Column="1" ToolTip="Create a new tag.">
+                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                                </Label>
+                            </Grid>
+                        </MenuItem.Header>
                     </MenuItem>
 
-                    <MenuItem Background="{DynamicResource PrimaryHueMidBrush}" Width="480">
+                    <MenuItem Name="miSidebarNotesItem" Background="{DynamicResource PrimaryHueMidBrush}" Width="460" Click="MiSidebarNotesItem_Click">
                         <MenuItem.Header>
                             <Grid Width="250">
                                 <Grid.ColumnDefinitions>
@@ -132,16 +144,29 @@
 
                                 <TextBlock Name="tbSidebarNotesTitle" Width="210" Grid.Column="0" VerticalAlignment="Center">Notes</TextBlock>
                                 <Label Name="lblSidebarNewNote" Grid.Column="1" ToolTip="Create a new note.">
-                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                 </Label>
                             </Grid>
                         </MenuItem.Header>
                     </MenuItem>
 
-                    <MenuItem Header="Notebooks (2)">
+                    <MenuItem Name="miSidebarNotebooksItem" Width="460">
+                        <MenuItem.Header>
+                            <Grid Width="250">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="190"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
 
+                                <TextBlock Name="tbSidebarNotebooksTitle" Width="210" Grid.Column="0" VerticalAlignment="Center">Notebooks</TextBlock>
+                                <Label Name="lblSidebarNewNotebook" Grid.Column="1" ToolTip="Create a new notebook.">
+                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                                </Label>
+                            </Grid>
+                        </MenuItem.Header>
                     </MenuItem>
-                    <MenuItem>
+                    
+                    <MenuItem Name="miSidebarTrashItem" Width="460" Click="MiSidebarTrashItem_Click">
                         <MenuItem.Header>
                             <Grid Width="250">
                                 <Grid.ColumnDefinitions>
@@ -150,8 +175,8 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Name="tbSidebarTrashTitle" Width="210" Grid.Column="0" VerticalAlignment="Center">Trash</TextBlock>
-                                <Label Name="lblSidebarEmptyTrash" Grid.Column="1" ToolTip="Create a new note.">
-                                    <materialDesign:PackIcon Kind="TrashCan" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                <Label Name="lblSidebarEmptyTrash" Grid.Column="1" ToolTip="Empty the trash." MouseLeftButtonUp="LblSidebarEmptyTrash_MouseLeftButtonUp">
+                                    <materialDesign:PackIcon Kind="TrashCan" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                 </Label>
                             </Grid>
                         </MenuItem.Header>
@@ -203,7 +228,7 @@
                         <Run FontSize="24" Text="{Binding Title}"></Run>
                         </TextBlock>
                         <Button ToolTip="Edit this note." Style="{StaticResource MaterialDesignFloatingActionLightButton}" Content="{materialDesign:PackIcon Kind=Edit}" Margin="20,0,15,0" Width="25" Height="25"/>
-                        <Button ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=TrashCan}" Margin="0,0,15,0" Width="25" Height="25">
+                        <Button Name="btnRightPaneDelete" ToolTip="Send this note to trash." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=TrashCan}" Margin="0,0,15,0" Width="25" Height="25" Click="BtnRightPaneDelete_Click">
                             <Button.Resources>
                                 <ResourceDictionary>
                                     <ResourceDictionary.MergedDictionaries>
@@ -212,7 +237,8 @@
                                 </ResourceDictionary>
                             </Button.Resources>
                         </Button>
-                        <Button ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=Share}" Width="25" Height="25"/>
+                        <Button Name="btnRightPaneShare" ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=Share}" Width="25" Height="25"/>
+                        <Button Name="btnRightPaneRestore" Visibility="Hidden" Margin="-25,0,0,0" ToolTip="Restore this note." Style="{StaticResource MaterialDesignFloatingActionLightButton}" Content="{materialDesign:PackIcon Kind=FileRestore}" Width="25" Height="25" Click="BtnRightPaneRestore_Click"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="15">
                         <materialDesign:PackIcon Margin="10,0,8,0" VerticalAlignment="Center" Kind="TagOutline" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
