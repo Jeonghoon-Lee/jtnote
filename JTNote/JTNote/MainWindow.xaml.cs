@@ -49,6 +49,9 @@ namespace JTNote
             // Set login user information onto title bar
             Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
 
+            // Load tag list from database
+            Globals.ReloadTagList();
+
             // Set default bindings for window elements
             lvCentrePane.ItemsSource = notesList;
 
@@ -247,6 +250,23 @@ namespace JTNote
             {
                 ErrorNotifyDbConnection(ex);
             }
+        }
+
+        private void LblSidebarNewTag_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TagDialog tagDialog = new TagDialog(this, TagDialogType.Create);
+
+            if (tagDialog.ShowDialog() == true)
+            {
+                //
+                // TODO: Reload tag list and insert into menu item
+                //
+            }
+        }
+
+        private void NewTag_MenuClick(object sender, RoutedEventArgs e)
+        {
+            LblSidebarNewTag_PreviewMouseLeftButtonDown(sender, null);
         }
     }
 }

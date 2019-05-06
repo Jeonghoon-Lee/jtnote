@@ -40,7 +40,7 @@ create table Dbo.Notes
 	Id int identity(1, 1) not null,
 	UserId int not null,				-- foreign key from Users table
 	Title nvarchar(128) not null,
-	Content varbinary(MAX) not null,
+	Content sql_variant not null,
 	NotebookId int null,				-- foreign key from Categories table
 	IsDeleted tinyint not null,			-- 0: Not deleted, 1: into Trash
 	LastUpdatedDate datetime not null,

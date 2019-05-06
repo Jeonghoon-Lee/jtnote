@@ -19,7 +19,7 @@
                     <Label Content="Password:" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
                     <TextBox Name="tbLoginEmail" HorizontalAlignment="Left" Height="Auto" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" TextChanged="TbLoginEmail_TextChanged"/>
                     <PasswordBox Name="pbLoginPassword" HorizontalAlignment="Left" Height="Auto" Margin="126,59,0,0" Password="" VerticalAlignment="Top" Width="286"/>
-                    <Button Name="btLogin" IsEnabled="False" Click="ButtonLogin_Click" Content="Login" HorizontalAlignment="Left" Margin="140,211,0,0" VerticalAlignment="Top" Width="141" Height="28"/>
+                    <Button Name="btLogin" IsDefault="True" IsEnabled="False" Click="ButtonLogin_Click" Content="Login" HorizontalAlignment="Left" Margin="140,211,0,0" VerticalAlignment="Top" Width="141" Height="28"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Register">
