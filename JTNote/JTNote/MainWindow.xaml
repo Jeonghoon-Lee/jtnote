@@ -68,6 +68,7 @@
             </Menu.Resources>
             <MenuItem Header="File">
                 <MenuItem Header="New Note"></MenuItem>
+                <MenuItem Header="New Tag..." Click="NewTag_MenuClick"></MenuItem>
             </MenuItem>
             <MenuItem Header="Edit">
 
@@ -127,7 +128,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Name="tbSidebarTagsTitle" Width="210" Grid.Column="0" VerticalAlignment="Center">Tags</TextBlock>
-                                        <Label Name="lblSidebarNewTag" Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblTagAddIcon_PreviewMouseLeftButtonDown">
+                                        <Label Name="lblSidebarNewTag" Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblSidebarNewTag_PreviewMouseLeftButtonDown">
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                 </Label>
                             </Grid>

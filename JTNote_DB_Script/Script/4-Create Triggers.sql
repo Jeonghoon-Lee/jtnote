@@ -13,6 +13,7 @@ go
 
 
 /* Create trigger Dbo.DeleteTagTr */
+-- This is not used. just for sample
 if OBJECT_ID('Dbo.DeleteTagTr' , 'TR') is not null
 	drop trigger Dbo.DeleteTagTr
 ;

@@ -65,7 +65,7 @@ namespace JTNote
                 switch (dialogType)
                 {
                     case TagDialogType.Create:
-                        if (!Globals.Db.CreateTag(new Tag() { Name = tagName, UserId = Globals.LoginUser.Id }))
+                        if (Globals.Db.CreateTag(new Tag() { Name = tagName, UserId = Globals.LoginUser.Id }) < 1)
                         {
                             MessageBox.Show("[Error]Unable to create new tag.\nPlease try it again", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
                         }

@@ -252,7 +252,7 @@ namespace JTNote
             }
         }
 
-        private void LblTagAddIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void LblSidebarNewTag_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TagDialog tagDialog = new TagDialog(this, TagDialogType.Create);
 
@@ -262,6 +262,11 @@ namespace JTNote
                 // TODO: Reload tag list and insert into menu item
                 //
             }
+        }
+
+        private void NewTag_MenuClick(object sender, RoutedEventArgs e)
+        {
+            LblSidebarNewTag_PreviewMouseLeftButtonDown(sender, null);
         }
     }
 }

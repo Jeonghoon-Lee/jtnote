@@ -77,6 +77,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MD5Hash.cs" />
+    <Compile Include="NoteTag.cs" />
     <Compile Include="RegexUtils.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="TagDialog.xaml.cs">
