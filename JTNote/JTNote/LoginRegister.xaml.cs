@@ -39,18 +39,23 @@ namespace JTNote
                     return;
                 }
 
-                User loginUser = Globals.Db.GetUser(loginEmail);
-                string enteredPassword = pbLoginPassword.Password;
-
-                if (loginUser.Email != loginEmail || !MD5Hash.VerifyMd5Hash(enteredPassword, loginUser.Password))
+                //                User loginUser = Globals.Db.GetUser(loginEmail);
+                using (var ctx = new JTNoteContext())
                 {
-                    MessageBox.Show("Error: login failed", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                    User loginUser = ctx.Users.Where(user => user.Email == loginEmail).First();
 
-                DialogResult = true;
-                // Save login user information for future use
-                Globals.LoginUser = loginUser;
+                    string enteredPassword = pbLoginPassword.Password;
+
+                    if (loginUser.Email != loginEmail || !MD5Hash.VerifyMd5Hash(enteredPassword, loginUser.Password))
+                    {
+                        MessageBox.Show("Error: login failed", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    DialogResult = true;
+                    // Save login user information for future use
+                    Globals.LoginUser = loginUser;
+                }
             }
             catch (SqlException ex)
             {
@@ -80,19 +85,25 @@ namespace JTNote
                 string email = tbRegisterEmail.Text;
                 string password = MD5Hash.GetMd5Hash(pbRegisterPasswd1.Password);
 
-                if (Globals.Db.ExistsEmail(email))
+                using (var ctx = new JTNoteContext())
                 {
-                    MessageBox.Show("Error: email is already registered.\nPlease change email\n", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
+                    // check email is exist
+                    if (ctx.Users.Where(user => user.Email == email).Count() > 0)
+                    {
+                        MessageBox.Show("Error: email is already registered.\nPlease change email\n", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    User registeredUser = new User() { UserName = userName, Email = email, Password = password };
+                    // Add new user
+                    ctx.Users.Add(registeredUser);
+                    ctx.SaveChanges();
+
+                    MessageBox.Show("User registration was successful.\nContinue to login", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    DialogResult = true;
+                    // Save login user information for future use
+                    Globals.LoginUser = registeredUser;
                 }
-                User registeredUser = new User() { UserName = userName, Email = email, Password = password };
-                Globals.Db.AddUser(registeredUser);
-
-                MessageBox.Show("User registration was successful.\nContinue to login", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                DialogResult = true;
-                // Save login user information for future use
-                Globals.LoginUser = registeredUser;
             }
             catch (SqlException ex)
             {

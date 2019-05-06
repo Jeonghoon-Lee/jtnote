@@ -9,6 +9,7 @@ namespace JTNote
 {
     public class Database
     {
+/*
         // Set DbConnectionString from DB Property
         const string DbConnectionString = @"Server=tcp:jtnote.database.windows.net,1433;Initial Catalog=JTNoteDB;Persist Security Info=False;User ID=sqladmin;Password=IPD16DotNet;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
@@ -164,7 +165,7 @@ namespace JTNote
             cmdDelete.ExecuteNonQuery();
         }
 
-        /* Tags table : Methods */
+        // Tags table : Methods
         public List<Tag> GetTagsByUserId(int userId)
         {
             List<Tag> list = new List<Tag>();
@@ -214,7 +215,7 @@ namespace JTNote
             return cmdDelete.ExecuteNonQuery() > 0;
         }
 
-        /* NoteTag table : Methods */
+        // NoteTag table : Methods
         public bool AddNoteTag(int noteId, int tagId)
         {
             SqlCommand cmdInsert = new SqlCommand("INSERT INTO NoteTag (NoteId, TagId) VALUES (@NoteId, @TagId)", conn);
@@ -233,5 +234,6 @@ namespace JTNote
             cmdDelete.Parameters.AddWithValue("TagId", tagId);
             return cmdDelete.ExecuteNonQuery() > 0;
         }
+        */
     }
 }
