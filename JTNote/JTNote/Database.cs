@@ -113,7 +113,7 @@ namespace JTNote
         {
             SqlCommand cmdSelect = new SqlCommand("SELECT * FROM Notes WHERE UserId=@UserId AND Id=@NoteId", conn);
             cmdSelect.Parameters.AddWithValue("UserId", Globals.LoginUser.Id);
-            cmdSelect.Parameters.AddWithValue("UserId", noteId);
+            cmdSelect.Parameters.AddWithValue("NoteId", noteId);
 
             using (SqlDataReader reader = cmdSelect.ExecuteReader())
             {
@@ -184,6 +184,33 @@ namespace JTNote
 
             cmdUpdate.Parameters.AddWithValue("Id", tagId);
             return cmdUpdate.ExecuteNonQuery() > 0;
+        }
+
+        public string UpdateNote(Note inputNote)
+        {
+            SqlCommand cmdInsert = new SqlCommand("UPDATE Notes SET UserId=@UserId, Title=@Title, Content=@Content, NotebookId=@NotebookId, IsDeleted=@IsDeleted, LastUpdatedDate=@LastUpdatedDate WHERE Id=@NoteId", conn);
+
+            cmdInsert.Parameters.AddWithValue("NoteId", inputNote.Id);
+            cmdInsert.Parameters.AddWithValue("UserId", inputNote.UserId);
+            cmdInsert.Parameters.AddWithValue("Title", inputNote.Title);
+            cmdInsert.Parameters.AddWithValue("Content", inputNote.Content);
+            cmdInsert.Parameters.AddWithValue("IsDeleted", inputNote.IsDeleted == true ? 1 : 0);
+            cmdInsert.Parameters.AddWithValue("LastUpdatedDate", DateTime.Today);
+
+            // Insert null into db if notebook ID is null, otherwise insert notebook ID
+            if (inputNote.NotebookId == null)
+                cmdInsert.Parameters.AddWithValue("NotebookId", DBNull.Value);
+            else
+                cmdInsert.Parameters.AddWithValue("NotebookId", inputNote.NotebookId);
+
+            return (string)cmdInsert.ExecuteScalar();
+        }
+
+        public void DeleteNote(int id)
+        {
+            SqlCommand cmdDelete = new SqlCommand("DELETE FROM Notes WHERE Id=@NoteId", conn);
+            cmdDelete.Parameters.AddWithValue("NoteId", id);
+            cmdDelete.ExecuteNonQuery();
         }
     }
 }
