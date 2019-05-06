@@ -118,8 +118,20 @@
                         </ItemsPanelTemplate>
                     </Menu.ItemsPanel>
 
-                    <MenuItem Header="Tags">
-
+                    <MenuItem Width="480">
+                        <MenuItem.Header>
+                            <Grid Width="250">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="190"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                
+                                <TextBlock Width="210" Grid.Column="0" VerticalAlignment="Center">Tags</TextBlock>
+                                <Label Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblTagAddIcon_PreviewMouseLeftButtonDown">
+                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                </Label>
+                            </Grid>
+                        </MenuItem.Header>
                     </MenuItem>
 
                     <MenuItem Background="{DynamicResource PrimaryHueMidBrush}" Width="480">

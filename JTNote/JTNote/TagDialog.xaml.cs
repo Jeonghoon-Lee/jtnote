@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,11 @@ namespace JTNote
         TagDialogType dialogType;
         Tag currentTag;
 
-        public TagDialog(TagDialogType type = TagDialogType.Create, Tag tag = null)
+        public TagDialog(Window owner, TagDialogType type = TagDialogType.Create, Tag tag = null)
         {
             InitializeComponent();
+
+            Owner = owner;
 
             dialogType = type;
             currentTag = tag;
@@ -47,32 +50,41 @@ namespace JTNote
 
         private void ButtonCreateUpdate_Click(object sender, RoutedEventArgs e)
         {
-            string tagName = tbTag.Text;
-
-            // check if tag is already exist in the list of tags
-            if (Globals.TagList.Exists(tag => tag.Name == tagName))
+            try
             {
-                string errMessage = string.Format("Tag \"{0}\" already exists.\nPlease enter a different tag name", tagName);
-                MessageBox.Show(errMessage, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                string tagName = tbTag.Text;
+
+                // check if tag is already exist in the list of tags
+                if (Globals.TagList.Exists(tag => tag.Name == tagName))
+                {
+                    string errMessage = string.Format("Tag \"{0}\" already exists.\nPlease enter a different tag name", tagName);
+                    MessageBox.Show(errMessage, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                switch (dialogType)
+                {
+                    case TagDialogType.Create:
+                        if (!Globals.Db.CreateTag(new Tag() { Name = tagName, UserId = Globals.LoginUser.Id }))
+                        {
+                            MessageBox.Show("[Error]Unable to create new tag.\nPlease try it again", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        break;
+                    case TagDialogType.Update:
+                        currentTag.Name = tagName;      // update tag name
+                        if (!Globals.Db.UpdateTag(currentTag))
+                        {
+                            MessageBox.Show("[Error]Unable to update tag name.\nPlease try it again", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("Invalid argument for creating TagDialog");
+                }
+                DialogResult = true;
             }
-
-            switch (dialogType)
+            catch (SqlException ex)
             {
-                case TagDialogType.Create:
-                    if (!Globals.Db.CreateTag(new Tag() { Name = tagName, UserId = Globals.LoginUser.Id })) {
-                        MessageBox.Show("[Error]Unable to create new tag.\nPlease try it again", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                    break;
-                case TagDialogType.Update:
-                    currentTag.Name = tagName;      // update tag name
-                    if (!Globals.Db.UpdateTag(currentTag))
-                    {
-                        MessageBox.Show("[Error]Unable to update tag name.\nPlease try it again", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("Invalid argument for creating TagDialog");
+                MessageBox.Show(string.Format("Fatal error: unable to create tag.{0}{1}", Environment.NewLine, ex.Message), "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

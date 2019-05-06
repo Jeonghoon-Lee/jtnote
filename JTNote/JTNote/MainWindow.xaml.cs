@@ -105,5 +105,17 @@ namespace JTNote
         {
             spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
         }
+
+        private void LblTagAddIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TagDialog tagDialog = new TagDialog(this, TagDialogType.Create);
+
+            if (tagDialog.ShowDialog() == true)
+            {
+                //
+                // TODO: Reload tag list and insert into menu item
+                //
+            }
+        }
     }
 }
