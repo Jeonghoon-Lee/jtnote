@@ -49,6 +49,12 @@
           <AssociatedConnUserName />
           <FullPath>3_AddConstraints.sql</FullPath>
         </FileNode>
+        <FileNode Name="4-Create Triggers.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:JH-DESKTOP:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>JH-DESKTOP</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>4-Create Triggers.sql</FullPath>
+        </FileNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
