@@ -144,7 +144,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Name="tbSidebarNotesTitle" Width="210" Grid.Column="0" VerticalAlignment="Center">Notes</TextBlock>
-                                <Label Name="lblSidebarNewNote" Grid.Column="1" ToolTip="Create a new note.">
+                                <Label Name="lblSidebarNewNote" Grid.Column="1" ToolTip="Create a new note." MouseLeftButtonUp="LblSidebarNewNote_MouseLeftButtonUp">
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                 </Label>
                             </Grid>
@@ -228,7 +228,7 @@
                         <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
                         <Run FontSize="24" Text="{Binding Title}"></Run>
                         </TextBlock>
-                        <Button ToolTip="Edit this note." Style="{StaticResource MaterialDesignFloatingActionLightButton}" Content="{materialDesign:PackIcon Kind=Edit}" Margin="20,0,15,0" Width="25" Height="25"/>
+                        <Button Name="btnRightPaneEdit" ToolTip="Edit this note." Style="{StaticResource MaterialDesignFloatingActionLightButton}" Content="{materialDesign:PackIcon Kind=Edit}" Margin="20,0,15,0" Width="25" Height="25" Click="BtnRightPaneEdit_Click"/>
                         <Button Name="btnRightPaneDelete" ToolTip="Send this note to trash." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=TrashCan}" Margin="0,0,15,0" Width="25" Height="25" Click="BtnRightPaneDelete_Click">
                             <Button.Resources>
                                 <ResourceDictionary>

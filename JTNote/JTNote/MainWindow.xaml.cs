@@ -229,6 +229,11 @@ namespace JTNote
                 ErrorNotifyDbConnection(ex);
             }
         }
+        private void BtnRightPaneEdit_Click(object sender, RoutedEventArgs e)
+        {
+            NoteEdit editNoteWindow = new NoteEdit(this, lvCentrePane.SelectedItem as Note);
+            editNoteWindow.ShowDialog();
+        }
 
 
         // SIDEBAR NIBS CLICKS
@@ -268,5 +273,12 @@ namespace JTNote
         {
             LblSidebarNewTag_PreviewMouseLeftButtonDown(sender, null);
         }
+
+        private void LblSidebarNewNote_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            NoteEdit newNoteWindow = new NoteEdit(this);
+            newNoteWindow.ShowDialog();
+        }
+
     }
 }

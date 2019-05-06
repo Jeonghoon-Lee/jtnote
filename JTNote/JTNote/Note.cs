@@ -29,7 +29,7 @@ namespace JTNote
             private set { }
         }
 
-        public Note(int id, int userId, string title, string content, int? notebookId, bool isDeleted, DateTime lastUpdatedDate)
+        public Note(int? id, int userId, string title, string content, int? notebookId, bool isDeleted, DateTime lastUpdatedDate)
         {
             if (title == null || title == "")
                 throw new ArgumentException("Error loading data: Title must contain text."); // Title cannot be blank, there is an error if so
