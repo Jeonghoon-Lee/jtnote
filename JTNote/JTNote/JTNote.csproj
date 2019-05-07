@@ -89,6 +89,9 @@
     <Compile Include="MD5Hash.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="Notebook.cs" />
+    <Compile Include="NoteEdit.xaml.cs">
+      <DependentUpon>NoteEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RegexUtils.cs" />
     <Compile Include="SharedNote.cs" />
     <Compile Include="Tag.cs" />
@@ -118,6 +121,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NoteEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TagDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
