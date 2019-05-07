@@ -188,12 +188,21 @@
                 <TreeView Name="trvTags">
                     <TreeView.Resources>
                         <HierarchicalDataTemplate DataType="{x:Type self:TagsOnUser}" ItemsSource="{Binding TagList}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Title}" />
-                                <TextBlock Text=" [" Foreground="Blue" />
-                                <TextBlock Text="{Binding TagList.Count}" Foreground="Blue" />
-                                <TextBlock Text="]" Foreground="Blue" />
-                            </StackPanel>
+                            <Grid Width="200">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" Width="160" Grid.Column="0">
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
+                                    <TextBlock VerticalAlignment="Center" Text=" [" Foreground="Blue" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding TagList.Count}" Foreground="Blue" />
+                                    <TextBlock VerticalAlignment="Center" Text="]" Foreground="Blue" />
+                                </StackPanel>
+                                <Label Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblSidebarNewTag_PreviewMouseLeftButtonDown">
+                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                                </Label>
+                            </Grid>
                         </HierarchicalDataTemplate>
                         <DataTemplate DataType="{x:Type self:Tag}">
                             <StackPanel Orientation="Horizontal">

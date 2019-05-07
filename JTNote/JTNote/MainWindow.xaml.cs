@@ -26,7 +26,7 @@ namespace JTNote
         List<Note> trashList = new List<Note>();
 
         // List<Tag> tagList = new List<Tag>();
-        List<TagsOnUser> tagsOnUserList = new List<TagsOnUser>();
+        // List<TagsOnUser> tagsOnUserList = new List<TagsOnUser>();
 
         public MainWindow()
         {
@@ -65,9 +65,9 @@ namespace JTNote
                     tag.NumberOfNotes = tag.Notes.Count;
                     tagsOnUser.TagList.Add(tag);
                 }
-                tagsOnUserList.Add(tagsOnUser);
+                Globals.TagListView.Add(tagsOnUser);
             }
-            trvTags.ItemsSource = tagsOnUserList;
+            trvTags.ItemsSource = Globals.TagListView;
 
             // FIXME: testing treeview without bind
             using (var ctx = new JTNoteContext())
@@ -332,8 +332,21 @@ namespace JTNote
             if (tagDialog.ShowDialog() == true)
             {
                 //
-                // TODO: Reload tag list and insert into menu item
+                // TODO: Make it method and test
                 //
+                using (var ctx = new JTNoteContext())
+                {
+                    TagsOnUser tagsOnUser = new TagsOnUser();
+
+                    Globals.TagListView.Clear();
+                    foreach (Tag tag in ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList())
+                    {
+                        tag.NumberOfNotes = tag.Notes.Count;
+                        tagsOnUser.TagList.Add(tag);
+                    }
+                    Globals.TagListView.Add(tagsOnUser);
+                }
+                trvTags.Items.Refresh();
             }
         }
 

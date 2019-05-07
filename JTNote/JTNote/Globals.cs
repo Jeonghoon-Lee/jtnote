@@ -10,6 +10,9 @@ namespace JTNote
     {
         public static User LoginUser;
 
+        public static List<TagsOnUser> TagListView = new List<TagsOnUser>();
+
+
         /*
                 public static Database Db;
 
