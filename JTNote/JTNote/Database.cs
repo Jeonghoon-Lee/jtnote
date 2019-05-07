@@ -121,7 +121,7 @@ namespace JTNote
                 string title = null, content = null;
                 int? notebookId = null;
                 bool isDeleted = false;
-                DateTime lastUpdatedDate = DateTime.Today;
+                DateTime lastUpdatedDate = DateTime.Now;
 
                 while (reader.Read())
                 {
@@ -146,7 +146,7 @@ namespace JTNote
             cmdInsert.Parameters.AddWithValue("Title", inputNote.Title);
             cmdInsert.Parameters.AddWithValue("Content", inputNote.Content);
             cmdInsert.Parameters.AddWithValue("IsDeleted", inputNote.IsDeleted == true ? 1 : 0);
-            cmdInsert.Parameters.AddWithValue("LastUpdatedDate", DateTime.Today);
+            cmdInsert.Parameters.AddWithValue("LastUpdatedDate", DateTime.Now);
 
             // Insert null into db if notebook ID is null, otherwise insert notebook ID
             if (inputNote.NotebookId == null)
@@ -162,6 +162,20 @@ namespace JTNote
             SqlCommand cmdDelete = new SqlCommand("DELETE FROM Notes WHERE Id=@NoteId", conn);
             cmdDelete.Parameters.AddWithValue("NoteId", id);
             cmdDelete.ExecuteNonQuery();
+        }
+
+        public void CreateNote(Note inputNote)
+        {
+            SqlCommand cmdInsert = new SqlCommand("INSERT INTO Notes (UserId, Title, Content, NotebookId, IsDeleted, LastUpdatedDate) values (@UserId, @Title, @Content, @NotebookId, @IsDeleted, @LastUpdatedDate)", conn);
+
+            cmdInsert.Parameters.AddWithValue("UserId", inputNote.UserId);
+            cmdInsert.Parameters.AddWithValue("Title", inputNote.Title);
+            cmdInsert.Parameters.AddWithValue("Content", inputNote.Content);
+            cmdInsert.Parameters.AddWithValue("NotebookId", DBNull.Value); // To change if adding ability to add to notebook in note creation screen
+            cmdInsert.Parameters.AddWithValue("IsDeleted", 0);
+            cmdInsert.Parameters.AddWithValue("LastUpdatedDate", DateTime.Now);
+
+            cmdInsert.ExecuteNonQuery();
         }
 
         /* Tags table : Methods */

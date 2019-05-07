@@ -4,11 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:sysCollection="clr-namespace:System.Collections;assembly=mscorlib"
         xmlns:local="clr-namespace:JTNote"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
+        Closing="Window_Closing"
         Title="NoteEdit" Height="600" Width="900">
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <Menu.Resources>
@@ -43,13 +46,13 @@
         </Grid>
 
         <WrapPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="{DynamicResource PrimaryHueLightBrush}">
-            <Button Margin="5" />
+            <ComboBox Name="cbFonts" Margin="15,0,0,0" Width="150" SelectionChanged="CbFonts_SelectionChanged"/>
+            <ComboBox Name="cbFontSizes" Margin="10,0,0,0" Width="40" SelectionChanged="CbFontSizes_SelectionChanged"/>
+            <Button Margin="15,5,0,5" />
         </WrapPanel>
         
         <Grid>
-            <toolkit:RichTextBox Name="rtbContent" Grid.Row="1" Margin="10" BorderBrush="Gray" Padding="10"
-                                         Text="{Binding Notes}" 
-                                         ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <toolkit:RichTextBox Name="rtbContent" Grid.Row="1" Margin="10" BorderBrush="Gray" Padding="10" ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <toolkit:RichTextBoxFormatBarManager.FormatBar>
                     <toolkit:RichTextBoxFormatBar Visibility="Visible" />
                 </toolkit:RichTextBoxFormatBarManager.FormatBar>
