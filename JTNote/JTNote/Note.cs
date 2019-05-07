@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -7,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Data.Entity.Spatial;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 /*
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 */
 
 namespace JTNote
@@ -27,14 +25,23 @@ namespace JTNote
             Tags = new HashSet<Tag>();
         }
 
-        public Note(int? id, int userId, string title, string content, int? notebookId, bool isDeleted, DateTime lastUpdatedDate)
+        public Note(int id, int userId, string title, string content, int? notebookId, bool isDeleted, DateTime lastUpdatedDate)
         {
             if (title == null || title == "")
                 throw new ArgumentException("Error loading data: Title must contain text."); // Title cannot be blank, there is an error if so
+
+            Id = id;
+            UserId = userId;
+            Title = title;
+            Content = content;
+            NotebookId = notebookId;
+            IsDeleted = (byte)(isDeleted == true ? 1 : 0);
+            LastUpdatedDate = lastUpdatedDate;
         }
 
         public int Id { get; set; }
 
+        [NotMapped]
         public string ContentPlaintext
         {
             get
@@ -53,6 +60,7 @@ namespace JTNote
             }
         }
 
+        [NotMapped]
         public string ContentTruncated
         {
             get
@@ -73,6 +81,8 @@ namespace JTNote
         public string Title { get; set; }
 
         public int? NotebookId { get; set; }
+
+        public string Content { get; set; }
 
         public byte IsDeleted { get; set; }
 

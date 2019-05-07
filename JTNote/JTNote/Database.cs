@@ -165,6 +165,8 @@ namespace JTNote
             cmdDelete.ExecuteNonQuery();
         }
 */
+
+            /*
         public void CreateNote(Note inputNote)
         {
             SqlCommand cmdInsert = new SqlCommand("INSERT INTO Notes (UserId, Title, Content, NotebookId, IsDeleted, LastUpdatedDate) values (@UserId, @Title, @Content, @NotebookId, @IsDeleted, @LastUpdatedDate)", conn);
@@ -178,5 +180,6 @@ namespace JTNote
 
             cmdInsert.ExecuteNonQuery();
         }
+        */
     }
 }

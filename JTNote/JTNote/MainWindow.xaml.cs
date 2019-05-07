@@ -109,7 +109,7 @@ namespace JTNote
                     ctx.Notes.Where(note => note.UserId == Globals.LoginUser.Id).ToList()
                         .ForEach(note => {
                             // if (note.IsDeleted)
-                            if (note.IsDeleted == 0)
+                            if (note.IsDeleted == 1)
                                 trashList.Add(note); // Add notes flagged for deletion to trash
                             else
                                 notesList.Add(note); // Add all other notes to main notes list
@@ -258,9 +258,14 @@ namespace JTNote
                     // updated with EF
                     using (var ctx = new JTNoteContext())
                     {
-                        currentNote.IsDeleted = 1;
+//                        currentNote.IsDeleted = 1;
+                        // TODO: Error handling
+                        Note updateNote = ctx.Notes.Where(note => note.Id == currentNote.Id).ToList()[0];
+
+                        updateNote.IsDeleted = 1;
                         ctx.SaveChanges();
                     }
+                    LoadAllNotes();
                 }
                 catch (Exception ex)
                 {
