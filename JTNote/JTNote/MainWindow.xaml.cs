@@ -106,7 +106,7 @@ namespace JTNote
                 // Updated with EF
                 using (var ctx = new JTNoteContext())
                 {
-                    ctx.Notes.Where(note => note.Id == Globals.LoginUser.Id).ToList()
+                    ctx.Notes.Where(note => note.UserId == Globals.LoginUser.Id).ToList()
                         .ForEach(note => {
                             // if (note.IsDeleted)
                             if (note.IsDeleted == 0)
