@@ -12,7 +12,7 @@
         Closing="Window_Closing"
         Title="NoteEdit" Height="600" Width="900">
 
-    <DockPanel>
+    <DockPanel Name="dpMainPanel">
         <Menu DockPanel.Dock="Top">
             <Menu.Resources>
                 <ResourceDictionary>
@@ -39,7 +39,7 @@
                 </DockPanel>
                 <DockPanel DockPanel.Dock="Right">
                     <Button Name="btnSaveNote" DockPanel.Dock="Left" Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=Check, Size=35}" ToolTip="Save this note." Padding="0" Height="40" Width="40" Margin="10,0,0,0" Click="BtnSaveNote_Click" />
-                    <TextBox DockPanel.Dock="Left" Name="tbTitle" Margin="15,0,10,0" Padding="5,0,0,0" Text="Untitled Note" FontSize="25" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Height="40" HorizontalAlignment="Stretch" />
+                    <TextBox DockPanel.Dock="Left" Name="tbTitle" Margin="15,0,10,0" Padding="5,0,0,0" Text="{Binding Title}" FontSize="25" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Height="40" HorizontalAlignment="Stretch" />
                 </DockPanel>
 
             </DockPanel>
@@ -52,9 +52,9 @@
         </WrapPanel>
         
         <Grid>
-            <toolkit:RichTextBox Name="rtbContent" Grid.Row="1" Margin="10" BorderBrush="Gray" Padding="10" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <toolkit:RichTextBox Name="rtbContent" Grid.Row="1" Margin="10" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Gray" Padding="10" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="RtbContent_SelectionChanged" LostFocus="RtbContent_LostFocus">
                 <toolkit:RichTextBoxFormatBarManager.FormatBar>
-                    <toolkit:RichTextBoxFormatBar Visibility="Visible" />
+                    <toolkit:RichTextBoxFormatBar Visibility="Hidden" />
                 </toolkit:RichTextBoxFormatBarManager.FormatBar>
                 <toolkit:RichTextBox.TextFormatter>
                     <toolkit:XamlFormatter />

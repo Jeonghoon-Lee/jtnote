@@ -49,3 +49,23 @@
 2. To do until next scrum:
 	-Finish creating edit note dialog, and implement code behind to add notes.
 	-Fix error reloading note lists in main menu (items in listview don't properly update)
+
+
+5/7/2019 Jeonghoon
+1. Done since last scrum:
+	-Apply Entity Framework to project.
+	-Implement tree view for Tags on sidebar menu.
+2. To do until next scrum:
+	-Finish integrating tree view into whole sidebar.
+3. Need assistance / figure things out:
+	-Assistance with integrating Entity framework into note creation.
+
+5/7/2019
+1. Done since last scrum:
+	-Finished basic functionality of note creation dialog, added ability to add notes to DB.
+2. To do until next scrum:
+	-Finish all functionality of note creation dialog, including import, formatting, and export to PDF.
+	-Hide Tags and editing buttons on right pane if no note is selected, change title.
+3. Need assistance / figure things out:
+	-Why there is a SQL Error at school but not at home.
+	-Bind formatting options to rich textbox.

@@ -9,6 +9,7 @@ namespace JTNote
 {
     public class Database
     {
+/*
         // Set DbConnectionString from DB Property
         const string DbConnectionString = @"Server=tcp:jtnote.database.windows.net,1433;Initial Catalog=JTNoteDB;Persist Security Info=False;User ID=sqladmin;Password=IPD16DotNet;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
@@ -163,7 +164,9 @@ namespace JTNote
             cmdDelete.Parameters.AddWithValue("NoteId", id);
             cmdDelete.ExecuteNonQuery();
         }
+*/
 
+            /*
         public void CreateNote(Note inputNote)
         {
             SqlCommand cmdInsert = new SqlCommand("INSERT INTO Notes (UserId, Title, Content, NotebookId, IsDeleted, LastUpdatedDate) values (@UserId, @Title, @Content, @NotebookId, @IsDeleted, @LastUpdatedDate)", conn);
@@ -177,75 +180,6 @@ namespace JTNote
 
             cmdInsert.ExecuteNonQuery();
         }
-
-        /* Tags table : Methods */
-        public List<Tag> GetTagsByUserId(int userId)
-        {
-            List<Tag> list = new List<Tag>();
-
-            string queryStr = string.Format("SELECT * FROM Tags WHERE UserId = {0}", userId);
-
-            SqlCommand cmdSelect = new SqlCommand(queryStr, conn);
-            using (SqlDataReader reader = cmdSelect.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    int id = (int)reader["Id"];
-                    string name = (string)reader["Name"];
-
-                    list.Add(new Tag() { Id = id, Name = name, UserId = userId });
-                }
-            }
-            return list;
-        }
-
-        public int CreateTag(Tag tag)
-        {
-            SqlCommand cmdInsert = new SqlCommand("INSERT INTO Tags (Name, UserId) OUTPUT INSERTED.ID VALUES (@Name, @UserId)", conn);
-
-            cmdInsert.Parameters.AddWithValue("Name", tag.Name);
-            cmdInsert.Parameters.AddWithValue("UserId", tag.UserId);
-
-            tag.Id = (int)cmdInsert.ExecuteScalar();
-            return tag.Id;
-        }
-
-        public bool UpdateTag(Tag tag)
-        {
-            SqlCommand cmdUpdate = new SqlCommand("UPDATE Tags SET Name=@Name WHERE Id=@Id;", conn);
-
-            cmdUpdate.Parameters.AddWithValue("Id", tag.Id);
-            cmdUpdate.Parameters.AddWithValue("Name", tag.Name);
-
-            return cmdUpdate.ExecuteNonQuery() > 0;
-        }
-
-        public bool DeleteTag(int tagId)
-        {
-            SqlCommand cmdDelete = new SqlCommand("DELETE FROM Tags WHERE Id=@Id;", conn);
-
-            cmdDelete.Parameters.AddWithValue("Id", tagId);
-            return cmdDelete.ExecuteNonQuery() > 0;
-        }
-
-        /* NoteTag table : Methods */
-        public bool AddNoteTag(int noteId, int tagId)
-        {
-            SqlCommand cmdInsert = new SqlCommand("INSERT INTO NoteTag (NoteId, TagId) VALUES (@NoteId, @TagId)", conn);
-
-            cmdInsert.Parameters.AddWithValue("NoteId", noteId);
-            cmdInsert.Parameters.AddWithValue("TagId", tagId);
-
-            return cmdInsert.ExecuteNonQuery() > 0;
-        }
-
-        public bool DeleteNoteTag(int noteId, int tagId)
-        {
-            SqlCommand cmdDelete = new SqlCommand("DELETE FROM NoteTag WHERE NoteId=@noteId and TagId=@TagId;", conn);
-
-            cmdDelete.Parameters.AddWithValue("NoteId", noteId);
-            cmdDelete.Parameters.AddWithValue("TagId", tagId);
-            return cmdDelete.ExecuteNonQuery() > 0;
-        }
+        */
     }
 }
