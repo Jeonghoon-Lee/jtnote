@@ -24,8 +24,13 @@ namespace JTNote
         // Create lists of items for main window display
         List<Note> notesList = new List<Note>();
         List<Note> trashList = new List<Note>();
+
+        // List<Tag> tagList = new List<Tag>();
+        // List<TagsOnUser> tagsOnUserList = new List<TagsOnUser>();
+
         public MainWindow()
         {
+/*
             try
             {
                 Globals.Db = new Database();
@@ -36,7 +41,7 @@ namespace JTNote
                 Close();    // set close the main window, terminate the program
                 return;
             }
-
+*/
             LoginRegister loginDlg = new LoginRegister();
             if (loginDlg.ShowDialog() != true)
             {
@@ -49,8 +54,36 @@ namespace JTNote
             // Set login user information onto title bar
             Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
 
+
+            // FIXME: testing treeview with bind
+            using (var ctx = new JTNoteContext())
+            {
+                TagsOnUser tagsOnUser = new TagsOnUser();
+
+                foreach (Tag tag in ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList())
+                {
+                    tag.NumberOfNotes = tag.Notes.Count;
+                    tagsOnUser.TagList.Add(tag);
+                }
+                Globals.TagListView.Add(tagsOnUser);
+            }
+            trvTags.ItemsSource = Globals.TagListView;
+
+            // FIXME: testing treeview without bind
+            using (var ctx = new JTNoteContext())
+            {
+                List<Tag> tagList = ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList();
+
+                lblNumberOfTags.Text = tagList.Count().ToString();
+                foreach (Tag tag in tagList)
+                {
+                    trvTags2.Items.Add(string.Format("{0} ({1})", tag.Name, tag.Notes.Count));
+                }
+            }
+
+
             // Load tag list from database
-            Globals.ReloadTagList();
+            // Globals.ReloadTagList();
 
             // Set default bindings for window elements
             lvCentrePane.ItemsSource = notesList;
@@ -69,13 +102,19 @@ namespace JTNote
             try
             {
                 // Populate notes lists from DB
-                Globals.Db.GetAllNotesByUserId(Globals.LoginUser.Id).ForEach(note =>
+                //                Globals.Db.GetAllNotesByUserId(Globals.LoginUser.Id)
+                // Updated with EF
+                using (var ctx = new JTNoteContext())
                 {
-                    if (note.IsDeleted)
-                        trashList.Add(note); // Add notes flagged for deletion to trash
-                    else
-                        notesList.Add(note); // Add all other notes to main notes list
-                });
+                    ctx.Notes.Where(note => note.UserId == Globals.LoginUser.Id).ToList()
+                        .ForEach(note => {
+                            // if (note.IsDeleted)
+                            if (note.IsDeleted == 1)
+                                trashList.Add(note); // Add notes flagged for deletion to trash
+                            else
+                                notesList.Add(note); // Add all other notes to main notes list
+                         });
+                }
             }
             catch (Exception ex)
             {
@@ -181,15 +220,25 @@ namespace JTNote
         private void BtnRightPaneDelete_Click(object sender, RoutedEventArgs e)
         {
             Note currentNote = lvCentrePane.SelectedItem as Note;
-            if (currentNote.IsDeleted == true)
+            // if (currentNote.IsDeleted == true)
+            // updated with EF
+            if (currentNote.IsDeleted == 1)
             {
                 // Item is already in trash, permanently delete
                 try
                 {
                     if (MessageBox.Show(string.Format("Are you sure you want to permanently delete the note \"{0}\"? This is not reversible.", currentNote.Title), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        currentNote.DeleteSelfFromDb();
-                        LoadAllNotes();
+                        //    currentNote.DeleteSelfFromDb();
+                        //    LoadAllNotes();
+
+                        // updated with EF
+                        // FIXME: Need to test
+                        using (var ctx = new JTNoteContext())
+                        {
+                            ctx.Notes.Remove(currentNote);
+                            ctx.SaveChanges();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -202,8 +251,20 @@ namespace JTNote
                 // Item is not yet in trash, move it there                
                 try
                 {
-                    currentNote.IsDeleted = true;
-                    currentNote.UpdateSelfInDb();
+                    // currentNote.IsDeleted = true;
+                    // currentNote.UpdateSelfInDb();
+                    // LoadAllNotes();
+
+                    // updated with EF
+                    using (var ctx = new JTNoteContext())
+                    {
+//                        currentNote.IsDeleted = 1;
+                        // TODO: Error handling
+                        Note updateNote = ctx.Notes.Where(note => note.Id == currentNote.Id).ToList()[0];
+
+                        updateNote.IsDeleted = 1;
+                        ctx.SaveChanges();
+                    }
                     LoadAllNotes();
                 }
                 catch (Exception ex)
@@ -221,9 +282,17 @@ namespace JTNote
             {
                 if (MessageBox.Show(string.Format("Would you like to restore the note \"{0}\"?", currentNote.Title), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    currentNote.IsDeleted = false;
-                    currentNote.UpdateSelfInDb();
-                    LoadAllNotes();
+                    // currentNote.IsDeleted = false;
+                    //currentNote.IsDeleted = 0;
+                    //currentNote.UpdateSelfInDb();
+                    //LoadAllNotes();
+
+                    // updated with EF
+                    using (var ctx = new JTNoteContext())
+                    {
+                        currentNote.IsDeleted = 0;
+                        ctx.SaveChanges();
+                    }
                 }
             }
             catch (Exception ex)
@@ -246,11 +315,20 @@ namespace JTNote
             {
                 if (MessageBox.Show(string.Format("Are you sure you want to permanently delete these {0} notes? This is not reversible.", trashList.Count), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    trashList.ForEach(currentNote =>
+                    /*
+                        trashList.ForEach(currentNote =>
+                        {
+                            currentNote.DeleteSelfFromDb();
+                        });
+                        LoadAllNotes();
+                    */
+                    // updated with EF
+                    // FIXME: Need to test
+                    using (var ctx = new JTNoteContext())
                     {
-                        currentNote.DeleteSelfFromDb();
-                    });
-                    LoadAllNotes();
+                        trashList.ForEach(currentNote => ctx.Notes.Remove(currentNote));
+                        ctx.SaveChanges();
+                    }
                 }
             }
             catch (Exception ex)
@@ -266,8 +344,21 @@ namespace JTNote
             if (tagDialog.ShowDialog() == true)
             {
                 //
-                // TODO: Reload tag list and insert into menu item
+                // TODO: Make it method and test
                 //
+                using (var ctx = new JTNoteContext())
+                {
+                    TagsOnUser tagsOnUser = new TagsOnUser();
+
+                    Globals.TagListView.Clear();
+                    foreach (Tag tag in ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList())
+                    {
+                        tag.NumberOfNotes = tag.Notes.Count;
+                        tagsOnUser.TagList.Add(tag);
+                    }
+                    Globals.TagListView.Add(tagsOnUser);
+                }
+                trvTags.Items.Refresh();
             }
         }
 
@@ -284,3 +375,4 @@ namespace JTNote
 
     }
 }
+

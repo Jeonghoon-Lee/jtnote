@@ -6,10 +6,10 @@ namespace JTNote
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Tag
+    public partial class Notebook
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Tag()
+        public Notebook()
         {
             Notes = new HashSet<Note>();
         }
@@ -21,9 +21,6 @@ namespace JTNote
         public string Name { get; set; }
 
         public int UserId { get; set; }
-
-        [NotMapped]
-        public int NumberOfNotes { get; set; }
 
         public virtual User User { get; set; }
 

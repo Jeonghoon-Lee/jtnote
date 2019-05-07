@@ -21,7 +21,8 @@ namespace JTNote
     /// </summary>
     public partial class NoteEdit : Window
     {
-        Note currentNote = new Note(null, Globals.LoginUser.Id, "Untitled Note", "", null, false, DateTime.Now);
+        Note currentNote = new Note(0, Globals.LoginUser.Id, "Untitled Note", "", null, false, DateTime.Now);
+
         MainWindow mainWindow;
         public NoteEdit(MainWindow parent, Note inputNote = null)
         {
@@ -59,10 +60,20 @@ namespace JTNote
                 currentNote.Title = tbTitle.Text;
             currentNote.Content = rtbContent.Text.ToString();
 
+            using (var ctx = new JTNoteContext())
+            {
+                if (currentNote.Id < 1) //== null)
+                    ctx.Notes.Add(currentNote);
+
+                ctx.SaveChanges();
+            }
+
+            /*
             if (currentNote.Id == null)
                 Globals.Db.CreateNote(currentNote);
             else
                 Globals.Db.UpdateNote(currentNote);
+            */
 
             mainWindow.LoadAllNotes();
         }

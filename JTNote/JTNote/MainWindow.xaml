@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:self="clr-namespace:JTNote"
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -184,6 +185,61 @@
                         </MenuItem.Header>
                     </MenuItem>
                 </Menu>
+                
+                <TreeView Name="trvTags">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type self:TagsOnUser}" ItemsSource="{Binding TagList}">
+                            <Grid Width="200">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" Width="160" Grid.Column="0">
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
+                                    <TextBlock VerticalAlignment="Center" Text=" [" Foreground="Blue" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding TagList.Count}" Foreground="Blue" />
+                                    <TextBlock VerticalAlignment="Center" Text="]" Foreground="Blue" />
+                                </StackPanel>
+                                <Label Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblSidebarNewTag_PreviewMouseLeftButtonDown">
+                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                                </Label>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                        <DataTemplate DataType="{x:Type self:Tag}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text=" [" Foreground="Black" />
+                                <TextBlock Text="{Binding NumberOfNotes}" Foreground="Black" />
+                                <TextBlock Text="]" Foreground="Black" />                                
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+
+                <TreeView>
+                    <TreeViewItem Name="trvTags2">
+                        <TreeViewItem.Header>
+                            <Grid Width="200">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Width="160" Grid.Column="0">
+                                    <TextBlock Grid.Column="0" VerticalAlignment="Center">Tags</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" Text=" [" Foreground="Blue" />
+                                    <TextBlock Name="lblNumberOfTags" VerticalAlignment="Center" Text="" Foreground="Blue" />
+                                    <TextBlock VerticalAlignment="Center" Text="]" Foreground="Blue" />
+                                </StackPanel>
+                                
+                                <Label Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblSidebarNewTag_PreviewMouseLeftButtonDown">
+                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                                </Label>
+                            </Grid>
+                        </TreeViewItem.Header>                        
+                    </TreeViewItem>
+                </TreeView>
+
             </StackPanel>
 
             <Grid Grid.Column="1" HorizontalAlignment="Stretch">
