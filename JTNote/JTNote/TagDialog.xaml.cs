@@ -42,6 +42,7 @@ namespace JTNote
                 case TagDialogType.Update:
                     Title = "Update tag";
                     btCreateUpdate.Content = "Update";
+                    tbTag.Text = currentTag.Name;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("Invalid argument for creating TagDialog");
@@ -57,7 +58,15 @@ namespace JTNote
                 {
                     // check if tag is already exist in the list of tags
                     // if (Globals.TagList.Exists(tag => tag.Name == tagName))
-                    if (ctx.Tags.Where(tag => tag.UserId == Globals.LoginUser.Id && tag.Name == tagName).Count() > 0)
+
+                    foreach (Tag tag in ctx.Tags.Where(tag => tag.UserId == Globals.LoginUser.Id && tagName.CompareTo(tag.Name) == 0).ToList())
+                    {
+                        Console.WriteLine(tagName);
+                        Console.WriteLine(tag.Name);
+                    }
+
+                    if (ctx.Tags.Where(tag => tag.UserId == Globals.LoginUser.Id && tag.Name == tagName).ToList().Count() > 0)
+                    //                    if (Globals.LoginUser.Tags.Where(tag => tag.Name == tagName).Count() > 0)
                     {
                         string errMessage = string.Format("Tag \"{0}\" already exists.\nPlease enter a different tag name", tagName);
                         MessageBox.Show(errMessage, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -71,6 +80,7 @@ namespace JTNote
                             break;
                         case TagDialogType.Update:
                             currentTag.Name = tagName;      // update tag name
+                            ctx.Tags.Where(tag => tag.Id == currentTag.Id).ToList()[0].Name = tagName;
                             break;
                         default:
                             throw new ArgumentOutOfRangeException("Invalid argument for creating TagDialog");

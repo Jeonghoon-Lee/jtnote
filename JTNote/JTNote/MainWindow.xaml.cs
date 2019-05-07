@@ -55,7 +55,7 @@ namespace JTNote
             Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
 
 
-            // FIXME: testing treeview with bind
+            // TODO: testing treeview with bind
             using (var ctx = new JTNoteContext())
             {
                 TagsOnUser tagsOnUser = new TagsOnUser();
@@ -70,6 +70,7 @@ namespace JTNote
             trvTags.ItemsSource = Globals.TagListView;
 
             // FIXME: testing treeview without bind
+/*
             using (var ctx = new JTNoteContext())
             {
                 List<Tag> tagList = ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList();
@@ -80,7 +81,7 @@ namespace JTNote
                     trvTags2.Items.Add(string.Format("{0} ({1})", tag.Name, tag.Notes.Count));
                 }
             }
-
+*/
 
             // Load tag list from database
             // Globals.ReloadTagList();
@@ -129,6 +130,11 @@ namespace JTNote
             // Set counts for sidebar items - TODO: Replace these with bindings?
             tbSidebarNotesTitle.Text = string.Format("Notes ({0})", notesList.Count);
             tbSidebarTrashTitle.Text = string.Format("Trash ({0})", trashList.Count);
+
+            // May 7, 2019
+            // modified by JH to display note, trash count on left tree view
+            tblNumberOfNotes.Text = notesList.Count.ToString();
+            tblNumberOfTrash.Text = trashList.Count.ToString();
 
             // Refresh centre pane
             lvCentrePane.Items.Refresh();
@@ -300,12 +306,12 @@ namespace JTNote
                 ErrorNotifyDbConnection(ex);
             }
         }
+
         private void BtnRightPaneEdit_Click(object sender, RoutedEventArgs e)
         {
             NoteEdit editNoteWindow = new NoteEdit(this, lvCentrePane.SelectedItem as Note);
             editNoteWindow.ShowDialog();
         }
-
 
         // SIDEBAR NIBS CLICKS
         private void LblSidebarEmptyTrash_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -373,6 +379,58 @@ namespace JTNote
             newNoteWindow.Show();
         }
 
+        private void TagRename_PopupMenuClick(object sender, RoutedEventArgs e)
+        {
+            Tag currentTag = (Tag)trvTags.SelectedItem;
+            TagDialog tagDialog = new TagDialog(this, TagDialogType.Update, currentTag);
+
+            if (tagDialog.ShowDialog() == true)
+            {
+                //
+                // TODO: Make it method and test
+                //
+/*
+                using (var ctx = new JTNoteContext())
+                {
+                    TagsOnUser tagsOnUser = new TagsOnUser();
+
+                    Globals.TagListView.Clear();
+                    foreach (Tag tag in ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList())
+                    {
+                        tag.NumberOfNotes = tag.Notes.Count;
+                        tagsOnUser.TagList.Add(tag);
+                    }
+                    Globals.TagListView.Add(tagsOnUser);
+                }
+*/            
+                trvTags.Items.Refresh();
+            }
+        }
+
+        private void TagDelete_PopupMenuClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        // Handling right mouse click on left tree view
+        private void TrvTags_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                treeViewItem.Focus();
+                e.Handled = true;
+            }
+        }
+
+        static TreeViewItem VisualUpwardSearch(DependencyObject source)
+        {
+            while (source != null && !(source is TreeViewItem))
+                source = VisualTreeHelper.GetParent(source);
+
+            return source as TreeViewItem;
+        }
     }
 }
 
