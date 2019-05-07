@@ -25,6 +25,13 @@ namespace JTNote
         List<Note> notesList = new List<Note>();
         List<Note> trashList = new List<Note>();
 
+        // States for centre and right panels
+        enum ListState {
+            Notes = 0,
+            Trash = 1
+        };
+        ListState listState = ListState.Notes;
+
         // List<Tag> tagList = new List<Tag>();
         // List<TagsOnUser> tagsOnUserList = new List<TagsOnUser>();
 
@@ -130,11 +137,26 @@ namespace JTNote
             tbSidebarNotesTitle.Text = string.Format("Notes ({0})", notesList.Count);
             tbSidebarTrashTitle.Text = string.Format("Trash ({0})", trashList.Count);
 
-            // Refresh centre pane
+            // Set correct data source and refresh centre pane
+            switch (listState)
+            {
+                case ListState.Notes:
+                    lvCentrePane.ItemsSource = notesList;
+                    break;
+                case ListState.Trash:
+                    lvCentrePane.ItemsSource = trashList;
+                    break;
+                default:
+                    MessageBox.Show("Unknown error when loading notes selection!", "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
+                    break;
+            }
             lvCentrePane.Items.Refresh();
 
             if (lvCentrePane.Items.Count > 0)
+            {
                 lvCentrePane.SelectedIndex = 0;
+                spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
+            }
         }
 
         void ErrorNotifyDbConnection(Exception ex)
@@ -160,8 +182,8 @@ namespace JTNote
         {
             // Change data source for centre pane, highlighting correct item in right pane
             lvCentrePane.ItemsSource = newList;
-            lvCentrePane.Items.Refresh();
 
+            // If there are no notes in the currently selected list, deselect notes.
             if (newList.Count > 0)
                 lvCentrePane.SelectedIndex = 0;
 
@@ -182,13 +204,17 @@ namespace JTNote
                 btnRightPaneDelete.ToolTip = "Permanently delete this note.";
                 btnRightPaneShare.Visibility = Visibility.Hidden;
                 btnRightPaneRestore.Visibility = Visibility.Visible;
+                listState = ListState.Trash;
             }
             else
             {
                 btnRightPaneDelete.ToolTip = "Send this note to trash.";
                 btnRightPaneRestore.Visibility = Visibility.Hidden;
                 btnRightPaneShare.Visibility = Visibility.Visible;
+                listState = ListState.Notes;
             }
+
+            lvCentrePane.Items.Refresh();
         }
 
         private void LvCentrePane_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -229,9 +255,6 @@ namespace JTNote
                 {
                     if (MessageBox.Show(string.Format("Are you sure you want to permanently delete the note \"{0}\"? This is not reversible.", currentNote.Title), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        //    currentNote.DeleteSelfFromDb();
-                        //    LoadAllNotes();
-
                         // updated with EF
                         // FIXME: Need to test
                         using (var ctx = new JTNoteContext())
@@ -303,7 +326,7 @@ namespace JTNote
         private void BtnRightPaneEdit_Click(object sender, RoutedEventArgs e)
         {
             NoteEdit editNoteWindow = new NoteEdit(this, lvCentrePane.SelectedItem as Note);
-            editNoteWindow.ShowDialog();
+            editNoteWindow.Show();
         }
 
 
