@@ -95,6 +95,7 @@
     <Compile Include="TagDialog.xaml.cs">
       <DependentUpon>TagDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TagsOnUser.cs" />
     <Compile Include="User.cs" />
     <Page Include="LoginRegister.xaml">
       <SubType>Designer</SubType>

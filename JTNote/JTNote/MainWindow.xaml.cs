@@ -24,6 +24,10 @@ namespace JTNote
         // Create lists of items for main window display
         List<Note> notesList = new List<Note>();
         List<Note> trashList = new List<Note>();
+
+        // List<Tag> tagList = new List<Tag>();
+        List<TagsOnUser> tagsOnUserList = new List<TagsOnUser>();
+
         public MainWindow()
         {
 /*
@@ -49,6 +53,34 @@ namespace JTNote
 
             // Set login user information onto title bar
             Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
+
+
+            // FIXME: testing treeview with bind
+            using (var ctx = new JTNoteContext())
+            {
+                TagsOnUser tagsOnUser = new TagsOnUser();
+
+                foreach (Tag tag in ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList())
+                {
+                    tag.NumberOfNotes = tag.Notes.Count;
+                    tagsOnUser.TagList.Add(tag);
+                }
+                tagsOnUserList.Add(tagsOnUser);
+            }
+            trvTags.ItemsSource = tagsOnUserList;
+
+            // FIXME: testing treeview without bind
+            using (var ctx = new JTNoteContext())
+            {
+                List<Tag> tagList = ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList();
+
+                lblNumberOfTags.Text = tagList.Count().ToString();
+                foreach (Tag tag in tagList)
+                {
+                    trvTags2.Items.Add(string.Format("{0} ({1})", tag.Name, tag.Notes.Count));
+                }
+            }
+
 
             // Load tag list from database
             // Globals.ReloadTagList();

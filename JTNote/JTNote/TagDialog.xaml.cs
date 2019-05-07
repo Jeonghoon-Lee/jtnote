@@ -76,7 +76,6 @@ namespace JTNote
                         default:
                             throw new ArgumentOutOfRangeException("Invalid argument for creating TagDialog");
                     }
-
                 }
                 /*
                             // check if tag is already exist in the list of tags
