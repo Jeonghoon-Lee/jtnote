@@ -5,6 +5,7 @@
 	-Complete database mockup
 	-Create database on Azure
 
+
 5/2/2019 Taylor
 1. Done since last scrum:
 	-First scrum
@@ -30,3 +31,21 @@
 2. To do until next scrum:
 	-Finish making main page interactive.
 	-Create functionality for Add Note page including Rich Text box and saving to DB.
+
+
+5/6/2019 Jeonghoon
+1. Done since last scrum:
+	-Create login and registration system for users.
+	-Create system for creation of tags and attaching them to notes.
+2. To do until next scrum:
+	-Finish creation of tag system.
+	-Switch sidebar menu to treeview to accomodate tags.
+
+5/6/2019 Taylor
+1. Done since last scrum:
+	-Created interactivity in main window.
+	-Created system to organize notes into main and trash lists, and to delete notes.
+	-Started work on edit note dialog.
+2. To do until next scrum:
+	-Finish creating edit note dialog, and implement code behind to add notes.
+	-Fix error reloading note lists in main menu (items in listview don't properly update)

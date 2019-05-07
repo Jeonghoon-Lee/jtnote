@@ -105,11 +105,13 @@ namespace JTNote
             {
                 MessageBox.Show(string.Format("Fatal error: unable to connect to the database.{0}{1}", Environment.NewLine, ex.Message), "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
+                return;
             }
             else if (ex is InvalidCastException || ex is ArgumentException)
             {
                 MessageBox.Show(string.Format("Fatal error: unable to perform action in the database due to corrupt data.{0}{1}", Environment.NewLine, ex.Message), "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
+                return;
             }
             else
                 throw ex;
@@ -229,6 +231,11 @@ namespace JTNote
                 ErrorNotifyDbConnection(ex);
             }
         }
+        private void BtnRightPaneEdit_Click(object sender, RoutedEventArgs e)
+        {
+            NoteEdit editNoteWindow = new NoteEdit(this, lvCentrePane.SelectedItem as Note);
+            editNoteWindow.ShowDialog();
+        }
 
 
         // SIDEBAR NIBS CLICKS
@@ -268,5 +275,12 @@ namespace JTNote
         {
             LblSidebarNewTag_PreviewMouseLeftButtonDown(sender, null);
         }
+
+        private void LblSidebarNewNote_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            NoteEdit newNoteWindow = new NoteEdit(this);
+            newNoteWindow.Show();
+        }
+
     }
 }
