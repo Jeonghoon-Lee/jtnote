@@ -56,19 +56,16 @@ namespace JTNote
 
         private void ReloadTagTreeView()
         {
-            using (var ctx = new JTNoteContext())
-            {
-                TagsOnUser tagsOnUser = new TagsOnUser();
+            TagsOnUser tagsOnUser = new TagsOnUser();
 
-                foreach (Tag tag in ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList())
-                {
-                    tag.NumberOfNotes = tag.Notes.Count;
-                    tagsOnUser.TagList.Add(tag);
-                }
-                tagListOnUser.Clear();
-                tagListOnUser.Add(tagsOnUser);
-                trvTags.Items.Refresh();
+            foreach (Tag tag in Globals.Ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList())
+            {
+                tag.NumberOfNotes = tag.Notes.Count;
+                tagsOnUser.TagList.Add(tag);
             }
+            tagListOnUser.Clear();
+            tagListOnUser.Add(tagsOnUser);
+            trvTags.Items.Refresh();
         }
 
         public void LoadAllNotes()
@@ -81,17 +78,14 @@ namespace JTNote
                 // Populate notes lists from DB
                 //                Globals.Db.GetAllNotesByUserId(Globals.LoginUser.Id)
                 // Updated with EF
-                using (var ctx = new JTNoteContext())
-                {
-                    ctx.Notes.Where(note => note.UserId == Globals.LoginUser.Id).ToList()
-                        .ForEach(note => {
-                            // if (note.IsDeleted)
-                            if (note.IsDeleted == 1)
-                                trashList.Add(note); // Add notes flagged for deletion to trash
-                            else
-                                notesList.Add(note); // Add all other notes to main notes list
-                         });
-                }
+                Globals.Ctx.Notes.Where(note => note.UserId == Globals.LoginUser.Id).ToList()
+                    .ForEach(note => {
+                        // if (note.IsDeleted)
+                        if (note.IsDeleted == 1)
+                            trashList.Add(note); // Add notes flagged for deletion to trash
+                        else
+                            notesList.Add(note); // Add all other notes to main notes list
+                        });
             }
             catch (Exception ex)
             {
@@ -216,11 +210,8 @@ namespace JTNote
 
                         // updated with EF
                         // FIXME: Need to test
-                        using (var ctx = new JTNoteContext())
-                        {
-                            ctx.Notes.Remove(currentNote);
-                            ctx.SaveChanges();
-                        }
+                        Globals.Ctx.Notes.Remove(currentNote);
+                        Globals.Ctx.SaveChanges();
                     }
                 }
                 catch (Exception ex)
@@ -238,15 +229,12 @@ namespace JTNote
                     // LoadAllNotes();
 
                     // updated with EF
-                    using (var ctx = new JTNoteContext())
-                    {
 //                        currentNote.IsDeleted = 1;
-                        // TODO: Error handling
-                        Note updateNote = ctx.Notes.Where(note => note.Id == currentNote.Id).ToList()[0];
+                    // TODO: Error handling
+                    Note updateNote = Globals.Ctx.Notes.Where(note => note.Id == currentNote.Id).ToList()[0];
 
-                        updateNote.IsDeleted = 1;
-                        ctx.SaveChanges();
-                    }
+                    updateNote.IsDeleted = 1;
+                    Globals.Ctx.SaveChanges();
                     LoadAllNotes();
                 }
                 catch (Exception ex)
@@ -270,11 +258,8 @@ namespace JTNote
                     //LoadAllNotes();
 
                     // updated with EF
-                    using (var ctx = new JTNoteContext())
-                    {
-                        currentNote.IsDeleted = 0;
-                        ctx.SaveChanges();
-                    }
+                    currentNote.IsDeleted = 0;
+                    Globals.Ctx.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -306,11 +291,8 @@ namespace JTNote
                     */
                     // updated with EF
                     // FIXME: Need to test
-                    using (var ctx = new JTNoteContext())
-                    {
-                        trashList.ForEach(currentNote => ctx.Notes.Remove(currentNote));
-                        ctx.SaveChanges();
-                    }
+                    trashList.ForEach(currentNote => Globals.Ctx.Notes.Remove(currentNote));
+                    Globals.Ctx.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -321,7 +303,7 @@ namespace JTNote
 
         private void LblSidebarNewTag_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            TagDialog tagDialog = new TagDialog(this, TagDialogType.Create);
+            TagNotebookDialog tagDialog = new TagNotebookDialog(this, ETagNotebookDlgType.CreateTag);
 
             if (tagDialog.ShowDialog() == true)
             {
@@ -342,29 +324,27 @@ namespace JTNote
 
         private void TagRename_PopupMenuClick(object sender, RoutedEventArgs e)
         {
-/*            Tag currentTag = (Tag)trvTags.SelectedItem;
-            TagDialog tagDialog = new TagDialog(this, TagDialogType.Update, currentTag);
+            Tag currentTag = (Tag)trvTags.SelectedItem;
+            TagNotebookDialog tagDialog = new TagNotebookDialog(this, ETagNotebookDlgType.UpdateTag, currentTag);
 
             if (tagDialog.ShowDialog() == true)
             {
                 // Update was made in tag dialog,
                 trvTags.Items.Refresh();
             }
-*/        }
+        }
 
         private void TagDelete_PopupMenuClick(object sender, RoutedEventArgs e)
         {
-/*            Tag deletingTag = (Tag)trvTags.SelectedItem;
+            Tag deletingTag = (Tag)trvTags.SelectedItem;
             if (MessageBox.Show(string.Format("Are you sure you want to permanently delete tag \"{0}\"?\nThis is not reversible.", deletingTag.Name), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                using (var ctx = new JTNoteContext())
-                {
-                    ctx.Tags.RemoveRange(ctx.Tags.Where(tag => tag.Id == deletingTag.Id).ToList());
-                    ctx.SaveChanges();
-                }
+                Globals.Ctx.Tags.Remove(Globals.Ctx.Tags.Where(tag => tag.Id == deletingTag.Id).Single());
+                Globals.Ctx.SaveChanges();
+
                 ReloadTagTreeView();
             }
-*/        }
+        }
 
         // Handling right mouse click on left tree view
         private void TrvTags_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)

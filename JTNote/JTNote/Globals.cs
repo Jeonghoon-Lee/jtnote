@@ -8,6 +8,7 @@ namespace JTNote
 {
     class Globals
     {
+        public static readonly JTNoteContext Ctx = new JTNoteContext();
         public static User LoginUser;
     }
 }

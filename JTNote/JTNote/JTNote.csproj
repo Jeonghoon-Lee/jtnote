@@ -95,8 +95,8 @@
     <Compile Include="RegexUtils.cs" />
     <Compile Include="SharedNote.cs" />
     <Compile Include="Tag.cs" />
-    <Compile Include="TagDialog.xaml.cs">
-      <DependentUpon>TagDialog.xaml</DependentUpon>
+    <Compile Include="TagNotebookDialog.xaml.cs">
+      <DependentUpon>TagNotebookDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="TagsOnUser.cs" />
     <Compile Include="User.cs" />
@@ -125,7 +125,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TagDialog.xaml">
+    <Page Include="TagNotebookDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
