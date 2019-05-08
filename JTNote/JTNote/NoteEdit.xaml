@@ -23,7 +23,19 @@
             </Menu.Resources>
 
             <MenuItem Header="File"></MenuItem>
-            <MenuItem Header="Edit"></MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Undo" Command="ApplicationCommands.Undo" />
+                <MenuItem Header="Redo" Command="ApplicationCommands.Redo" />
+                <Separator />
+                <MenuItem Header="Cut" Command="ApplicationCommands.Cut" />
+                <MenuItem Header="Copy" Command="ApplicationCommands.Copy" />
+                <MenuItem Header="Paste" Command="ApplicationCommands.Paste" />
+                <MenuItem Header="Delete" Command="ApplicationCommands.Delete" />
+                <Separator />
+                <MenuItem Header="Find..." Command="ApplicationCommands.Find" CommandTarget="{Binding ElementName=rtbContent}" />
+                <Separator />
+                <MenuItem Header="Select All" Command="ApplicationCommands.SelectAll"/>
+            </MenuItem>
             <MenuItem Header="Help"></MenuItem>
         </Menu>
 
@@ -46,9 +58,11 @@
         </Grid>
 
         <WrapPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="{DynamicResource PrimaryHueLightBrush}">
-            <ComboBox Name="cbFonts" Margin="15,0,0,0" Width="150" SelectionChanged="CbFonts_SelectionChanged"/>
-            <ComboBox Name="cbFontSizes" Margin="10,0,0,0" Width="40" SelectionChanged="CbFontSizes_SelectionChanged"/>
-            <Button Margin="15,5,0,5" />
+            <ComboBox Name="cbFonts" Margin="15,0,0,0" Width="150" SelectionChanged="FontFamilySize_SelectionChanged"/>
+            <ComboBox Name="cbFontSizes" Margin="10,0,0,0" Width="40" SelectionChanged="FontFamilySize_SelectionChanged"/>
+            <Button Name="btnFormatBold" Command="EditingCommands.ToggleBold" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatBold, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
+            <Button Name="btnFormatItalic" Command="EditingCommands.ToggleItalic" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatItalic, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
+            <Button Name="btnFormatUnderline" Command="EditingCommands.ToggleUnderline" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatUnderline, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
         </WrapPanel>
         
         <Grid>

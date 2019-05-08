@@ -25,7 +25,11 @@ namespace JTNote
         string initialTitle;
         string initialContent;
         bool forceClose = false; // To force the window to close without prompt when clicking checkmark button
+        int[] allFontSizes = { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
         TextPointer contentLastCaretPosition;
+        bool boldEngaged = false;
+        bool italicEngaged = false;
+        bool underlineEngaged = false;
 
         MainWindow mainWindow;
         public NoteEdit(MainWindow parent, Note inputNote = null)
@@ -52,9 +56,11 @@ namespace JTNote
             fontNames = fontNames.OrderBy(x => x).ToList();
             cbFonts.ItemsSource = fontNames;
             cbFonts.SelectedItem = rtbContent.FontFamily.Source;
+            cbFontSizes.SelectedItem = 12;
+
 
             // Set up font sizes box
-            cbFontSizes.ItemsSource = new List<int>(new int[] { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 });
+            cbFontSizes.ItemsSource = new List<int>(allFontSizes);
 
 
             // Load title and content
@@ -124,13 +130,50 @@ namespace JTNote
             }
         }
 
-        private void CbFonts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void FontFamilySize_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //rtbContent.FontFamily = new FontFamily(cbFonts.Text);
-            //rtbContent.Focus();
-            string newFontName = e.AddedItems[0].ToString();
+            string newFontName;
+            double newFontSize;
 
-            if (newFontName != (rtbContent.Selection.GetPropertyValue(FontFamilyProperty) as FontFamily).Source)
+            try
+            {
+                if (sender.Equals(cbFonts))
+                {
+                    newFontName = e.AddedItems[0].ToString();
+                    if (!double.TryParse(cbFontSizes.Text, out newFontSize))
+                        newFontSize = 12; // If error parsing new font size, revert to default
+                }
+                else
+                {
+                    newFontName = cbFonts.Text;
+                    if (!double.TryParse(e.AddedItems[0].ToString(), out newFontSize))
+                        newFontSize = 12; // If error parsing new font size, revert to default
+                }
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                // If no event args AddedItems passed, set defaults
+                newFontName = SystemFonts.MessageFontFamily.Source.ToString();
+                newFontSize = 12;
+            }
+
+            // See if we can select a single font name/size from selection (if error, it signals there are multiple different ones in selection
+            bool multi = false;
+            string selectedFontNameCheck;
+            string selectedFontSizeCheck;
+            try
+            {
+                selectedFontNameCheck = (rtbContent.Selection.GetPropertyValue(FontFamilyProperty) as FontFamily).Source;
+                selectedFontSizeCheck = rtbContent.Selection.GetPropertyValue(FontSizeProperty).ToString();
+            }
+            catch (NullReferenceException ex)
+            {
+                multi = true;
+            }
+
+            if (multi ||
+                newFontName != (rtbContent.Selection.GetPropertyValue(FontFamilyProperty) as FontFamily).Source || 
+                newFontSize.ToString() != rtbContent.Selection.GetPropertyValue(FontSizeProperty).ToString())
             {
                 FontFamily newFF = new FontFamily(newFontName);
 
@@ -138,8 +181,11 @@ namespace JTNote
                 {
                     if (rtbContent.Selection.Start.Paragraph == null)
                     {
-                        Paragraph p = new Paragraph();
-                        p.FontFamily = newFF;
+                        Paragraph p = new Paragraph
+                        {
+                            FontFamily = newFF,
+                            FontSize = newFontSize
+                        };
                         rtbContent.Document.Blocks.Add(p);
                     }
                     else
@@ -152,7 +198,8 @@ namespace JTNote
                             Paragraph newParagraph = currentBlock as Paragraph;
                             Run newRun = new Run
                             {
-                                FontFamily = newFF
+                                FontFamily = newFF,
+                                FontSize = newFontSize
                             };
                             newParagraph.Inlines.Add(newRun);
                             rtbContent.CaretPosition = newRun.ElementStart;
@@ -163,6 +210,7 @@ namespace JTNote
                 {
                     TextRange selectedRange = new TextRange(rtbContent.Selection.Start, rtbContent.Selection.End);
                     selectedRange.ApplyPropertyValue(TextElement.FontFamilyProperty, newFF);
+                    selectedRange.ApplyPropertyValue(TextElement.FontSizeProperty, newFontSize);
                 }
 
                 rtbContent.Focus();
@@ -188,6 +236,8 @@ namespace JTNote
                 try
                 {
                     cbFonts.SelectedItem = (rtbContent.Selection.GetPropertyValue(FontFamilyProperty) as FontFamily).Source;
+                    if (double.TryParse(rtbContent.Selection.GetPropertyValue(FontSizeProperty).ToString(), out double fontSizeDouble))
+                        cbFontSizes.SelectedItem = allFontSizes.OrderBy(x => Math.Abs((long)x - fontSizeDouble)).First(); // Output if font size of run matches one of the predefined font sizes
                 }
                 catch (NullReferenceException ex)
                 {

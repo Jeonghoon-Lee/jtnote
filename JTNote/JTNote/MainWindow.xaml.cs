@@ -219,7 +219,21 @@ namespace JTNote
 
         private void LvCentrePane_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
+            if (lvCentrePane.SelectedItem == null)
+            {
+                spActionButtonContainer.Visibility = Visibility.Hidden;
+                spRightPaneTagsContainer.Visibility = Visibility.Hidden;
+                rtbContent.Visibility = Visibility.Hidden;
+                lblRightPaneNoContentMessage.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
+                spActionButtonContainer.Visibility = Visibility.Visible;
+                spRightPaneTagsContainer.Visibility = Visibility.Visible;
+                rtbContent.Visibility = Visibility.Visible;
+                lblRightPaneNoContentMessage.Visibility = Visibility.Hidden;
+            }
         }
 
 
