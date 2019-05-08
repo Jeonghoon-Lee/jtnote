@@ -57,16 +57,9 @@ namespace JTNote
                 using (var ctx = new JTNoteContext())
                 {
                     // check if tag is already exist in the list of tags
-                    // if (Globals.TagList.Exists(tag => tag.Name == tagName))
-
-                    foreach (Tag tag in ctx.Tags.Where(tag => tag.UserId == Globals.LoginUser.Id && tagName.CompareTo(tag.Name) == 0).ToList())
-                    {
-                        Console.WriteLine(tagName);
-                        Console.WriteLine(tag.Name);
-                    }
-
-                    if (ctx.Tags.Where(tag => tag.UserId == Globals.LoginUser.Id && tag.Name == tagName).ToList().Count() > 0)
-                    //                    if (Globals.LoginUser.Tags.Where(tag => tag.Name == tagName).Count() > 0)
+                    if (ctx.Tags.Where(tag => tag.UserId == Globals.LoginUser.Id)
+                            .Select(tag => tag.Name).ToList()
+                            .Contains(tagName))
                     {
                         string errMessage = string.Format("Tag \"{0}\" already exists.\nPlease enter a different tag name", tagName);
                         MessageBox.Show(errMessage, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -79,6 +72,7 @@ namespace JTNote
                             ctx.Tags.Add(new Tag() { Name = tagName, UserId = Globals.LoginUser.Id });
                             break;
                         case TagDialogType.Update:
+                            // TODO: Need to implement error handling
                             currentTag.Name = tagName;      // update tag name
                             ctx.Tags.Where(tag => tag.Id == currentTag.Id).ToList()[0].Name = tagName;
                             break;
@@ -87,34 +81,6 @@ namespace JTNote
                     }
                     ctx.SaveChanges();
                 }
-                /*
-                            // check if tag is already exist in the list of tags
-                            if (Globals.TagList.Exists(tag => tag.Name == tagName))
-                            {
-                                string errMessage = string.Format("Tag \"{0}\" already exists.\nPlease enter a different tag name", tagName);
-                                MessageBox.Show(errMessage, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Warning);
-                                return;
-                            }
-
-                            switch (dialogType)
-                            {
-                                case TagDialogType.Create:
-                                    if (Globals.Db.CreateTag(new Tag() { Name = tagName, UserId = Globals.LoginUser.Id }) < 1)
-                                    {
-                                        MessageBox.Show("[Error]Unable to create new tag.\nPlease try it again", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
-                                    }
-                                    break;
-                                case TagDialogType.Update:
-                                    currentTag.Name = tagName;      // update tag name
-                                    if (!Globals.Db.UpdateTag(currentTag))
-                                    {
-                                        MessageBox.Show("[Error]Unable to update tag name.\nPlease try it again", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
-                                    }
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException("Invalid argument for creating TagDialog");
-                            }
-                */
                 DialogResult = true;
             }
             catch (SqlException ex)

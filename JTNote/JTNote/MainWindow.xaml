@@ -186,7 +186,7 @@
                     </MenuItem>
                 </Menu>
 
-                <TreeView Name="trvTags" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvTags_PreviewMouseRightButtonDown">
+                <TreeView Name="trvTags" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvTags_PreviewMouseRightButtonDown" PreviewMouseLeftButtonDown="TrvTags_PreviewMouseLeftButtonDown">
                     <TreeView.Resources>
                         <HierarchicalDataTemplate DataType="{x:Type self:TagsOnUser}" ItemsSource="{Binding TagList}">
                             <Grid Width="200">
@@ -222,8 +222,8 @@
                     </TreeView.Resources>
                 </TreeView>
 
-                <TreeView Name="trvNotes" FontSize="16" FontWeight="Regular">
-                    <TreeViewItem>
+                <TreeView>
+                    <TreeViewItem Name="trvNotes" Background="{DynamicResource PrimaryHueMidBrush}" FontSize="16" FontWeight="Regular" Selected="TreeViewItem_Selected">
                         <TreeViewItem.Header>
                             <Grid Width="200">
                                 <Grid.ColumnDefinitions>
@@ -231,12 +231,12 @@
                                     <ColumnDefinition Width="30"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Orientation="Horizontal" Width="170" Grid.Column="0">
+                                <DockPanel Width="170" Grid.Column="0" PreviewMouseLeftButtonDown="DockPanel_PreviewMouseLeftButtonDown">
                                     <TextBlock VerticalAlignment="Center" Text="Notes" />
                                     <TextBlock VerticalAlignment="Center" Text=" (" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
                                     <TextBlock Name="tblNumberOfNotes" VerticalAlignment="Center" Text="0" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
-                                    <TextBlock VerticalAlignment="Center" Text=")" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
-                                </StackPanel>                                
+                                    <TextBlock VerticalAlignment="Center" Text=")" HorizontalAlignment="Stretch" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                </DockPanel>
                                 <Label Grid.Column="1" ToolTip="Create a new note." MouseLeftButtonUp="LblSidebarNewNote_MouseLeftButtonUp">
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                 </Label>
@@ -246,7 +246,7 @@
                 </TreeView>
 
                 <TreeView Name="trvNotebook" FontSize="16" FontWeight="Regular">
-                    <TreeViewItem>
+                    <TreeViewItem Selected="TreeViewItem_Selected">
                         <TreeViewItem.Header>
                             <Grid Width="200">
                                 <Grid.ColumnDefinitions>
@@ -259,12 +259,12 @@
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                 </Label>
                             </Grid>
-                        </TreeViewItem.Header>                        
-                    </TreeViewItem>                    
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
                 </TreeView>
 
                 <TreeView Name="trvTrash" FontSize="16" FontWeight="Regular">
-                    <TreeViewItem>
+                    <TreeViewItem Selected="TreeViewItem_Selected">
                         <TreeViewItem.Header>
                             <Grid Width="200">
                                 <Grid.ColumnDefinitions>
