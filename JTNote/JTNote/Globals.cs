@@ -8,30 +8,7 @@ namespace JTNote
 {
     class Globals
     {
+        public static readonly JTNoteContext Ctx = new JTNoteContext();
         public static User LoginUser;
-
-        public static List<TagsOnUser> TagListView = new List<TagsOnUser>();
-
-
-        /*
-                public static Database Db;
-
-                public static User LoginUser;
-                public static List<Tag> TagList = null;
-
-                public static void ReloadTagList()
-                {
-                    if (TagList == null)
-                    {
-                        // initialize
-                        TagList = Db.GetTagsByUserId(LoginUser.Id);
-                    }
-                    else
-                    {
-                        TagList.Clear();
-                        TagList.AddRange(Db.GetTagsByUserId(LoginUser.Id));
-                    }
-                }
-        */
     }
 }

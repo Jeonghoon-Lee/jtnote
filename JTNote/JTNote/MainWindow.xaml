@@ -71,6 +71,11 @@
             <MenuItem Header="File">
                 <MenuItem Header="New Note"></MenuItem>
                 <MenuItem Header="New Tag..." Click="NewTag_MenuClick"></MenuItem>
+                <MenuItem Header="New Notebook..." Click="NewNotebook_MenuClick"></MenuItem>
+                <Separator/>
+                <MenuItem Header="User Setting..."></MenuItem>
+                <Separator/>
+                <MenuItem Header="Exit" Click="Exit_MenuClick"></MenuItem>
             </MenuItem>
             <MenuItem Header="Edit">
 
@@ -114,6 +119,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" HorizontalAlignment="Left" Background="{DynamicResource PrimaryHueLightBrush}">
+<!--
                 <Menu Name="mnuSidebar" IsMainMenu="False" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
                     <Menu.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -185,20 +191,20 @@
                         </MenuItem.Header>
                     </MenuItem>
                 </Menu>
-
-                <TreeView Name="trvTags">
+-->
+                <TreeView Name="trvTags" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvTags_PreviewMouseRightButtonDown" PreviewMouseLeftButtonDown="TrvTags_PreviewMouseLeftButtonDown">
                     <TreeView.Resources>
                         <HierarchicalDataTemplate DataType="{x:Type self:TagsOnUser}" ItemsSource="{Binding TagList}">
                             <Grid Width="200">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="160"></ColumnDefinition>
-                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                    <ColumnDefinition Width="170"></ColumnDefinition>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <StackPanel Orientation="Horizontal" Width="160" Grid.Column="0">
+                                <StackPanel Orientation="Horizontal" Width="170" Grid.Column="0">
                                     <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
-                                    <TextBlock VerticalAlignment="Center" Text=" [" Foreground="Blue" />
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding TagList.Count}" Foreground="Blue" />
-                                    <TextBlock VerticalAlignment="Center" Text="]" Foreground="Blue" />
+                                    <TextBlock VerticalAlignment="Center" Text=" (" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding TagList.Count}" />
+                                    <TextBlock VerticalAlignment="Center" Text=")" />
                                 </StackPanel>
                                 <Label Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblSidebarNewTag_PreviewMouseLeftButtonDown">
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
@@ -206,33 +212,38 @@
                             </Grid>
                         </HierarchicalDataTemplate>
                         <DataTemplate DataType="{x:Type self:Tag}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}" />
-                                <TextBlock Text=" [" Foreground="Black" />
-                                <TextBlock Text="{Binding NumberOfNotes}" Foreground="Black" />
-                                <TextBlock Text="]" Foreground="Black" />
-                            </StackPanel>
+                            <DockPanel Width="180">
+                                <DockPanel.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Rename..." Click="TagRename_PopupMenuClick"/>
+                                        <MenuItem Header="Delete" Click="TagDelete_PopupMenuClick"/>
+                                    </ContextMenu>
+                                </DockPanel.ContextMenu>
+                                <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="Regular"/>
+                                <TextBlock Text=" (" FontSize="14" FontWeight="Regular" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                <TextBlock Text="{Binding NumberOfNotes}" FontSize="14" FontWeight="Regular" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                <TextBlock Text=")" FontSize="14" FontWeight="Regular" HorizontalAlignment="Stretch" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                            </DockPanel>
                         </DataTemplate>
                     </TreeView.Resources>
                 </TreeView>
 
-                <TreeView>
-                    <TreeViewItem Name="trvTags2">
+                <TreeView Name="trvNotes" FontSize="16" FontWeight="Regular" Background="{DynamicResource PrimaryHueMidBrush}">
+                    <TreeViewItem Selected="TreeViewItem_Selected" Tag="tviNotes">
                         <TreeViewItem.Header>
                             <Grid Width="200">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="160"></ColumnDefinition>
-                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                    <ColumnDefinition Width="170"></ColumnDefinition>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Orientation="Horizontal" Width="160" Grid.Column="0">
-                                    <TextBlock Grid.Column="0" VerticalAlignment="Center">Tags</TextBlock>
-                                    <TextBlock VerticalAlignment="Center" Text=" [" Foreground="Blue" />
-                                    <TextBlock Name="lblNumberOfTags" VerticalAlignment="Center" Text="" Foreground="Blue" />
-                                    <TextBlock VerticalAlignment="Center" Text="]" Foreground="Blue" />
-                                </StackPanel>
-
-                                <Label Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblSidebarNewTag_PreviewMouseLeftButtonDown">
+                                <DockPanel Width="170" Grid.Column="0">
+                                    <TextBlock VerticalAlignment="Center" Text="Notes" />
+                                    <TextBlock VerticalAlignment="Center" Text=" (" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                    <TextBlock Name="tblNumberOfNotes" VerticalAlignment="Center" Text="0" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                    <TextBlock VerticalAlignment="Center" Text=")" HorizontalAlignment="Stretch" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                </DockPanel>
+                                <Label Grid.Column="1" ToolTip="Create a new note." MouseLeftButtonUp="LblSidebarNewNote_MouseLeftButtonUp">
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                 </Label>
                             </Grid>
@@ -240,6 +251,52 @@
                     </TreeViewItem>
                 </TreeView>
 
+                <TreeView Name="trvNotebook" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvNotebook_PreviewMouseRightButtonDown">
+                    <TreeView.Resources>
+                        <ContextMenu x:Key="NotebookContext" StaysOpen="True">
+                            <MenuItem Header="Rename..." Click="NotebookRename_PopupMenuClick"/>
+                            <MenuItem Header="Delete" Click="NotebookDelete_PopupMenuClick"/>
+                        </ContextMenu>
+                    </TreeView.Resources>                    
+                    <TreeViewItem Selected="TreeViewItem_Selected" Tag="tviNotebook">
+                        <TreeViewItem.Header>
+                            <Grid Width="200">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"></ColumnDefinition>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Width="170" Grid.Column="0" VerticalAlignment="Center">Notebooks</TextBlock>
+                                <Label Grid.Column="1" ToolTip="Create a new notebook." MouseLeftButtonUp="LblSidebarNewNotebook_MouseLeftButtonUp">
+                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                                </Label>
+                            </Grid>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeView>
+
+                <TreeView Name="trvTrash" FontSize="16" FontWeight="Regular">
+                    <TreeViewItem Selected="TreeViewItem_Selected" Tag="tviTrash">
+                        <TreeViewItem.Header>
+                            <Grid Width="200">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"></ColumnDefinition>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Width="170" Grid.Column="0">
+                                    <TextBlock VerticalAlignment="Center" Text="Trash" />
+                                    <TextBlock VerticalAlignment="Center" Text=" (" Foreground="Gray" />
+                                    <TextBlock Name="tblNumberOfTrash" VerticalAlignment="Center" Text="0" Foreground="Gray" />
+                                    <TextBlock VerticalAlignment="Center" Text=")" Foreground="Gray" />
+                                </StackPanel>
+                                <Label Grid.Column="1" ToolTip="Empty the trash." MouseLeftButtonUp="LblSidebarEmptyTrash_MouseLeftButtonUp">
+                                    <materialDesign:PackIcon Kind="TrashCan" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                                </Label>
+                            </Grid>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeView>
             </StackPanel>
 
             <Grid Grid.Column="1" HorizontalAlignment="Stretch">
