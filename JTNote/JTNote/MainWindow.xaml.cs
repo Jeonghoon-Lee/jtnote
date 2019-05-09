@@ -52,6 +52,9 @@ namespace JTNote
             Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
             ReloadTagTreeView();
 
+            // testing
+            ReloadNotebookTreeView();
+
             // Set default bindings for window elements
             lvCentrePane.ItemsSource = notesList;
 
@@ -296,14 +299,6 @@ namespace JTNote
             {
                 if (MessageBox.Show(string.Format("Are you sure you want to permanently delete these {0} notes? This is not reversible.", trashList.Count), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    /*
-                        trashList.ForEach(currentNote =>
-                        {
-                            currentNote.DeleteSelfFromDb();
-                        });
-                        LoadAllNotes();
-                    */
-                    // updated with EF
                     // FIXME: Need to test
                     trashList.ForEach(currentNote => Globals.Ctx.Notes.Remove(currentNote));
                     Globals.Ctx.SaveChanges();
@@ -389,20 +384,20 @@ namespace JTNote
             {
                 case "tviNotes":
                     ChangeSidebarSelection(notesList, "miSidebarNotesItem");
-                    trvTags.Background = null;
+                //    trvTags.Background = null;
                     trvNotes.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
-                    trvNotebook.Background = null;
+                //    trvNotebook.Background = null;
                     trvTrash.Background = null;
                     break;
                 case "tviNotebook":
-                    trvNotebook.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                //    trvNotebook.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
                     trvNotes.Background = null;
                     trvTrash.Background = null;
                     break;
                 case "tviTrash":
                     ChangeSidebarSelection(trashList, "miSidebarTrashItem");
                     trvNotes.Background = null;
-                    trvNotebook.Background = null;
+                //    trvNotebook.Background = null;
                     trvTrash.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
                     break;
                 default:
@@ -425,6 +420,75 @@ namespace JTNote
                 //                treeViewItem.IsSelected = false;
                 //                treeViewItem.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
 
+            }
+        }
+
+        private void NewNotebook_MenuClick(object sender, RoutedEventArgs e)
+        {
+            LblSidebarNewNotebook_MouseLeftButtonUp(sender, null);
+        }
+
+        private void Exit_MenuClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void LblSidebarNewNotebook_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            TagNotebookDialog notebookDlg = new TagNotebookDialog(this, ETagNotebookDlgType.CreateNotebook);
+
+            if (notebookDlg.ShowDialog() == true)
+            {
+                ReloadNotebookTreeView();
+            }
+        }
+
+        private void ReloadNotebookTreeView()
+        {
+            TreeViewItem ParentNode = (TreeViewItem)trvNotebook.Items[0];
+            ParentNode.Items.Clear();
+
+            foreach (var notebook in Globals.LoginUser.Notebooks)
+            {
+                TreeViewItem newItem = new TreeViewItem() {
+                    Tag = notebook.Id.ToString(),
+                    Header = string.Format("{0} ({1})", notebook.Name, notebook.Notes.Count)
+                };
+                ParentNode.Items.Add(newItem);
+                newItem.ContextMenu = trvNotebook.Resources["NotebookContext"] as System.Windows.Controls.ContextMenu;
+            } 
+        }
+
+        private void TrvNotebook_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TrvTags_PreviewMouseRightButtonDown(sender, e);
+        }
+
+        private void NotebookRename_PopupMenuClick(object sender, RoutedEventArgs e)
+        {
+            // FIXME: Error handling
+            int notebookId = int.Parse(((TreeViewItem)trvNotebook.SelectedItem).Tag.ToString());
+            Notebook currentNotebook = Globals.LoginUser.Notebooks.Where(notebook => notebook.Id == notebookId).SingleOrDefault();
+
+            TagNotebookDialog notebookDialog = new TagNotebookDialog(this, ETagNotebookDlgType.UpdateNotebook, currentNotebook);
+            if (notebookDialog.ShowDialog() == true)
+            {
+                ReloadNotebookTreeView();
+            }
+        }
+
+        private void NotebookDelete_PopupMenuClick(object sender, RoutedEventArgs e)
+        {
+            // FIXME: Error handling
+            int notebookId = int.Parse(((TreeViewItem)trvNotebook.SelectedItem).Tag.ToString());
+            Notebook deletingNotebook = Globals.LoginUser.Notebooks.Where(notebook => notebook.Id == notebookId).SingleOrDefault();
+
+            if (MessageBox.Show(string.Format("Are you sure you want to permanently delete tag \"{0}\"?\nThis is not reversible.", deletingNotebook.Name), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                Globals.Ctx.Notebooks.Remove(Globals.Ctx.Notebooks.Where(nt => nt.Id == deletingNotebook.Id).Single());
+                Globals.Ctx.SaveChanges();
+
+                ReloadNotebookTreeView();
             }
         }
     }

@@ -71,6 +71,11 @@
             <MenuItem Header="File">
                 <MenuItem Header="New Note"></MenuItem>
                 <MenuItem Header="New Tag..." Click="NewTag_MenuClick"></MenuItem>
+                <MenuItem Header="New Notebook..." Click="NewNotebook_MenuClick"></MenuItem>
+                <Separator/>
+                <MenuItem Header="User Setting..."></MenuItem>
+                <Separator/>
+                <MenuItem Header="Exit" Click="Exit_MenuClick"></MenuItem>
             </MenuItem>
             <MenuItem Header="Edit">
 
@@ -246,8 +251,14 @@
                     </TreeViewItem>
                 </TreeView>
 
-                <TreeView Name="trvNotebook" FontSize="16" FontWeight="Regular">
-                    <TreeViewItem Selected="TreeViewItem_Selected"  Tag="tviNotebook">
+                <TreeView Name="trvNotebook" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvNotebook_PreviewMouseRightButtonDown">
+                    <TreeView.Resources>
+                        <ContextMenu x:Key="NotebookContext" StaysOpen="True">
+                            <MenuItem Header="Rename..." Click="NotebookRename_PopupMenuClick"/>
+                            <MenuItem Header="Delete" Click="NotebookDelete_PopupMenuClick"/>
+                        </ContextMenu>
+                    </TreeView.Resources>                    
+                    <TreeViewItem Selected="TreeViewItem_Selected" Tag="tviNotebook">
                         <TreeViewItem.Header>
                             <Grid Width="200">
                                 <Grid.ColumnDefinitions>
@@ -256,7 +267,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Width="170" Grid.Column="0" VerticalAlignment="Center">Notebooks</TextBlock>
-                                <Label Grid.Column="1" ToolTip="Create a new notebook.">
+                                <Label Grid.Column="1" ToolTip="Create a new notebook." MouseLeftButtonUp="LblSidebarNewNotebook_MouseLeftButtonUp">
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                 </Label>
                             </Grid>

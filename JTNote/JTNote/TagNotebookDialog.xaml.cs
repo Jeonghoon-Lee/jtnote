@@ -51,7 +51,7 @@ namespace JTNote
                 case ETagNotebookDlgType.UpdateNotebook:
                     Title = "Rename notebook";
                     btCreateUpdate.Content = "Update";
-                    tbTagNotebook.Text = ((Tag)currentObj).Name;
+                    tbTagNotebook.Text = ((Notebook)currentObj).Name;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("Invalid argument for creating TagDialog");
