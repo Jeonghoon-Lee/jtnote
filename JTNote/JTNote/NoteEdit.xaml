@@ -1,0 +1,88 @@
+﻿<Window x:Class="JTNote.NoteEdit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:sysCollection="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:local="clr-namespace:JTNote"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Closing="Window_Closing"
+        Title="NoteEdit" Height="600" Width="900">
+
+    <DockPanel Name="dpMainPanel">
+        <Menu DockPanel.Dock="Top">
+            <Menu.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </Menu.Resources>
+
+            <MenuItem Header="File">
+                <MenuItem Header="Import Document..." Click="MenuItemImport_Click" />
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Undo" Command="ApplicationCommands.Undo" />
+                <MenuItem Header="Redo" Command="ApplicationCommands.Redo" />
+                <Separator />
+                <MenuItem Header="Cut" Command="ApplicationCommands.Cut" />
+                <MenuItem Header="Copy" Command="ApplicationCommands.Copy" />
+                <MenuItem Header="Paste" Command="ApplicationCommands.Paste" />
+                <MenuItem Header="Delete" Command="ApplicationCommands.Delete" />
+                <Separator />
+                <MenuItem Header="Find..." Command="ApplicationCommands.Find" CommandTarget="{Binding ElementName=rtbContent}" />
+                <Separator />
+                <MenuItem Header="Select All" Command="ApplicationCommands.SelectAll"/>
+            </MenuItem>
+            <MenuItem Header="Help"></MenuItem>
+        </Menu>
+
+        <Grid DockPanel.Dock="Top" Background="{DynamicResource PrimaryHueDarkBrush}" Height="55">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Right">
+                    <Button Name="btnPrint" DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" Content="{materialDesign:PackIcon Kind=Printer, Size=25}" ToolTip="Print this note." Padding="0" Height="40" Width="40" Margin="10,0,0,0" />
+                    <Button Name="btnShare" DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" Content="{materialDesign:PackIcon Kind=Share, Size=25}" ToolTip="Share this note." Padding="0" Height="40" Width="40" Margin="10,0,15,0" />
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Right">
+                    <Button Name="btnSaveNote" DockPanel.Dock="Left" Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=Check, Size=35}" ToolTip="Save this note." Padding="0" Height="40" Width="40" Margin="10,0,0,0" Click="BtnSaveNote_Click" />
+                    <ComboBox Name="cbNotebooks" DockPanel.Dock="Left" Width="160" Height="40" Margin="15,0,0,0" Padding="3,8,3,3" FontSize="16" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" ToolTip="Add to a notebook." />
+                    <TextBox DockPanel.Dock="Left" Name="tbTitle" Margin="10,0,10,0" Padding="5,0,0,0" Text="{Binding Title}" FontSize="25" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Height="40" HorizontalAlignment="Stretch" />
+                </DockPanel>
+
+            </DockPanel>
+        </Grid>
+
+        <DockPanel DockPanel.Dock="Top" Background="{DynamicResource PrimaryHueLightBrush}">
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                <ComboBox Name="cbFonts" Margin="15,0,0,0" Width="150" SelectionChanged="FontFamilySize_SelectionChanged"/>
+                <ComboBox Name="cbFontSizes" Margin="10,0,0,0" Width="40" SelectionChanged="FontFamilySize_SelectionChanged"/>
+                <Button Name="btnFormatBold" Command="EditingCommands.ToggleBold" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatBold, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
+                <Button Name="btnFormatItalic" Command="EditingCommands.ToggleItalic" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatItalic, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
+                <Button Name="btnFormatUnderline" Command="EditingCommands.ToggleUnderline" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatUnderline, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
+            </StackPanel>
+            <StackPanel>
+                <!-- Area to add tags -->
+            </StackPanel>
+        </DockPanel>
+        
+        
+        <Grid>
+            <toolkit:RichTextBox Name="rtbContent" Grid.Row="1" Margin="10" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Gray" Padding="10" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="RtbContent_SelectionChanged" LostFocus="RtbContent_LostFocus">
+                <toolkit:RichTextBoxFormatBarManager.FormatBar>
+                    <toolkit:RichTextBoxFormatBar Visibility="Hidden" />
+                </toolkit:RichTextBoxFormatBarManager.FormatBar>
+                <toolkit:RichTextBox.TextFormatter>
+                    <toolkit:RtfFormatter />
+                </toolkit:RichTextBox.TextFormatter>
+            </toolkit:RichTextBox>
+        </Grid>
+    </DockPanel>
+</Window>

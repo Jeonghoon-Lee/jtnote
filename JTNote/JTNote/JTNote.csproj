@@ -35,6 +35,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -42,7 +51,10 @@
       <HintPath>..\packages\MaterialDesignThemes.2.5.1\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -76,12 +88,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FileFunctions.cs" />
+    <Compile Include="JTNoteContext.cs" />
     <Compile Include="MD5Hash.cs" />
-    <Compile Include="RegexUtils.cs" />
-    <Compile Include="Tag.cs" />
-    <Compile Include="TagDialog.xaml.cs">
-      <DependentUpon>TagDialog.xaml</DependentUpon>
+    <Compile Include="Note.cs" />
+    <Compile Include="Notebook.cs" />
+    <Compile Include="NoteEdit.xaml.cs">
+      <DependentUpon>NoteEdit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RegexUtils.cs" />
+    <Compile Include="SharedNote.cs" />
+    <Compile Include="Tag.cs" />
+    <Compile Include="TagNotebookDialog.xaml.cs">
+      <DependentUpon>TagNotebookDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TagsOnUser.cs" />
     <Compile Include="User.cs" />
     <Page Include="LoginRegister.xaml">
       <SubType>Designer</SubType>
@@ -104,13 +125,16 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="TagDialog.xaml">
+    <Page Include="NoteEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TagNotebookDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Note.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

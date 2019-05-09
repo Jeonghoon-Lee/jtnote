@@ -4,32 +4,28 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Data.Entity.Spatial;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+/*
+    using System;
+    using System.Collections.Generic;
+*/
 
 namespace JTNote
 {
-    public class Note
+    public partial class Note
     {
-        public int? Id { get; set; }
-        public int UserId { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; } // TODO: May have to change typing as this will be XML for RTB?
-        public int? NotebookId { get; set; } = null;
-        public bool IsDeleted { get; set; } = false;
-        public DateTime LastUpdatedDate { get; set; } = DateTime.Today;
-
-        public string TruncatedContent
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Note()
         {
-            get
-            {
-                if (Content.Length > 100)
-                    return Content.Substring(0, 100) + "...";
-                else
-                    return Content;
-            }
-            private set { }
+            SharedNotes = new HashSet<SharedNote>();
+            Tags = new HashSet<Tag>();
         }
 
-        public Note(int id, int userId, string title, string content, int? notebookId, bool isDeleted, DateTime lastUpdatedDate)
+        public Note(int id, int userId, string title, string content, Notebook notebook, bool isDeleted, DateTime lastUpdatedDate)
         {
             if (title == null || title == "")
                 throw new ArgumentException("Error loading data: Title must contain text."); // Title cannot be blank, there is an error if so
@@ -38,39 +34,68 @@ namespace JTNote
             UserId = userId;
             Title = title;
             Content = content;
-            NotebookId = notebookId;
-            IsDeleted = isDeleted;
+            Notebook = notebook;
+            IsDeleted = (byte)(isDeleted == true ? 1 : 0);
             LastUpdatedDate = lastUpdatedDate;
         }
 
-        public void ReloadNote()
+        public int Id { get; set; }
+
+        [NotMapped]
+        public string ContentPlaintext
         {
-            if (Id == null)
-                throw new ArgumentException("Cannot reload a new note with no Id!");
+            get
+            {
+                // Parse raw XML from Content to plain text
+                XmlDocument contentRawXml = new XmlDocument();
+                contentRawXml.LoadXml("<?xml version=\"1.0\" encoding=\"UTF - 8\"?><note_body>" + Content + "</note_body>");
 
-            Note updatedInfo = Globals.Db.GetNoteById((int)Id);
+                StringBuilder sbOutput = new StringBuilder();
+                foreach (XmlNode node in contentRawXml.DocumentElement.ChildNodes)
+                {
+                    sbOutput.Append(node.InnerText);
+                }
 
-            Title = updatedInfo.Title;
-            Content = updatedInfo.Content;
-            NotebookId = updatedInfo.NotebookId;
-            IsDeleted = updatedInfo.IsDeleted;
-            LastUpdatedDate = updatedInfo.LastUpdatedDate;
+                return sbOutput.ToString();
+            }
         }
 
-        public void DeleteSelfFromDb()
+        [NotMapped]
+        public string ContentTruncated
         {
-            Globals.Db.DeleteNote((int)Id);
+            get
+            {
+                string ptxtContent = ContentPlaintext;
+                if (ptxtContent.Length > 100)
+                    return ptxtContent.Substring(0, 100) + "...";
+                else
+                    return ptxtContent;
+            }
+            private set { }
         }
 
-        public void UpdateSelfInDb()
-        {
-            Globals.Db.UpdateNote(this);
-        }
+        public int UserId { get; set; }
 
-        // TODO: Testing listview with this, delete later
-        public override string ToString()
-        {
-            return "Test value, title: " + Title;
-        }
+        [Required]
+        [StringLength(128)]
+        public string Title { get; set; }
+
+        public int? NotebookId { get; set; }
+
+        public string Content { get; set; }
+
+        public byte IsDeleted { get; set; }
+
+        public DateTime LastUpdatedDate { get; set; }
+
+        public virtual Notebook Notebook { get; set; }
+
+        public virtual User User { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SharedNote> SharedNotes { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

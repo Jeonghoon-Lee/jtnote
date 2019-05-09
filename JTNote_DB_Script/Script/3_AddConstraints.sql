@@ -12,6 +12,14 @@ use JTNotes
 go
 
 -- Foreign key between Notes and Users table
+alter table Dbo.Notebooks
+	add constraint fk_Notebooks_Users foreign key (UserId)
+		references Dbo.Users (Id)
+		on delete cascade
+;
+go
+
+-- Foreign key between Notes and Users table
 alter table Dbo.Notes
 	add constraint fk_Notes_Users foreign key (UserId)
 		references Dbo.Users (Id)
@@ -30,7 +38,6 @@ go
 alter table Dbo.Tags
 	add constraint fk_Tags_Users foreign key (UserId)
 		references Dbo.Users (Id)
-		on delete cascade
 ;
 go
 
@@ -54,6 +61,7 @@ go
 alter table Dbo.SharedNotes
 	add constraint fk_SharedNotes_Users foreign key (UserId)
 		references Dbo.Users (Id)
+		on delete cascade
 ;
 go
 
@@ -64,6 +72,7 @@ alter table Dbo.SharedNotes
 ;
 go
 
+-- After first phase
 -- Foreign key between Messages and Users table
 alter table Dbo.Messages
 	add constraint fk_Messages_Users foreign key (UserId)

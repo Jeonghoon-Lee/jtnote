@@ -60,6 +60,7 @@ create table Dbo.Notebooks
 (
 	Id int identity(1, 1) not null,
 	Name nvarchar(20) not null,
+	UserId int not null,
 
 	constraint pk_Notebooks primary key clustered (Id asc)
 )

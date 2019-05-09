@@ -5,6 +5,7 @@
 	-Complete database mockup
 	-Create database on Azure
 
+
 5/2/2019 Taylor
 1. Done since last scrum:
 	-First scrum
@@ -30,3 +31,80 @@
 2. To do until next scrum:
 	-Finish making main page interactive.
 	-Create functionality for Add Note page including Rich Text box and saving to DB.
+
+
+5/6/2019 Jeonghoon
+1. Done since last scrum:
+	-Create login and registration system for users.
+	-Create system for creation of tags and attaching them to notes.
+2. To do until next scrum:
+	-Finish creation of tag system.
+	-Switch sidebar menu to treeview to accomodate tags.
+
+5/6/2019 Taylor
+1. Done since last scrum:
+	-Created interactivity in main window.
+	-Created system to organize notes into main and trash lists, and to delete notes.
+	-Started work on edit note dialog.
+2. To do until next scrum:
+	-Finish creating edit note dialog, and implement code behind to add notes.
+	-Fix error reloading note lists in main menu (items in listview don't properly update)
+
+
+5/7/2019 Jeonghoon
+1. Done since last scrum:
+	-Apply Entity Framework to project.
+	-Implement tree view for Tags on sidebar menu.
+2. To do until next scrum:
+	-Finish integrating tree view into whole sidebar.
+3. Need assistance / figure things out:
+	-Assistance with integrating Entity framework into note creation.
+
+5/7/2019 Taylor
+1. Done since last scrum:
+	-Finished basic functionality of note creation dialog, added ability to add notes to DB.
+2. To do until next scrum:
+	-Finish all functionality of note creation dialog, including import, formatting, and export to PDF.
+	-Hide Tags and editing buttons on right pane if no note is selected, change title.
+3. Need assistance / figure things out:
+	-Why there is a SQL Error at school but not at home.
+	-Bind formatting options to rich textbox.
+
+
+5/8/2019 Jeonghoon
+1. Done since last scrum:
+	-Integrated with Entity Framework database.
+	-Tag creation system completed.
+2. To do until next scrum:
+	-Complete tree view in main window.
+	-Create notebook system.
+
+5/8/2019 Taylor
+1. Done since last scrum:
+	-Completed formatting and text actions for edit note screen.
+	-Stop action buttons from displaying when no note selected in main menu.
+	-Fixed bug with Entity migration which prevented deletion of notes.
+2. To do until next scrum:
+	-Document importing to create note.
+	-Add visual elements to Edit Note screen to later use for implementing tags and notebooks.
+
+
+5/9/2019 Jeonghoon
+1. Done since last scrum:
+	-Resolved issue with deleting trash from switch to Entity Framework.
+	-Implemented system to create notebooks.
+2. To do until next scrum:
+	-Implement User Settings window.
+	-Implement document sharing.
+3. Need assistance / figure things out
+	-Fix bugs in tree view for main menu.
+
+5/9/2019 Taylor
+1. Done since last scrum:
+	-Implemented graphical elements to add notes and tags to note.
+	-Began implementation of importing file to create note.
+2. To do until next scrum:
+	-Implement functionality to add Notebook and Tags to note.
+	-Complete functionality to import document to create note.
+3. Need assistance / figure things out
+	-How to convert RTF to XML for importing.

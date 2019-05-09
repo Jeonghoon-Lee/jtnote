@@ -39,9 +39,9 @@ namespace JTNote
                     return;
                 }
 
-                User loginUser = Globals.Db.GetUser(loginEmail);
-                string enteredPassword = pbLoginPassword.Password;
+                User loginUser = Globals.Ctx.Users.Where(user => user.Email == loginEmail).First();
 
+                string enteredPassword = pbLoginPassword.Password;
                 if (loginUser.Email != loginEmail || !MD5Hash.VerifyMd5Hash(enteredPassword, loginUser.Password))
                 {
                     MessageBox.Show("Error: login failed", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -80,13 +80,16 @@ namespace JTNote
                 string email = tbRegisterEmail.Text;
                 string password = MD5Hash.GetMd5Hash(pbRegisterPasswd1.Password);
 
-                if (Globals.Db.ExistsEmail(email))
+                // check email is exist
+                if (Globals.Ctx.Users.Where(user => user.Email == email).Count() > 0)
                 {
                     MessageBox.Show("Error: email is already registered.\nPlease change email\n", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 User registeredUser = new User() { UserName = userName, Email = email, Password = password };
-                Globals.Db.AddUser(registeredUser);
+                // Add new user
+                Globals.Ctx.Users.Add(registeredUser);
+                Globals.Ctx.SaveChanges();
 
                 MessageBox.Show("User registration was successful.\nContinue to login", "JTNotes", MessageBoxButton.OK, MessageBoxImage.Information);
 
