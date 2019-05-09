@@ -88,6 +88,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FileFunctions.cs" />
     <Compile Include="JTNoteContext.cs" />
     <Compile Include="MD5Hash.cs" />
     <Compile Include="Note.cs" />

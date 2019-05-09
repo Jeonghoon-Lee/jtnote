@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -27,9 +28,6 @@ namespace JTNote
         bool forceClose = false; // To force the window to close without prompt when clicking checkmark button
         int[] allFontSizes = { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
         TextPointer contentLastCaretPosition;
-        bool boldEngaged = false;
-        bool italicEngaged = false;
-        bool underlineEngaged = false;
 
         MainWindow mainWindow;
         public NoteEdit(MainWindow parent, Note inputNote = null)
@@ -68,28 +66,47 @@ namespace JTNote
             contentLastCaretPosition = rtbContent.CaretPosition;
             tbTitle.SelectAll();
             FocusManager.SetFocusedElement(this, tbTitle);
+
+
+            // Load notebooks
+            List<Notebook> notebooksList = new List<Notebook>();
+            cbNotebooks.ItemsSource = notebooksList;
+            notebooksList.Add(new Notebook() { Name = "(no notebook)", Id = 0 }); // Add a blank dummy notebook to indicate user selected no notebook
+            foreach (Notebook nb in Globals.LoginUser.Notebooks)
+                notebooksList.Add(nb);
+
+            if (currentNote.Notebook == null)
+                cbNotebooks.SelectedIndex = 0;
+            else
+                cbNotebooks.SelectedItem = notebooksList.Where(note => note.Id == currentNote.Notebook.Id).FirstOrDefault();
         }
 
         private void SaveNote()
         {
+            Notebook selNotebook = cbNotebooks.SelectedItem as Notebook;
+
             if (tbTitle.Text != "")
-                currentNote.Title = tbTitle.Text;
-            currentNote.Content = rtbContent.Text.ToString();
+            currentNote.Title = tbTitle.Text;
+                currentNote.Content = rtbContent.Text.ToString();
+            if ((cbNotebooks.SelectedItem as Notebook).Id != 0)
+                currentNote.Notebook = Globals.Ctx.Notebooks.Where(nb => nb.Id == selNotebook.Id).FirstOrDefault();
 
-            using (var ctx = new JTNoteContext())
+            if (currentNote.Id < 1) //== null)
+                Globals.Ctx.Notes.Add(currentNote);
+            else
             {
-                if (currentNote.Id < 1) //== null)
-                    ctx.Notes.Add(currentNote);
-                else
-                {
-                    Note updateNote = ctx.Notes.Where(note => note.Id == currentNote.Id).ToList()[0];
-                    updateNote.Title = currentNote.Title;
-                    updateNote.Content = currentNote.Content;
-                    updateNote.LastUpdatedDate = DateTime.Now;
-                }
+                Note updateNote = Globals.Ctx.Notes.Where(note => note.Id == currentNote.Id).ToList()[0];
+                updateNote.Title = currentNote.Title;
+                updateNote.Content = currentNote.Content;
+                updateNote.LastUpdatedDate = DateTime.Now;
 
-                ctx.SaveChanges();
+                if ((cbNotebooks.SelectedItem as Notebook).Id == 0)
+                    updateNote.Notebook = Globals.Ctx.Notebooks.Where(nb => nb.Id == selNotebook.Id).FirstOrDefault();
+                else
+                    updateNote.Notebook = selNotebook;
             }
+
+            Globals.Ctx.SaveChanges();
 
             mainWindow.LoadAllNotes();
         }
@@ -250,6 +267,30 @@ namespace JTNote
         {
             // Preserve carat position of content box so content from menus inserted correctly
             contentLastCaretPosition = rtbContent.CaretPosition;
+        }
+
+        private void MenuItemImport_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Warning: This will erase all currently existing contents of the note. Would you still like to proceed?", "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                OpenFileDialog d = new OpenFileDialog();
+                d.Filter = "JTNote Documents (*.jtn)|*.jtn|Text Documents (*.txt)|*.txt|Rich Text Format (*.rtf)|*.rtf|All Supported Formats|*.jtn;*.txt;*.rtf";
+                d.FilterIndex = 4;
+                d.Title = "JTNote - Import Document";
+                d.ShowDialog();
+
+                if (d.FileName != "")
+                {
+                    try
+                    {                        
+                        rtbContent.Text = FileFunctions.GetContentOfFile(d.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        //FIXME: Catch specific exception
+                    }
+                }
+            }
         }
     }
 }

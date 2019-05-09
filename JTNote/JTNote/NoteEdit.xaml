@@ -22,7 +22,9 @@
                 </ResourceDictionary>
             </Menu.Resources>
 
-            <MenuItem Header="File"></MenuItem>
+            <MenuItem Header="File">
+                <MenuItem Header="Import Document..." Click="MenuItemImport_Click" />
+            </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="Undo" Command="ApplicationCommands.Undo" />
                 <MenuItem Header="Redo" Command="ApplicationCommands.Redo" />
@@ -51,19 +53,26 @@
                 </DockPanel>
                 <DockPanel DockPanel.Dock="Right">
                     <Button Name="btnSaveNote" DockPanel.Dock="Left" Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=Check, Size=35}" ToolTip="Save this note." Padding="0" Height="40" Width="40" Margin="10,0,0,0" Click="BtnSaveNote_Click" />
-                    <TextBox DockPanel.Dock="Left" Name="tbTitle" Margin="15,0,10,0" Padding="5,0,0,0" Text="{Binding Title}" FontSize="25" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Height="40" HorizontalAlignment="Stretch" />
+                    <ComboBox Name="cbNotebooks" DockPanel.Dock="Left" Width="160" Height="40" Margin="15,0,0,0" Padding="3,8,3,3" FontSize="16" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" ToolTip="Add to a notebook." />
+                    <TextBox DockPanel.Dock="Left" Name="tbTitle" Margin="10,0,10,0" Padding="5,0,0,0" Text="{Binding Title}" FontSize="25" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Height="40" HorizontalAlignment="Stretch" />
                 </DockPanel>
 
             </DockPanel>
         </Grid>
 
-        <WrapPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="{DynamicResource PrimaryHueLightBrush}">
-            <ComboBox Name="cbFonts" Margin="15,0,0,0" Width="150" SelectionChanged="FontFamilySize_SelectionChanged"/>
-            <ComboBox Name="cbFontSizes" Margin="10,0,0,0" Width="40" SelectionChanged="FontFamilySize_SelectionChanged"/>
-            <Button Name="btnFormatBold" Command="EditingCommands.ToggleBold" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatBold, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
-            <Button Name="btnFormatItalic" Command="EditingCommands.ToggleItalic" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatItalic, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
-            <Button Name="btnFormatUnderline" Command="EditingCommands.ToggleUnderline" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatUnderline, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
-        </WrapPanel>
+        <DockPanel DockPanel.Dock="Top" Background="{DynamicResource PrimaryHueLightBrush}">
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                <ComboBox Name="cbFonts" Margin="15,0,0,0" Width="150" SelectionChanged="FontFamilySize_SelectionChanged"/>
+                <ComboBox Name="cbFontSizes" Margin="10,0,0,0" Width="40" SelectionChanged="FontFamilySize_SelectionChanged"/>
+                <Button Name="btnFormatBold" Command="EditingCommands.ToggleBold" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatBold, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
+                <Button Name="btnFormatItalic" Command="EditingCommands.ToggleItalic" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatItalic, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
+                <Button Name="btnFormatUnderline" Command="EditingCommands.ToggleUnderline" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatUnderline, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
+            </StackPanel>
+            <StackPanel>
+                <!-- Area to add tags -->
+            </StackPanel>
+        </DockPanel>
+        
         
         <Grid>
             <toolkit:RichTextBox Name="rtbContent" Grid.Row="1" Margin="10" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Gray" Padding="10" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="RtbContent_SelectionChanged" LostFocus="RtbContent_LostFocus">
@@ -71,7 +80,7 @@
                     <toolkit:RichTextBoxFormatBar Visibility="Hidden" />
                 </toolkit:RichTextBoxFormatBarManager.FormatBar>
                 <toolkit:RichTextBox.TextFormatter>
-                    <toolkit:XamlFormatter />
+                    <toolkit:RtfFormatter />
                 </toolkit:RichTextBox.TextFormatter>
             </toolkit:RichTextBox>
         </Grid>
