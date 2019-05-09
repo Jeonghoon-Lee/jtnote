@@ -34,9 +34,6 @@ namespace JTNote
         };
         ListState listState = ListState.Notes;
 
-        // List<Tag> tagList = new List<Tag>();
-        // List<TagsOnUser> tagsOnUserList = new List<TagsOnUser>();
-
         public MainWindow()
         {
             LoginRegister loginDlg = new LoginRegister();
@@ -83,6 +80,7 @@ namespace JTNote
             notesList.Clear(); // Clear existing notes list to refresh
             trashList.Clear(); // Clear existing trash list to refresh
 
+            // FIXME: Error handling
             try
             {
                 // Populate notes lists from DB
@@ -107,12 +105,7 @@ namespace JTNote
             notesList = notesList.OrderByDescending(item => item.LastUpdatedDate).ToList();
             trashList = trashList.OrderByDescending(item => item.LastUpdatedDate).ToList();
 
-            // Set counts for sidebar items - TODO: Replace these with bindings?
-//            tbSidebarNotesTitle.Text = string.Format("Notes ({0})", notesList.Count);
-//            tbSidebarTrashTitle.Text = string.Format("Trash ({0})", trashList.Count);
-
-            // May 7, 2019
-            // modified by JH to display note, trash count on left tree view
+            // update number of items
             tblNumberOfNotes.Text = notesList.Count.ToString();
             tblNumberOfTrash.Text = trashList.Count.ToString();
 
@@ -217,25 +210,11 @@ namespace JTNote
             }
         }
 
-/*
-        // SIDEBAR CLICKS
-        private void MiSidebarTrashItem_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeSidebarSelection(trashList, "miSidebarTrashItem");
-        }
-
-        private void MiSidebarNotesItem_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeSidebarSelection(notesList, "miSidebarNotesItem");
-        }
-*/
-
         // OTHER BUTTON CLICKS
         private void BtnResync_Click(object sender, RoutedEventArgs e)
         {
             LoadAllNotes();
         }
-
 
         // RIGHT PANE BUTTON CLICKS
         private void BtnRightPaneDelete_Click(object sender, RoutedEventArgs e)
@@ -250,10 +229,11 @@ namespace JTNote
                 {
                     if (MessageBox.Show(string.Format("Are you sure you want to permanently delete the note \"{0}\"? This is not reversible.", currentNote.Title), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        // updated with EF
                         // FIXME: Need to test
                         Globals.Ctx.Notes.Remove(currentNote);
                         Globals.Ctx.SaveChanges();
+                        // Reload
+                        LoadAllNotes();
                     }
                 }
                 catch (Exception ex)
@@ -266,16 +246,11 @@ namespace JTNote
                 // Item is not yet in trash, move it there                
                 try
                 {
-                    // currentNote.IsDeleted = true;
-                    // currentNote.UpdateSelfInDb();
-                    // LoadAllNotes();
-
-                    // updated with EF
-//                        currentNote.IsDeleted = 1;
-                    // TODO: Error handling
-                    Note updateNote = Globals.Ctx.Notes.Where(note => note.Id == currentNote.Id).ToList()[0];
-
-                    updateNote.IsDeleted = 1;
+                    // FIXME: Error handling
+                    // Need to test more
+                    //    Note updateNote = Globals.Ctx.Notes.Where(note => note.Id == currentNote.Id).ToList()[0];
+                    //    updateNote.IsDeleted = 1;
+                    currentNote.IsDeleted = 1;
                     Globals.Ctx.SaveChanges();
                     LoadAllNotes();
                 }
@@ -294,14 +269,11 @@ namespace JTNote
             {
                 if (MessageBox.Show(string.Format("Would you like to restore the note \"{0}\"?", currentNote.Title), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    // currentNote.IsDeleted = false;
-                    //currentNote.IsDeleted = 0;
-                    //currentNote.UpdateSelfInDb();
-                    //LoadAllNotes();
-
-                    // updated with EF
+                    // FIXME: Error handling
                     currentNote.IsDeleted = 0;
                     Globals.Ctx.SaveChanges();
+                    // reload
+                    LoadAllNotes();
                 }
             }
             catch (Exception ex)
@@ -335,6 +307,7 @@ namespace JTNote
                     // FIXME: Need to test
                     trashList.ForEach(currentNote => Globals.Ctx.Notes.Remove(currentNote));
                     Globals.Ctx.SaveChanges();
+                    LoadAllNotes();
                 }
             }
             catch (Exception ex)
