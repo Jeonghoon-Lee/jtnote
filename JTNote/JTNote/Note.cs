@@ -25,7 +25,7 @@ namespace JTNote
             Tags = new HashSet<Tag>();
         }
 
-        public Note(int id, int userId, string title, string content, int? notebookId, bool isDeleted, DateTime lastUpdatedDate)
+        public Note(int id, int userId, string title, string content, Notebook notebook, bool isDeleted, DateTime lastUpdatedDate)
         {
             if (title == null || title == "")
                 throw new ArgumentException("Error loading data: Title must contain text."); // Title cannot be blank, there is an error if so
@@ -34,7 +34,7 @@ namespace JTNote
             UserId = userId;
             Title = title;
             Content = content;
-            NotebookId = notebookId;
+            Notebook = notebook;
             IsDeleted = (byte)(isDeleted == true ? 1 : 0);
             LastUpdatedDate = lastUpdatedDate;
         }

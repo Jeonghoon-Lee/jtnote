@@ -61,7 +61,10 @@ namespace JTNote
             // Load all notes for logged in user
             LoadAllNotes();
 
-            spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
+            if (notesList.Count > 0)
+                spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
+            else
+                HideRightPaneControls();
         }
 
         private void ReloadTagTreeView()
@@ -153,6 +156,15 @@ namespace JTNote
                 throw ex;
         }
 
+        void HideRightPaneControls()
+        {
+            // Hide controls in right pane and replace with message to select something
+            spActionButtonContainer.Visibility = Visibility.Hidden;
+            spRightPaneTagsContainer.Visibility = Visibility.Hidden;
+            rtbContent.Visibility = Visibility.Hidden;
+            lblRightPaneNoContentMessage.Visibility = Visibility.Visible;
+        }
+
         void ChangeSidebarSelection(List<Note> newList, string newHighlight)
         {
             // Change data source for centre pane, highlighting correct item in right pane
@@ -161,7 +173,8 @@ namespace JTNote
             // If there are no notes in the currently selected list, deselect notes.
             if (newList.Count > 0)
                 lvCentrePane.SelectedIndex = 0;
-
+            else
+                HideRightPaneControls();
 
             // TODO: Need to modify after applying tree view
 /*
@@ -178,10 +191,7 @@ namespace JTNote
             // Change tooltip text for delete button and switch between share and restore buttons in right pane, as appropriate
             if (newHighlight == "miSidebarTrashItem")
             {
-                btnRightPaneDelete.ToolTip = "Permanently delete this note.";
-                btnRightPaneShare.Visibility = Visibility.Hidden;
-                btnRightPaneRestore.Visibility = Visibility.Visible;
-                listState = ListState.Trash;
+                HideRightPaneControls();
             }
             else
             {

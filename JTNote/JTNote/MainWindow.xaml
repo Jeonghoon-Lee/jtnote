@@ -59,6 +59,7 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
+    
     <DockPanel>
         <Menu DockPanel.Dock="Top" IsMainMenu="True">
             <Menu.Resources>
@@ -370,7 +371,7 @@
                             <toolkit:RichTextBoxFormatBar Visibility="Visible" />
                         </toolkit:RichTextBoxFormatBarManager.FormatBar>
                         <toolkit:RichTextBox.TextFormatter>
-                            <toolkit:XamlFormatter />
+                            <toolkit:RtfFormatter />
                         </toolkit:RichTextBox.TextFormatter>
                     </toolkit:RichTextBox>
                 </StackPanel>
