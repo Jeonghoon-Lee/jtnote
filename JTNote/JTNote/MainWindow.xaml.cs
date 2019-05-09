@@ -133,8 +133,9 @@ namespace JTNote
             if (lvCentrePane.Items.Count > 0)
             {
                 lvCentrePane.SelectedIndex = 0;
-                spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
             }
+
+            spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
         }
 
         void ErrorNotifyDbConnection(Exception ex)
@@ -208,18 +209,22 @@ namespace JTNote
         {
             if (lvCentrePane.SelectedItem == null)
             {
-                spActionButtonContainer.Visibility = Visibility.Hidden;
-                spRightPaneTagsContainer.Visibility = Visibility.Hidden;
-                rtbContent.Visibility = Visibility.Hidden;
-                lblRightPaneNoContentMessage.Visibility = Visibility.Visible;
+                HideRightPaneControls();
             }
             else
             {
-                spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
+                Note selItem = lvCentrePane.SelectedItem as Note;
+
+                spRightPane.DataContext = selItem;
                 spActionButtonContainer.Visibility = Visibility.Visible;
                 spRightPaneTagsContainer.Visibility = Visibility.Visible;
                 rtbContent.Visibility = Visibility.Visible;
                 lblRightPaneNoContentMessage.Visibility = Visibility.Hidden;
+
+                if (selItem.Notebook != null)
+                    spNotebookInfo.Visibility = Visibility.Visible;
+                else
+                    spNotebookInfo.Visibility = Visibility.Hidden;
             }
         }
 
@@ -500,6 +505,16 @@ namespace JTNote
 
                 ReloadNotebookTreeView();
             }
+        }
+
+        private void BtnRightPaneRemoveFromNotebook_Click(object sender, RoutedEventArgs e)
+        {
+            Note currentNote = lvCentrePane.SelectedItem as Note;
+            int currentIndex = lvCentrePane.SelectedIndex;
+            currentNote.Notebook = Globals.Ctx.Notebooks.Where(nb => nb.Id == 0).FirstOrDefault();
+            Globals.Ctx.SaveChanges();
+            LoadAllNotes();
+            lvCentrePane.SelectedIndex = currentIndex;
         }
     }
 }

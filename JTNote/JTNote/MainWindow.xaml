@@ -357,12 +357,19 @@
                         <Button Name="btnRightPaneShare" ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=Share}" Width="25" Height="25"/>
                         <Button Name="btnRightPaneRestore" Visibility="Hidden" Margin="-25,0,0,0" ToolTip="Restore this note." Style="{StaticResource MaterialDesignFloatingActionLightButton}" Content="{materialDesign:PackIcon Kind=FileRestore}" Width="25" Height="25" Click="BtnRightPaneRestore_Click"/>
                     </StackPanel>
-                    <StackPanel Name="spRightPaneTagsContainer" Orientation="Horizontal" Margin="15">
-                        <materialDesign:PackIcon Margin="10,0,8,0" VerticalAlignment="Center" Kind="TagOutline" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
-                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                            Work, Memo, Meeting
-                        </TextBlock>
-                    </StackPanel>
+                    <DockPanel Name="spRightPaneTagsContainer">
+                        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0,15,0,15">
+                            <materialDesign:PackIcon Margin="10,0,8,0" VerticalAlignment="Center" Kind="TagOutline" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                            <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+                                Work, Memo, Meeting
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel Name="spNotebookInfo" Visibility="Hidden" DockPanel.Dock="Left" Orientation="Horizontal" Margin="15, 15, 8, 15">
+                            <materialDesign:PackIcon Margin="10,0,8,0" VerticalAlignment="Center" Kind="Notebook" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                            <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Text="{Binding Notebook.Name}" />
+                            <Button Name="btnRightPaneRemoveFromNotebook" ToolTip="Remove this item from the notebook." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=Close, Size=11}" Margin="5,0,0,0" Width="15" Height="15" Click="BtnRightPaneRemoveFromNotebook_Click" />
+                        </StackPanel>
+                    </DockPanel>
                     <Label x:Name="lblRightPaneNoContentMessage" Visibility="Hidden" Content="Select a note to display." HorizontalAlignment="Center" VerticalAlignment="Center" Margin="238,0,209,0" Width="190" />
                     <toolkit:RichTextBox Name="rtbContent" Grid.Row="1" Margin="10" BorderBrush="Gray" Padding="15" Background="Transparent" BorderThickness="0" IsReadOnly="True"
                                          Text="{Binding Content}" 
