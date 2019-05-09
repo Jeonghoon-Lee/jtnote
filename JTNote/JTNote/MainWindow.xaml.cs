@@ -142,6 +142,8 @@ namespace JTNote
                 lvCentrePane.SelectedIndex = 0;
 
 
+            // TODO: Need to modify after applying tree view
+/*
             // Highlight correct menu item
             foreach (MenuItem curItem in mnuSidebar.Items)
             {
@@ -150,7 +152,7 @@ namespace JTNote
                 else
                     curItem.Background = null;
             }
-
+*/
 
             // Change tooltip text for delete button and switch between share and restore buttons in right pane, as appropriate
             if (newHighlight == "miSidebarTrashItem")
@@ -172,7 +174,7 @@ namespace JTNote
             spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
         }
 
-
+/*
         // SIDEBAR CLICKS
         private void MiSidebarTrashItem_Click(object sender, RoutedEventArgs e)
         {
@@ -183,7 +185,7 @@ namespace JTNote
         {
             ChangeSidebarSelection(notesList, "miSidebarNotesItem");
         }
-
+*/
 
         // OTHER BUTTON CLICKS
         private void BtnResync_Click(object sender, RoutedEventArgs e)
@@ -366,30 +368,51 @@ namespace JTNote
             return source as TreeViewItem;
         }
 
-        private void DockPanel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            MiSidebarTrashItem_Click(sender, null);
-        }
-
         private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
         {
             ((TreeViewItem)sender).IsSelected = false;
 
-            trvNotes.Background = null; // Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+            switch (((TreeViewItem)sender).Tag.ToString())
+            {
+                case "tviNotes":
+                    ChangeSidebarSelection(notesList, "miSidebarNotesItem");
+                    trvTags.Background = null;
+                    trvNotes.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                    trvNotebook.Background = null;
+                    trvTrash.Background = null;
+                    break;
+                case "tviNotebook":
+                    trvNotebook.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                    trvNotes.Background = null;
+                    trvTrash.Background = null;
+                    break;
+                case "tviTrash":
+                    ChangeSidebarSelection(trashList, "miSidebarTrashItem");
+                    trvNotes.Background = null;
+                    trvNotebook.Background = null;
+                    trvTrash.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void TrvTags_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-        //    trvTags.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+            TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
 
-        //    TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
-        //    if (treeViewItem != null)
-         //   {
-        //        treeViewItem.IsSelected = false;
+            if (treeViewItem != null)
+            {
+                trvNotes.Background = null;
+                trvTrash.Background = null;
+                trvNotebook.Background = null;
 
-                //                treeViewItem.Focus();
-                //               e.Handled = true;
-        //    }
+                // FIXME: this is not working properly
+                treeViewItem.Background = null;
+                //                treeViewItem.IsSelected = false;
+                //                treeViewItem.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+
+            }
         }
     }
 }
