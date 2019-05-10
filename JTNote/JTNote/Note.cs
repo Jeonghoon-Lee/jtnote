@@ -80,7 +80,7 @@ namespace JTNote
         {
             get
             {
-                if (Tags.Count > 0)
+                if (Tags?.Count > 0)
                     return string.Join(", ", Tags.ToList());
                 else
                     return "No tags added.";
