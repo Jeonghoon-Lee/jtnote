@@ -533,6 +533,22 @@ namespace JTNote
                 }
             }
         }
+
+        private void BtnRightPaneShare_Click(object sender, RoutedEventArgs e)
+        {
+            Note currentNote = lvCentrePane.SelectedItem as Note;
+            int currentIndex = lvCentrePane.SelectedIndex;
+            currentNote.Notebook = Globals.Ctx.Notebooks.Where(nb => nb.Id == 0).FirstOrDefault();
+
+            SharedNoteDialog sharedNoteDlg = new SharedNoteDialog(this, currentNote);
+
+            // TODO: handle after sharing note
+            if (sharedNoteDlg.ShowDialog() == true)
+            {
+
+            }
+
+        }
     }
 }
 

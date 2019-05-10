@@ -354,7 +354,7 @@
                                 </ResourceDictionary>
                             </Button.Resources>
                         </Button>
-                        <Button Name="btnRightPaneShare" ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=Share}" Width="25" Height="25"/>
+                        <Button Name="btnRightPaneShare" ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=Share}" Width="25" Height="25" Click="BtnRightPaneShare_Click"/>
                         <Button Name="btnRightPaneRestore" Visibility="Hidden" Margin="-25,0,0,0" ToolTip="Restore this note." Style="{StaticResource MaterialDesignFloatingActionLightButton}" Content="{materialDesign:PackIcon Kind=FileRestore}" Width="25" Height="25" Click="BtnRightPaneRestore_Click"/>
                     </StackPanel>
                     <DockPanel Name="spRightPaneTagsContainer">

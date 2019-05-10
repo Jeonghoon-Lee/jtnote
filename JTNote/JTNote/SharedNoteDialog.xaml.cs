@@ -37,5 +37,13 @@ namespace JTNote
             }
             lvSharedUsers.Items.Refresh();
         }
+
+        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            User selectedUser = (User)cmbUserList.SelectedValue;
+
+            lvSharedUsers.Items.Add(selectedUser);
+            lvSharedUsers.Items.Refresh();
+        }
     }
 }

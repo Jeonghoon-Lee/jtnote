@@ -13,15 +13,15 @@
         <Label Content="Share To:" HorizontalAlignment="Left" Margin="21,50,0,0" VerticalAlignment="Top"/>
         <TextBox Name="tbTitle" IsReadOnly="True" HorizontalAlignment="Left" Height="23" Margin="91,21,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="324"/>
         <ComboBox Name="cmbUserList" HorizontalAlignment="Left" Margin="91,50,0,0" VerticalAlignment="Top" Width="235"/>
-        <Button Content="Add" HorizontalAlignment="Left" Margin="340,50,0,0" VerticalAlignment="Top" Width="75" FontSize="12" Height="28"/>
-        <ListView Name="lvSharedUsers" HorizontalAlignment="Left" Height="137" Margin="91,99,0,0" VerticalAlignment="Top" Width="324">
+        <Button Content="Add" HorizontalAlignment="Left" Margin="340,50,0,0" VerticalAlignment="Top" Width="75" FontSize="12" Height="28" Click="ButtonAdd_Click"/>
+        <ListView Name="lvSharedUsers" HorizontalAlignment="Center" Height="146" Margin="91,89,25,77" VerticalAlignment="Center" Width="324" Foreground="#DD000000">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Content="Close" HorizontalAlignment="Left" Margin="153,252,0,0" VerticalAlignment="Top" Width="135"/>
-
+        <Button Content="Share Note" HorizontalAlignment="Left" Margin="82,252,0,0" VerticalAlignment="Top" Width="135"/>
+        <Button IsCancel="True" Content="Cancel" HorizontalAlignment="Left" Margin="235,252,0,0" VerticalAlignment="Top" Width="135"/>
     </Grid>
 </Window>
