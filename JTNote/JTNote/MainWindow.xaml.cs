@@ -49,7 +49,7 @@ namespace JTNote
             trvTags.ItemsSource = tagListOnUser;
 
             // Set login user information onto title bar
-            Title = string.Format("JTNote - {0}", Globals.LoginUser.Email);
+            Title = string.Format("JTNote - {0}", Globals.LoginUser);
             ReloadTagTreeView();
 
             // testing
@@ -515,6 +515,17 @@ namespace JTNote
             Globals.Ctx.SaveChanges();
             LoadAllNotes();
             lvCentrePane.SelectedIndex = currentIndex;
+        }
+
+        private void UserSetting_MenuClick(object sender, RoutedEventArgs e)
+        {
+            UserSettingDialog userSettingDlg = new UserSettingDialog(this);
+
+            if (userSettingDlg.ShowDialog() == true)
+            {
+                // update title
+                Title = string.Format("JTNote - {0}", Globals.LoginUser);
+            }
         }
     }
 }

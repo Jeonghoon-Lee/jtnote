@@ -1,0 +1,51 @@
+﻿<Window x:Class="JTNote.UserSettingDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:JTNote"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Title="User Settings" Height="351.801" Width="464.407">
+    <Grid Background="{DynamicResource PrimaryHueMidBrush}">
+        <TabControl Name="tcLoginRegister" HorizontalAlignment="Left" Height="296" Margin="10,10,0,0" VerticalAlignment="Top" Width="432">
+            <TabItem Header="Settings">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Email:" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Username:" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="tbEmail" IsReadOnly="True" HorizontalAlignment="Left" Height="Auto" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286"/>
+                    <TextBox Name="tbUsername" HorizontalAlignment="Left" Height="Auto" Margin="126,59,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" TextChanged="TbUsername_TextChanged"/>
+                    <TextBlock Name="tblUsernameError" HorizontalAlignment="Left" Margin="126,89,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
+                    <Button Name="btSaveChanges" IsEnabled="False" Content="Save Changes" HorizontalAlignment="Left" Margin="80,211,0,0" VerticalAlignment="Top" Width="120" Height="28" Click="BtSaveChanges_Click"/>
+                    <Button IsDefault="True" IsCancel="True" IsEnabled="True" Content="Cancel" HorizontalAlignment="Left" Margin="220,211,0,0" VerticalAlignment="Top" Width="120" Height="28"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Change password">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Old Password:" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top"/>
+                    <Label Content="New Password:" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Re-Enter Password:" HorizontalAlignment="Left" Margin="10,101,0,0" VerticalAlignment="Top"/>
+
+                    <PasswordBox Name="pbOldPassword" HorizontalAlignment="Left" Height="Auto" Margin="126,20,0,0" Password="" VerticalAlignment="Top" Width="286"/>
+                    <TextBlock Name="tblOldPasswordError" HorizontalAlignment="Left" Margin="126,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
+
+                    <PasswordBox Name="pbNewPassword1" HorizontalAlignment="Left" Height="Auto" Margin="126,59,0,0" Password="" VerticalAlignment="Top" Width="286" PasswordChanged="PbNewPassword_PasswordChanged"/>
+                    <TextBlock Name="tblNewPasswordError1" HorizontalAlignment="Left" Margin="126,88,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
+
+                    <PasswordBox Name="pbNewPassword2" HorizontalAlignment="Left" Height="Auto" Margin="126,98,0,0" Password="" VerticalAlignment="Top" Width="286"  PasswordChanged="PbNewPassword_PasswordChanged"/>
+                    <TextBlock Name="tblNewPasswordError2" HorizontalAlignment="Left" Margin="126,127,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
+
+                    <Button Name="btChangePassword" IsEnabled="False" Content="Save Changes" HorizontalAlignment="Left" Margin="80,211,0,0" VerticalAlignment="Top" Width="120" Height="28" Click="BtChangePassword_Click"/>
+                    <Button IsDefault="True" IsCancel="True" IsEnabled="True" Content="Cancel" HorizontalAlignment="Left" Margin="220,211,0,0" VerticalAlignment="Top" Width="120" Height="28"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

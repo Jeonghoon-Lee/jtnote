@@ -74,7 +74,7 @@
                 <MenuItem Header="New Tag..." Click="NewTag_MenuClick"></MenuItem>
                 <MenuItem Header="New Notebook..." Click="NewNotebook_MenuClick"></MenuItem>
                 <Separator/>
-                <MenuItem Header="User Setting..."></MenuItem>
+                <MenuItem Header="User Setting..." Click="UserSetting_MenuClick"></MenuItem>
                 <Separator/>
                 <MenuItem Header="Exit" Click="Exit_MenuClick"></MenuItem>
             </MenuItem>
@@ -110,7 +110,7 @@
         </Grid>
 
         <StatusBar DockPanel.Dock="Bottom" Background="{DynamicResource PrimaryHueDarkBrush}">
-            <Label Content="Program Loaded." Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+            <TextBlock Name="tblStatusBar" Text="Program Loaded." Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
         </StatusBar>
 
         <Grid Margin="0,0,0,0" Width="Auto">
@@ -383,9 +383,7 @@
                     </toolkit:RichTextBox>
                 </StackPanel>
             </Grid>
-
         </Grid>
-
     </DockPanel>
 </Window>
 

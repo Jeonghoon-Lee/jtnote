@@ -30,6 +30,11 @@ namespace JTNote
         [StringLength(32)]
         public string Password { get; set; }
 
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", Email, UserName == "" ? "" : "(" + UserName + ")" );
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Notebook> Notebooks { get; set; }
 

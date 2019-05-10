@@ -36,7 +36,7 @@ namespace JTNote
             switch (dialogType)
             {
                 case ETagNotebookDlgType.CreateTag:
-                    Title = "Create tag";
+                    Title = "Create new tag";
                     btCreateUpdate.Content = "Create";
                     break;
                 case ETagNotebookDlgType.UpdateTag:

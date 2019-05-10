@@ -10,7 +10,7 @@
         Title="Create Tag" Height="142.055" Width="377.648">
     <Grid>
         <StackPanel HorizontalAlignment="Left" Height="37" Margin="10,10,0,0" VerticalAlignment="Top" Width="335" Orientation="Horizontal">
-            <Label Content="Tag Name: " VerticalAlignment="Center" Width="80"/>
+            <Label Content="Name: " VerticalAlignment="Center" Width="80"/>
             <TextBox Name="tbTagNotebook" Height="23" TextWrapping="Wrap" Text="" Margin="0,7" Width="245" TextChanged="TbTag_TextChanged"/>
         </StackPanel>
         <Button IsEnabled="False" Name="btCreateUpdate" Content="Create" HorizontalAlignment="Left" Margin="54,62,0,0" VerticalAlignment="Top" Width="120" Click="ButtonCreateUpdate_Click" Height="26"/>
