@@ -525,6 +525,12 @@ namespace JTNote
             {
                 // update title
                 Title = string.Format("JTNote - {0}", Globals.LoginUser);
+                // check user is deleted
+                if (Globals.LoginUser == null)
+                {
+                    MessageBox.Show("Your account is deleted.\nThank you for using JTNotes.", "JTNote", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Close();
+                }
             }
         }
     }

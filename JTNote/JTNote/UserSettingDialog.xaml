@@ -46,6 +46,21 @@
                     <Button IsDefault="True" IsCancel="True" IsEnabled="True" Content="Cancel" HorizontalAlignment="Left" Margin="220,211,0,0" VerticalAlignment="Top" Width="120" Height="28"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Unsubscribe">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top"/>
+
+                    <PasswordBox Name="pbPassword" HorizontalAlignment="Left" Height="Auto" Margin="126,20,0,0" Password="" VerticalAlignment="Top" Width="286"/>
+                    <TextBlock Name="tblPasswordError" HorizontalAlignment="Left" Margin="126,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontSize="10"/>
+
+                    <Button Name="btDeleteAccount" IsEnabled="False" Content="Delete Account" HorizontalAlignment="Left" Margin="80,211,0,0" VerticalAlignment="Top" Width="120" Height="28" Click="BtDeleteAccount_Click"/>
+                    <Button IsDefault="True" IsCancel="True" IsEnabled="True" Content="Cancel" HorizontalAlignment="Left" Margin="220,211,0,0" VerticalAlignment="Top" Width="120" Height="28"/>
+                    <CheckBox Name="cbUnsubscribe" Content="I want to unsubscribe from JTNote service" HorizontalAlignment="Left" Margin="80,151,0,0" VerticalAlignment="Top" Click="CbUnsubscribe_Click"/>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

@@ -107,5 +107,35 @@ namespace JTNote
 
             btChangePassword.IsEnabled = true;
         }
+
+        private void BtDeleteAccount_Click(object sender, RoutedEventArgs e)
+        {
+            string password = pbPassword.Password;
+
+            if (!MD5Hash.VerifyMd5Hash(password, Globals.LoginUser.Password))
+            {
+                tblPasswordError.Text = "Password does not matched.";
+                return;
+            }
+
+            if (MessageBox.Show(string.Format("Are you sure you want to permanently delete your account \"{0}\"?\nAll of your data will be deleted and this is not reversible.", Globals.LoginUser.Email), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                Globals.Ctx.Users.Remove(Globals.LoginUser);
+                Globals.Ctx.SaveChanges();
+
+                Globals.LoginUser = null;
+                DialogResult = true;
+            }
+        }
+
+        private void CbUnsubscribe_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbUnsubscribe.IsChecked == true)
+            {
+                btDeleteAccount.IsEnabled = true;
+                return;
+            }
+            btDeleteAccount.IsEnabled = false;
+        }
     }
 }
