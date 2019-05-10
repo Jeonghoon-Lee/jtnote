@@ -29,12 +29,10 @@ namespace JTNote
         int[] allFontSizes = { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
         TextPointer contentLastCaretPosition;
 
-        MainWindow mainWindow;
         public NoteEdit(MainWindow parent, Note inputNote = null)
         {
             InitializeComponent();
             Owner = parent;
-            mainWindow = parent;
 
             if (inputNote != null)
                 currentNote = inputNote;
@@ -83,6 +81,7 @@ namespace JTNote
 
         private void SaveNote()
         {
+            // FIXME: Implement error handling
             Notebook selNotebook = cbNotebooks.SelectedItem as Notebook;
 
             if (tbTitle.Text != "")
@@ -99,6 +98,7 @@ namespace JTNote
                 updateNote.Title = currentNote.Title;
                 updateNote.Content = currentNote.Content;
                 updateNote.LastUpdatedDate = DateTime.Now;
+                updateNote.Tags = currentNote.Tags;
 
                 if ((cbNotebooks.SelectedItem as Notebook).Id == 0)
                     updateNote.Notebook = Globals.Ctx.Notebooks.Where(nb => nb.Id == selNotebook.Id).FirstOrDefault();
@@ -108,7 +108,7 @@ namespace JTNote
 
             Globals.Ctx.SaveChanges();
 
-            mainWindow.LoadAllNotes();
+            (Owner as MainWindow).LoadAllNotes();
         }
 
         private void BtnSaveNote_Click(object sender, RoutedEventArgs e)
@@ -116,7 +116,7 @@ namespace JTNote
             SaveNote();
             forceClose = true;
             Close();
-            mainWindow.Activate();
+            Owner.Activate();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -129,12 +129,12 @@ namespace JTNote
                 {
                     case MessageBoxResult.Yes:
                         SaveNote();
-                        mainWindow.Activate();
+                        Owner.Activate();
                         break;
                     case MessageBoxResult.No:
                         tbTitle.Text = initialTitle;
                         rtbContent.Text = initialContent;
-                        mainWindow.Activate();
+                        Owner.Activate();
                         break; // Let window close without saving changes
                     case MessageBoxResult.Cancel:
                         e.Cancel = true;
@@ -290,6 +290,27 @@ namespace JTNote
                         //FIXME: Catch specific exception
                     }
                 }
+            }
+        }
+
+        private void BtnTagManager_Click(object sender, RoutedEventArgs e)
+        {
+            // Create new TagsManager dialog and set values so the boxes in the dialog show added/available tags for currentNote
+            TagsManager tagsManager = new TagsManager(this);
+            currentNote.Tags.ToList().ForEach(tag => {
+                tagsManager.AddedTags.Add(tag);
+                tagsManager.AvailableTags.Remove(tag);
+            });
+
+            // Modify tags list in currentNote if user pressed OK in preceding dialog
+            if (tagsManager.ShowDialog() == true)
+            {
+                currentNote.Tags.Clear();
+                currentNote.Tags = tagsManager.AddedTags;
+
+                // Refresh data
+                dpMainPanel.DataContext = null;
+                dpMainPanel.DataContext = currentNote;
             }
         }
     }

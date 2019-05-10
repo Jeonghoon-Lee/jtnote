@@ -14,6 +14,11 @@ namespace JTNote
             Notes = new HashSet<Note>();
         }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         public int Id { get; set; }
 
         [Required]

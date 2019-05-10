@@ -102,6 +102,9 @@
     <Compile Include="TagNotebookDialog.xaml.cs">
       <DependentUpon>TagNotebookDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TagsManager.xaml.cs">
+      <DependentUpon>TagsManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TagsOnUser.cs" />
     <Compile Include="User.cs" />
     <Page Include="LoginRegister.xaml">
@@ -130,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TagNotebookDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TagsManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

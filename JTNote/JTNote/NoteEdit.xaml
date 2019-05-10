@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Closing="Window_Closing"
-        Title="NoteEdit" Height="600" Width="900">
+        Title="Edit Note - JTNote" Height="600" Width="900">
 
     <DockPanel Name="dpMainPanel">
         <Menu DockPanel.Dock="Top">
@@ -68,8 +68,9 @@
                 <Button Name="btnFormatItalic" Command="EditingCommands.ToggleItalic" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatItalic, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
                 <Button Name="btnFormatUnderline" Command="EditingCommands.ToggleUnderline" CommandTarget="{Binding ElementName=rtbContent}" Background="{DynamicResource PrimaryHueLightBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=FormatUnderline, Size=22}" Padding="0" Width="30" Height="30" BorderThickness="0" Margin="15,5,0,5" />
             </StackPanel>
-            <StackPanel>
-                <!-- Area to add tags -->
+            <StackPanel Orientation="Horizontal">
+                <Button Name="btnTagManager" Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=TagTextOutline, Size=15}" ToolTip="Manage tags." Width="25" Height="25" Margin="50,5,5,5" Click="BtnTagManager_Click" />
+                <TextBlock Text="{Binding TagsString}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" FontSize="16" Margin="8,8,0,0" />
             </StackPanel>
         </DockPanel>
         

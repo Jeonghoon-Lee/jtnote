@@ -321,14 +321,10 @@
                                     <!--TODO: Bind this to a method that truncates the note-->
                                     <StackPanel Orientation="Horizontal" Margin="0,10,0,15">
                                         <materialDesign:PackIcon Margin="0,0,5,0" ToolTip="Last updated" VerticalAlignment="Center" Kind="Update" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
-                                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                            <Run FontSize="12" Text="{Binding LastUpdatedDate, StringFormat=d}" />
-                                        </TextBlock>
+                                        <TextBlock Text="{Binding LastUpdatedDate, StringFormat=d}" FontSize="12" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" />
 
                                         <materialDesign:PackIcon Margin="10,0,5,0" VerticalAlignment="Center" Kind="TagOutline" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
-                                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                            <Run FontSize="12">Demo, Tags, Replace, With, Dynamic</Run>
-                                        </TextBlock>
+                                        <TextBlock Text="{Binding TagsString}" FontSize="12" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" />
 
                                     </StackPanel>
                                 </StackPanel>
@@ -360,9 +356,7 @@
                     <DockPanel Name="spRightPaneTagsContainer">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0,15,0,15">
                             <materialDesign:PackIcon Margin="10,0,8,0" VerticalAlignment="Center" Kind="TagOutline" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
-                            <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
-                                Work, Memo, Meeting
-                            </TextBlock>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding TagsString}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" />
                         </StackPanel>
                         <StackPanel Name="spNotebookInfo" Visibility="Hidden" DockPanel.Dock="Left" Orientation="Horizontal" Margin="15, 15, 8, 15">
                             <materialDesign:PackIcon Margin="10,0,8,0" VerticalAlignment="Center" Kind="Notebook" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
