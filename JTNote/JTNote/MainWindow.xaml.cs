@@ -115,13 +115,15 @@ namespace JTNote
             tblNumberOfNotes.Text = notesList.Count.ToString();
             tblNumberOfTrash.Text = trashList.Count.ToString();
 
-            // Set correct data source and refresh centre pane
+            // Set correct data source and refresh centre pane. Set to null first to make sure itemssource reloads
             switch (listState)
             {
                 case ListState.Notes:
+                    lvCentrePane.ItemsSource = null;
                     lvCentrePane.ItemsSource = notesList;
                     break;
                 case ListState.Trash:
+                    lvCentrePane.ItemsSource = null;
                     lvCentrePane.ItemsSource = trashList;
                     break;
                 default:
@@ -135,6 +137,8 @@ namespace JTNote
                 lvCentrePane.SelectedIndex = 0;
             }
 
+            // Refresh right pane data context, setting to null first to force reload
+            spRightPane.DataContext = null;
             spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
         }
 
@@ -169,6 +173,7 @@ namespace JTNote
         void ChangeSidebarSelection(List<Note> newList, string newHighlight)
         {
             // Change data source for centre pane, highlighting correct item in right pane
+            LoadAllNotes();
             lvCentrePane.ItemsSource = newList;
 
             // If there are no notes in the currently selected list, deselect notes.
@@ -192,7 +197,10 @@ namespace JTNote
             // Change tooltip text for delete button and switch between share and restore buttons in right pane, as appropriate
             if (newHighlight == "miSidebarTrashItem")
             {
-                HideRightPaneControls();
+                btnRightPaneDelete.ToolTip = "Permanently delete this note.";
+                btnRightPaneRestore.Visibility = Visibility.Visible;
+                btnRightPaneShare.Visibility = Visibility.Hidden;
+                listState = ListState.Trash;
             }
             else
             {

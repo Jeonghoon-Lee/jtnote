@@ -58,6 +58,7 @@ namespace JTNote
 
                 return sbOutput.ToString();
             }
+            private set { }
         }
 
         [NotMapped]
@@ -70,6 +71,19 @@ namespace JTNote
                     return ptxtContent.Substring(0, 100) + "...";
                 else
                     return ptxtContent;
+            }
+            private set { }
+        }
+
+        [NotMapped]
+        public string TagsString
+        {
+            get
+            {
+                if (Tags.Count > 0)
+                    return string.Join(", ", Tags.ToList());
+                else
+                    return "No tags added.";
             }
             private set { }
         }
