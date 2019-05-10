@@ -39,7 +39,7 @@ namespace JTNote
                     return;
                 }
 
-                User loginUser = Globals.Ctx.Users.Where(user => user.Email == loginEmail).First();
+                User loginUser = Globals.Ctx.Users.Where(user => user.Email == loginEmail).SingleOrDefault();
 
                 string enteredPassword = pbLoginPassword.Password;
                 if (loginUser.Email != loginEmail || !MD5Hash.VerifyMd5Hash(enteredPassword, loginUser.Password))
