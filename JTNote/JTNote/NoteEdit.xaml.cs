@@ -292,5 +292,15 @@ namespace JTNote
                 }
             }
         }
+
+        private void BtnShare_Click(object sender, RoutedEventArgs e)
+        {
+            SharedNoteDialog sharedNoteDlg = new SharedNoteDialog(this, currentNote);
+            
+            if (sharedNoteDlg.ShowDialog() == true)
+            {
+
+            }
+        }
     }
 }

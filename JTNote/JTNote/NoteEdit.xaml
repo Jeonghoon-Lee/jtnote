@@ -49,7 +49,7 @@
             <DockPanel>
                 <DockPanel DockPanel.Dock="Right">
                     <Button Name="btnPrint" DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" Content="{materialDesign:PackIcon Kind=Printer, Size=25}" ToolTip="Print this note." Padding="0" Height="40" Width="40" Margin="10,0,0,0" />
-                    <Button Name="btnShare" DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" Content="{materialDesign:PackIcon Kind=Share, Size=25}" ToolTip="Share this note." Padding="0" Height="40" Width="40" Margin="10,0,15,0" />
+                    <Button Name="btnShare" DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" Content="{materialDesign:PackIcon Kind=Share, Size=25}" ToolTip="Share this note." Padding="0" Height="40" Width="40" Margin="10,0,15,0" Click="BtnShare_Click"/>
                 </DockPanel>
                 <DockPanel DockPanel.Dock="Right">
                     <Button Name="btnSaveNote" DockPanel.Dock="Left" Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Content="{materialDesign:PackIcon Kind=Check, Size=35}" ToolTip="Save this note." Padding="0" Height="40" Width="40" Margin="10,0,0,0" Click="BtnSaveNote_Click" />
