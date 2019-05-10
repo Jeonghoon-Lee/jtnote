@@ -317,8 +317,18 @@
                                             <Run FontWeight="Bold" FontSize="16" Text="{Binding Title}"></Run>
                                         </TextBlock.Inlines>
                                     </TextBlock>
-                                    <TextBlock TextWrapping="Wrap" Width="Auto" Text="{Binding ContentTruncated}" />
-                                    <!--TODO: Bind this to a method that truncates the note-->
+                                    <toolkit:RichTextBox Grid.Row="1" FontSize="12" Background="Transparent" BorderThickness="0" IsReadOnly="True"
+                                         Width="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                    AncestorType=DockPanel, AncestorLevel=2}, Path=ActualWidth}"
+                                         Text="{Binding ContentTruncated}" 
+                                         ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                        <toolkit:RichTextBoxFormatBarManager.FormatBar>
+                                            <toolkit:RichTextBoxFormatBar Visibility="Hidden" />
+                                        </toolkit:RichTextBoxFormatBarManager.FormatBar>
+                                        <toolkit:RichTextBox.TextFormatter>
+                                            <toolkit:RtfFormatter />
+                                        </toolkit:RichTextBox.TextFormatter>
+                                    </toolkit:RichTextBox>
                                     <StackPanel Orientation="Horizontal" Margin="0,10,0,15">
                                         <materialDesign:PackIcon Margin="0,0,5,0" ToolTip="Last updated" VerticalAlignment="Center" Kind="Update" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                         <TextBlock Text="{Binding LastUpdatedDate, StringFormat=d}" FontSize="12" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" />
@@ -369,7 +379,7 @@
                                          Text="{Binding Content}" 
                                          ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <toolkit:RichTextBoxFormatBarManager.FormatBar>
-                            <toolkit:RichTextBoxFormatBar Visibility="Visible" />
+                            <toolkit:RichTextBoxFormatBar Visibility="Hidden" />
                         </toolkit:RichTextBoxFormatBarManager.FormatBar>
                         <toolkit:RichTextBox.TextFormatter>
                             <toolkit:RtfFormatter />

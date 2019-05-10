@@ -8,6 +8,7 @@ using System.Xml;
 using System.Data.Entity.Spatial;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 
 /*
     using System;
@@ -46,19 +47,11 @@ namespace JTNote
         {
             get
             {
-                // Parse raw XML from Content to plain text
-                XmlDocument contentRawXml = new XmlDocument();
-                contentRawXml.LoadXml("<?xml version=\"1.0\" encoding=\"UTF - 8\"?><note_body>" + Content + "</note_body>");
-
-                StringBuilder sbOutput = new StringBuilder();
-                foreach (XmlNode node in contentRawXml.DocumentElement.ChildNodes)
-                {
-                    sbOutput.Append(node.InnerText);
-                }
-
-                return sbOutput.ToString();
+                string outputString = Content;
+                outputString = Regex.Replace(outputString, @"^\{(.+)|^\\(.+)|(\}*)", "");
+                return outputString;
             }
-            private set { }
+            set { }
         }
 
         [NotMapped]
@@ -66,13 +59,13 @@ namespace JTNote
         {
             get
             {
-                string ptxtContent = ContentPlaintext;
-                if (ptxtContent.Length > 100)
-                    return ptxtContent.Substring(0, 100) + "...";
+                string outputContent = ContentPlaintext;
+                if (outputContent.Length > 100)
+                    return outputContent.Substring(0, 100) + "...";
                 else
-                    return ptxtContent;
+                    return outputContent;
             }
-            private set { }
+            set { }
         }
 
         [NotMapped]
@@ -80,7 +73,7 @@ namespace JTNote
         {
             get
             {
-                if (Tags.Count > 0)
+                if (Tags != null && Tags.Count > 0)
                     return string.Join(", ", Tags.ToList());
                 else
                     return "No tags added.";
