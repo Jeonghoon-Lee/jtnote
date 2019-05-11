@@ -545,9 +545,8 @@ namespace JTNote
             // TODO: handle after sharing note
             if (sharedNoteDlg.ShowDialog() == true)
             {
-
+                LoadAllNotes();
             }
-
         }
     }
 }

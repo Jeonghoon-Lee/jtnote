@@ -3,25 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:JTNote"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Title="Share Note" Height="341.314" Width="446.293">
+        Title="Share Note" Height="374.314" Width="459.293">
     <Grid>
         <Label Content="Title:" HorizontalAlignment="Left" Margin="21,20,0,0" VerticalAlignment="Top" Width="58"/>
         <Label Content="Share To:" HorizontalAlignment="Left" Margin="21,50,0,0" VerticalAlignment="Top"/>
         <TextBox Name="tbTitle" IsReadOnly="True" HorizontalAlignment="Left" Height="23" Margin="91,21,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="324"/>
         <ComboBox Name="cmbUserList" HorizontalAlignment="Left" Margin="91,50,0,0" VerticalAlignment="Top" Width="235"/>
         <Button Content="Add" HorizontalAlignment="Left" Margin="340,50,0,0" VerticalAlignment="Top" Width="75" FontSize="12" Height="28" Click="ButtonAdd_Click"/>
-        <ListView Name="lvSharedUsers" HorizontalAlignment="Center" Height="146" Margin="91,89,25,77" VerticalAlignment="Center" Width="324" Foreground="#DD000000">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Content="Share Note" HorizontalAlignment="Left" Margin="82,252,0,0" VerticalAlignment="Top" Width="135"/>
-        <Button IsCancel="True" Content="Cancel" HorizontalAlignment="Left" Margin="235,252,0,0" VerticalAlignment="Top" Width="135"/>
+        <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1" Margin="21,96,38,87">
+            <ListView Name="lvSharedUsers" HorizontalAlignment="Left" Margin="9,-1,0,-1" Width="374" Foreground="#DD000000" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                ScrollViewer.CanContentScroll="True"  ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Email" Width="190" DisplayMemberBinding="{Binding User.Email}" />
+                        <GridViewColumn Header="Permission" Width="100" DisplayMemberBinding="{Binding Path=Permission, StringFormat='Read Only' }"/>
+                        <GridViewColumn Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="btRemoveUser" ToolTip="Remove user" Style="{StaticResource MaterialDesignFloatingActionLightButton}" Content="{materialDesign:PackIcon Kind=AccountRemoveOutline}" Margin="20,0,15,0" Width="18" Height="18" Click="ButtonRemoveUser_Click"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+        <Button Content="Share Note" HorizontalAlignment="Left" Margin="74,276,0,0" VerticalAlignment="Top" Width="135" Click="ButtonSharedNote_Click"/>
+        <Button IsCancel="True" Content="Cancel" HorizontalAlignment="Left" Margin="227,276,0,0" VerticalAlignment="Top" Width="135"/>
     </Grid>
 </Window>
