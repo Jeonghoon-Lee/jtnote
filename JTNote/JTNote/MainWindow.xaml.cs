@@ -52,7 +52,7 @@ namespace JTNote
             Title = string.Format("JTNote - {0}", Globals.LoginUser);
             ReloadTagTreeView();
 
-            // testing
+            // TODO: need to test
             ReloadNotebookTreeView();
 
             // Set default bindings for window elements
@@ -65,6 +65,28 @@ namespace JTNote
                 spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
             else
                 HideRightPaneControls();
+
+
+/*
+ * TESTING
+            trvSharedNote.ItemsSource = Globals.LoginUser.Tags.ToList();
+
+
+            List<ITreeNode> TagViewList = new List<ITreeNode>();
+            foreach (Tag tag in Globals.LoginUser.Tags)
+            {
+                TagViewList.Add(new TagNode { Name = tag.Name, Tag = tag });
+            }
+
+            List<TreeMenuItem> leftTreeMenu = new List<TreeMenuItem> {
+                new TreeMenuItem { Name = "Tag" , ChildNodes = TagViewList },
+                new TreeMenuItem { Name = "Note" },
+                new TreeMenuItem { Name = "Notebook" },
+                new TreeMenuItem { Name = "Shared With Me" },
+                new TreeMenuItem { Name = "Trash" }
+            };
+            tvLeftMenu.ItemsSource = leftTreeMenu;
+*/
         }
 
         private void ReloadTagTreeView()
@@ -114,6 +136,7 @@ namespace JTNote
             // update number of items
             tblNumberOfNotes.Text = notesList.Count.ToString();
             tblNumberOfTrash.Text = trashList.Count.ToString();
+            tblNumberOfSharedNote.Text = Globals.LoginUser.SharedNotes.Count.ToString();
 
             // Set correct data source and refresh centre pane
             switch (listState)

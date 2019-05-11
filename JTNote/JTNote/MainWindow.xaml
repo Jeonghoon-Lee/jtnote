@@ -202,10 +202,10 @@
                                     <ColumnDefinition Width="30"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Horizontal" Width="170" Grid.Column="0">
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
-                                    <TextBlock VerticalAlignment="Center" Text=" (" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Title}" HorizontalAlignment="Stretch" />
+                              <!--      <TextBlock VerticalAlignment="Center" Text=" (" />
                                     <TextBlock VerticalAlignment="Center" Text="{Binding TagList.Count}" />
-                                    <TextBlock VerticalAlignment="Center" Text=")" />
+                                    <TextBlock VerticalAlignment="Center" Text=")" />   -->
                                 </StackPanel>
                                 <Label Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblSidebarNewTag_PreviewMouseLeftButtonDown">
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
@@ -276,6 +276,26 @@
                     </TreeViewItem>
                 </TreeView>
 
+                <TreeView Name="trvSharedNote" FontSize="16" FontWeight="Regular">
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Grid Width="200">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"></ColumnDefinition>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Width="170" Grid.Column="0">
+                                    <TextBlock VerticalAlignment="Center" Text="Shared with Me" />
+                                    <TextBlock VerticalAlignment="Center" Text=" (" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                    <TextBlock Name="tblNumberOfSharedNote" VerticalAlignment="Center" Text="" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                    <TextBlock VerticalAlignment="Center" Text=")" HorizontalAlignment="Stretch" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                </StackPanel>
+                            </Grid>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeView>                
+                
                 <TreeView Name="trvTrash" FontSize="16" FontWeight="Regular">
                     <TreeViewItem Selected="TreeViewItem_Selected" Tag="tviTrash">
                         <TreeViewItem.Header>
@@ -298,6 +318,32 @@
                         </TreeViewItem.Header>
                     </TreeViewItem>
                 </TreeView>
+
+<!--                
+                <TreeView x:Name="tvLeftMenu" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvTags_PreviewMouseRightButtonDown" PreviewMouseLeftButtonDown="TrvTags_PreviewMouseLeftButtonDown">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type self:TreeMenuItem}" ItemsSource="{Binding ChildNodes}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=Name, StringFormat='{}{0} '}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type self:TagNode}" ItemsSource="{Binding ChildNodes}">
+                            <DockPanel>
+                                <DockPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Rename..." Click="TagRename_PopupMenuClick"/>
+                                    <MenuItem Header="Delete" Click="TagDelete_PopupMenuClick"/>
+                                </ContextMenu>
+                                </DockPanel.ContextMenu>
+                                <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="Regular"/>
+                                <TextBlock Text=" (" FontSize="14" FontWeight="Regular" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                <TextBlock Text="{Binding Tag.Notes.Count}" FontSize="14" FontWeight="Regular" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                <TextBlock Text=")" FontSize="14" FontWeight="Regular" HorizontalAlignment="Stretch" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                            </DockPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+-->
             </StackPanel>
 
             <Grid Grid.Column="1" HorizontalAlignment="Stretch">
