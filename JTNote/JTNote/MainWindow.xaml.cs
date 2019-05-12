@@ -21,14 +21,9 @@ namespace JTNote
     /// </summary>
     public partial class MainWindow : Window
     {
-        // Create lists of items for main window display
-        /*
-                List<Note> notesList = new List<Note>();
-                List<Note> trashList = new List<Note>();
-        */
-        // List<TagsOnUser> tagListOnUser = new List<TagsOnUser>();
-
         List<Note> centerPaneNoteList = new List<Note>();
+        Tag selectedTag = new Tag();
+        Notebook selectedNotebook = new Notebook();
 
         // States for centre and right panels
         enum EListState { Tags, Notes, Notebooks, SharedNotes, Trash, Search };
@@ -50,8 +45,8 @@ namespace JTNote
             Title = string.Format("JTNote - {0}", Globals.LoginUser);
 
             // Reload Tags and Notebooks
-            ReloadTagTreeView();
-            ReloadNotebookTreeView();
+            //ReloadTagTreeView();
+            //ReloadNotebookTreeView();
 
             // Set default bindings for window elements
             //            lvCentrePane.ItemsSource = notesList;
@@ -72,10 +67,13 @@ namespace JTNote
                 TreeViewItem newItem = new TreeViewItem()
                 {
                     Tag = tag.Id.ToString(),
+                    DataContext = tag,
                     Header = string.Format("{0} ({1})", tag.Name, tag.Notes.Count)
                 };
                 ParentNode.Items.Add(newItem);
-                newItem.ContextMenu = trvNotebook.Resources["TagContext"] as System.Windows.Controls.ContextMenu;
+                newItem.ContextMenu = trvTags.Resources["TagContext"] as System.Windows.Controls.ContextMenu;
+                newItem.PreviewMouseLeftButtonDown += TrvTags_PreviewMouseLeftButtonDown;
+                newItem.PreviewMouseRightButtonDown += TrvNotebook_PreviewMouseRightButtonDown;
             }
         }
 
@@ -99,6 +97,9 @@ namespace JTNote
 
         public void LoadAllNotes()
         {
+            ReloadTagTreeView();
+            ReloadNotebookTreeView();
+
             // clear existing notes list from Center pane to refresh
             centerPaneNoteList.Clear();
 
@@ -110,6 +111,7 @@ namespace JTNote
             switch (listState)
             {
                 case EListState.Tags:
+                    centerPaneNoteList.AddRange(selectedTag.Notes.Where(note => note.IsDeleted == 0).OrderByDescending(item => item.LastUpdatedDate));
                     break;
                 case EListState.Notes:
                     centerPaneNoteList.AddRange(Globals.LoginUser.Notes.Where(note => note.IsDeleted == 0).OrderByDescending(item => item.LastUpdatedDate));
@@ -134,6 +136,7 @@ namespace JTNote
             if (centerPaneNoteList.Count > 0)
             {
                 lvCentrePane.SelectedIndex = 0;
+                spRightPane.DataContext = null;     // clear
                 spRightPane.DataContext = centerPaneNoteList[0];
             }
             else
@@ -332,25 +335,42 @@ namespace JTNote
 
         private void TagRename_PopupMenuClick(object sender, RoutedEventArgs e)
         {
-            Tag currentTag = (Tag)trvTags.SelectedItem;
-            TagNotebookDialog tagDialog = new TagNotebookDialog(this, ETagNotebookDlgType.UpdateTag, currentTag);
+            // TODO: need to optimize code
+            listState = EListState.Tags;
+            trvNotes.Background = null;
+            trvTrash.Background = null;
+            trvNotebook.Background = null;
+
+            selectedTag = (Tag)((TreeViewItem)trvTags.SelectedItem).DataContext;
+
+            LoadAllNotes();
+
+            TagNotebookDialog tagDialog = new TagNotebookDialog(this, ETagNotebookDlgType.UpdateTag, selectedTag);
 
             if (tagDialog.ShowDialog() == true)
             {
-                // Update was made in tag dialog,
-                trvTags.Items.Refresh();
+                LoadAllNotes();
             }
         }
 
         private void TagDelete_PopupMenuClick(object sender, RoutedEventArgs e)
         {
-            Tag deletingTag = (Tag)trvTags.SelectedItem;
-            if (MessageBox.Show(string.Format("Are you sure you want to permanently delete tag \"{0}\"?\nThis is not reversible.", deletingTag.Name), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            // FIXME: Error handling
+            listState = EListState.Tags;
+            trvNotes.Background = null;
+            trvTrash.Background = null;
+            trvNotebook.Background = null;
+
+            selectedTag = (Tag)((TreeViewItem)trvTags.SelectedItem).DataContext;
+
+            LoadAllNotes();
+
+            if (MessageBox.Show(string.Format("Are you sure you want to permanently delete tag \"{0}\"?\nThis is not reversible.", selectedTag.Name), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                Globals.Ctx.Tags.Remove(Globals.Ctx.Tags.Where(tag => tag.Id == deletingTag.Id).Single());
+                Globals.Ctx.Tags.Remove(Globals.Ctx.Tags.Where(tag => tag.Id == selectedTag.Id).Single());
                 Globals.Ctx.SaveChanges();
 
-                ReloadTagTreeView();
+                LoadAllNotes();
             }
         }
 
@@ -423,14 +443,18 @@ namespace JTNote
 
             if (treeViewItem != null)
             {
+                listState = EListState.Tags;
                 trvNotes.Background = null;
                 trvTrash.Background = null;
                 trvNotebook.Background = null;
 
                 // FIXME: this is not working properly
-                treeViewItem.Background = null;
+                // treeViewItem.Background = null;
                 //                treeViewItem.IsSelected = false;
                 //                treeViewItem.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                selectedTag = (Tag)treeViewItem.DataContext;
+
+                LoadAllNotes();
             }
         }
 

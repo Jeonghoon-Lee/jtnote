@@ -297,7 +297,7 @@ namespace JTNote
         {
             // Create new TagsManager dialog and set values so the boxes in the dialog show added/available tags for currentNote
             TagsManager tagsManager = new TagsManager(this);
-            currentNote.Tags.ToList().ForEach(tag => {
+            currentNote?.Tags?.ToList().ForEach(tag => {
                 tagsManager.AddedTags.Add(tag);
                 tagsManager.AvailableTags.Remove(tag);
             });
@@ -305,7 +305,7 @@ namespace JTNote
             // Modify tags list in currentNote if user pressed OK in preceding dialog
             if (tagsManager.ShowDialog() == true)
             {
-                currentNote.Tags.Clear();
+                currentNote.Tags?.Clear();
                 currentNote.Tags = tagsManager.AddedTags;
 
                 // Refresh data
