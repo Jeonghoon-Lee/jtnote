@@ -79,13 +79,10 @@
                 <MenuItem Header="Exit" Click="Exit_MenuClick"></MenuItem>
             </MenuItem>
             <MenuItem Header="Edit">
-
             </MenuItem>
             <MenuItem Header="Tools">
-
             </MenuItem>
             <MenuItem Header="Help">
-
             </MenuItem>
         </Menu>
 
@@ -193,7 +190,7 @@
                     </MenuItem>
                 </Menu>
 -->
-                <TreeView Name="trvTags" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvTags_PreviewMouseRightButtonDown" PreviewMouseLeftButtonDown="TrvTags_PreviewMouseLeftButtonDown">
+<!--                <TreeView Name="trvTags" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvTags_PreviewMouseRightButtonDown" PreviewMouseLeftButtonDown="TrvTags_PreviewMouseLeftButtonDown">
                     <TreeView.Resources>
                         <HierarchicalDataTemplate DataType="{x:Type self:TagsOnUser}" ItemsSource="{Binding TagList}">
                             <Grid Width="200">
@@ -202,7 +199,7 @@
                                     <ColumnDefinition Width="30"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Horizontal" Width="170" Grid.Column="0">
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Title}" HorizontalAlignment="Stretch" />
                                     <TextBlock VerticalAlignment="Center" Text=" (" />
                                     <TextBlock VerticalAlignment="Center" Text="{Binding TagList.Count}" />
                                     <TextBlock VerticalAlignment="Center" Text=")" />
@@ -228,7 +225,31 @@
                         </DataTemplate>
                     </TreeView.Resources>
                 </TreeView>
+-->
+                <TreeView Name="trvTags" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvNotebook_PreviewMouseRightButtonDown">
+                    <TreeView.Resources>
+                        <ContextMenu x:Key="TagContext" StaysOpen="True">
+                            <MenuItem Header="Rename..."/>
+                            <MenuItem Header="Delete"/>
+                        </ContextMenu>
+                    </TreeView.Resources>
+                    <TreeViewItem Tag="tviTag">
+                        <TreeViewItem.Header>
+                            <Grid Width="200">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"></ColumnDefinition>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
 
+                                <TextBlock Width="170" Grid.Column="0" VerticalAlignment="Center">Tags</TextBlock>
+                                <Label Grid.Column="1" ToolTip="Create a new tag." PreviewMouseLeftButtonDown="LblSidebarNewTag_PreviewMouseLeftButtonDown">
+                                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
+                                </Label>
+                            </Grid>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeView>
+                
                 <TreeView Name="trvNotes" FontSize="16" FontWeight="Regular" Background="{DynamicResource PrimaryHueMidBrush}">
                     <TreeViewItem Selected="TreeViewItem_Selected" Tag="tviNotes">
                         <TreeViewItem.Header>
@@ -258,7 +279,7 @@
                             <MenuItem Header="Rename..." Click="NotebookRename_PopupMenuClick"/>
                             <MenuItem Header="Delete" Click="NotebookDelete_PopupMenuClick"/>
                         </ContextMenu>
-                    </TreeView.Resources>                    
+                    </TreeView.Resources>
                     <TreeViewItem Selected="TreeViewItem_Selected" Tag="tviNotebook">
                         <TreeViewItem.Header>
                             <Grid Width="200">
@@ -276,6 +297,21 @@
                     </TreeViewItem>
                 </TreeView>
 
+                <TreeView Name="trvSharedNote" FontSize="16" FontWeight="Regular">
+                    <TreeViewItem Selected="TreeViewItem_Selected" Tag="tviShared">
+                        <TreeViewItem.Header>
+                            <Grid Width="200" Height="32">
+                                <StackPanel Orientation="Horizontal" Width="200">
+                                    <TextBlock VerticalAlignment="Center" Text="Shared with Me" />
+                                    <TextBlock VerticalAlignment="Center" Text=" (" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                    <TextBlock Name="tblNumberOfSharedNote" VerticalAlignment="Center" Text="" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                    <TextBlock VerticalAlignment="Center" Text=")" HorizontalAlignment="Stretch" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                </StackPanel>
+                            </Grid>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeView>                
+                
                 <TreeView Name="trvTrash" FontSize="16" FontWeight="Regular">
                     <TreeViewItem Selected="TreeViewItem_Selected" Tag="tviTrash">
                         <TreeViewItem.Header>
@@ -298,6 +334,32 @@
                         </TreeViewItem.Header>
                     </TreeViewItem>
                 </TreeView>
+
+<!--                
+                <TreeView x:Name="tvLeftMenu" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvTags_PreviewMouseRightButtonDown" PreviewMouseLeftButtonDown="TrvTags_PreviewMouseLeftButtonDown">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type self:TreeMenuItem}" ItemsSource="{Binding ChildNodes}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=Name, StringFormat='{}{0} '}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type self:TagNode}" ItemsSource="{Binding ChildNodes}">
+                            <DockPanel>
+                                <DockPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Rename..." Click="TagRename_PopupMenuClick"/>
+                                    <MenuItem Header="Delete" Click="TagDelete_PopupMenuClick"/>
+                                </ContextMenu>
+                                </DockPanel.ContextMenu>
+                                <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="Regular"/>
+                                <TextBlock Text=" (" FontSize="14" FontWeight="Regular" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                <TextBlock Text="{Binding Tag.Notes.Count}" FontSize="14" FontWeight="Regular" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                <TextBlock Text=")" FontSize="14" FontWeight="Regular" HorizontalAlignment="Stretch" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                            </DockPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+-->
             </StackPanel>
 
             <Grid Grid.Column="1" HorizontalAlignment="Stretch">
@@ -350,7 +412,7 @@
                                 </ResourceDictionary>
                             </Button.Resources>
                         </Button>
-                        <Button Name="btnRightPaneShare" ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=Share}" Width="25" Height="25"/>
+                        <Button Name="btnRightPaneShare" ToolTip="Share this note." Style="{StaticResource MaterialDesignFloatingActionAccentButton}" Content="{materialDesign:PackIcon Kind=Share}" Width="25" Height="25" Click="BtnRightPaneShare_Click"/>
                         <Button Name="btnRightPaneRestore" Visibility="Hidden" Margin="-25,0,0,0" ToolTip="Restore this note." Style="{StaticResource MaterialDesignFloatingActionLightButton}" Content="{materialDesign:PackIcon Kind=FileRestore}" Width="25" Height="25" Click="BtnRightPaneRestore_Click"/>
                     </StackPanel>
                     <DockPanel Name="spRightPaneTagsContainer">

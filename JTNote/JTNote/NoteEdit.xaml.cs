@@ -311,6 +311,17 @@ namespace JTNote
                 // Refresh data
                 dpMainPanel.DataContext = null;
                 dpMainPanel.DataContext = currentNote;
+			}
+		}
+
+        private void BtnShare_Click(object sender, RoutedEventArgs e)
+        {
+            SharedNoteDialog sharedNoteDlg = new SharedNoteDialog(this, currentNote);
+
+            // TODO: handle after sharing note
+            if (sharedNoteDlg.ShowDialog() == true)
+            {
+
             }
         }
     }
