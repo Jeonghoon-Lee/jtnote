@@ -44,12 +44,7 @@ namespace JTNote
             // Set login user information onto title bar
             Title = string.Format("JTNote - {0}", Globals.LoginUser);
 
-            // Reload Tags and Notebooks
-            //ReloadTagTreeView();
-            //ReloadNotebookTreeView();
-
             // Set default bindings for window elements
-            //            lvCentrePane.ItemsSource = notesList;
             lvCentrePane.ItemsSource = centerPaneNoteList;
 
             // Load all notes for logged in user
@@ -66,14 +61,11 @@ namespace JTNote
             {
                 TreeViewItem newItem = new TreeViewItem()
                 {
-                    Tag = tag.Id.ToString(),
                     DataContext = tag,
                     Header = string.Format("{0} ({1})", tag.Name, tag.Notes.Count)
                 };
                 ParentNode.Items.Add(newItem);
                 newItem.ContextMenu = trvTags.Resources["TagContext"] as System.Windows.Controls.ContextMenu;
-                newItem.PreviewMouseLeftButtonDown += TrvTags_PreviewMouseLeftButtonDown;
-                newItem.PreviewMouseRightButtonDown += TrvNotebook_PreviewMouseRightButtonDown;
             }
         }
 
@@ -87,7 +79,7 @@ namespace JTNote
             {
                 TreeViewItem newItem = new TreeViewItem()
                 {
-                    Tag = notebook.Id.ToString(),
+                    DataContext = notebook,
                     Header = string.Format("{0} ({1})", notebook.Name, notebook.Notes.Count)
                 };
                 ParentNode.Items.Add(newItem);
@@ -101,22 +93,44 @@ namespace JTNote
             ReloadNotebookTreeView();
 
             // clear existing notes list from Center pane to refresh
-            centerPaneNoteList.Clear();
+            if (listState == EListState.Tags)
+            {
+                if (selectedTag != null)
+                {
+                    centerPaneNoteList.Clear();
+                }
+            }
+            else
+            {
+                centerPaneNoteList.Clear();
+            }
 
             tblNumberOfNotes.Text = Globals.LoginUser.Notes.Where(note => note.IsDeleted == 0).ToList().Count().ToString();
             tblNumberOfTrash.Text = Globals.LoginUser.Notes.Where(note => note.IsDeleted == 1).ToList().Count().ToString();
+            tblNotebookNumberOfNotes.Text = Globals.LoginUser.Notes.Where(note => note.IsDeleted == 0 && note.Notebook == null).Count().ToString();
             tblNumberOfSharedNote.Text = Globals.LoginUser.SharedNotes.Count.ToString();
 
             // Set correct data source and refresh centre pane. Set to null first to make sure itemssource reloads
             switch (listState)
             {
                 case EListState.Tags:
-                    centerPaneNoteList.AddRange(selectedTag.Notes.Where(note => note.IsDeleted == 0).OrderByDescending(item => item.LastUpdatedDate));
+                    if (selectedTag != null)
+                    {
+                        centerPaneNoteList.AddRange(selectedTag.Notes.Where(note => note.IsDeleted == 0).OrderByDescending(item => item.LastUpdatedDate));
+                    }
                     break;
                 case EListState.Notes:
                     centerPaneNoteList.AddRange(Globals.LoginUser.Notes.Where(note => note.IsDeleted == 0).OrderByDescending(item => item.LastUpdatedDate));
                     break;
                 case EListState.Notebooks:
+                    if (selectedNotebook == null)
+                    {
+                        centerPaneNoteList.AddRange(Globals.LoginUser.Notes.Where(note => note.IsDeleted == 0 && note.Notebook == null).OrderByDescending(item => item.LastUpdatedDate));
+                    }
+                    else
+                    {
+                        centerPaneNoteList.AddRange(selectedNotebook.Notes.Where(note => note.IsDeleted == 0));
+                    }
                     break;
                 case EListState.SharedNotes:
                     centerPaneNoteList.AddRange(Globals.LoginUser.SharedNotes.Select(shared => shared.Note).OrderByDescending(item => item.LastUpdatedDate));
@@ -405,28 +419,34 @@ namespace JTNote
                     trvNotes.Background = null;
                     trvSharedNote.Background = null;
                     trvTrash.Background = null;
+                    trvNotebook.Background = null;
                     break;
                 case "tviNotes":
                     listState = EListState.Notes;
                     trvNotes.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
                     trvSharedNote.Background = null;
                     trvTrash.Background = null;
+                    trvNotebook.Background = null;
                     break;
                 case "tviNotebook":
                     listState = EListState.Notebooks;
                     trvNotes.Background = null;
                     trvSharedNote.Background = null;
                     trvTrash.Background = null;
+                    trvNotebook.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                    selectedNotebook = null;    // notes that have no notebook (means root node)
                     break;
                 case "tviShared":
                     listState = EListState.SharedNotes;
                     trvNotes.Background = null;
                     trvTrash.Background = null;
+                    trvNotebook.Background = null;
                     trvSharedNote.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
                     break;
                 case "tviTrash":
                     listState = EListState.Trash;
                     trvNotes.Background = null;
+                    trvNotebook.Background = null;
                     trvSharedNote.Background = null;
                     trvTrash.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
                     break;
@@ -447,13 +467,36 @@ namespace JTNote
                 trvNotes.Background = null;
                 trvTrash.Background = null;
                 trvNotebook.Background = null;
+                trvSharedNote.Background = null;
 
                 // FIXME: this is not working properly
                 // treeViewItem.Background = null;
                 //                treeViewItem.IsSelected = false;
                 //                treeViewItem.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
                 selectedTag = (Tag)treeViewItem.DataContext;
+                LoadAllNotes();
+            }
+        }
 
+        private void TrvNotebook_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                listState = EListState.Notebooks;
+                trvTags.Background = null;
+                trvNotes.Background = null;
+                trvTrash.Background = null;
+                //trvNotebook.Background = null;
+                // treeViewItem.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                trvSharedNote.Background = null;
+
+                // FIXME: this is not working properly
+                // treeViewItem.Background = null;
+                //                treeViewItem.IsSelected = false;
+                //                treeViewItem.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                selectedNotebook = (Notebook)treeViewItem.DataContext;
                 LoadAllNotes();
             }
         }
@@ -480,7 +523,23 @@ namespace JTNote
 
         private void TrvNotebook_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            TrvTags_PreviewMouseRightButtonDown(sender, e);
+            TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                listState = EListState.Notebooks;
+                trvTags.Background = null;
+                trvNotes.Background = null;
+                trvTrash.Background = null;
+                trvSharedNote.Background = null;
+
+                // FIXME: this is not working properly
+                // treeViewItem.Background = null;
+                //                treeViewItem.IsSelected = false;
+                //                treeViewItem.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                selectedNotebook = (Notebook)treeViewItem.DataContext;
+                LoadAllNotes();
+            }
         }
 
         private void NotebookRename_PopupMenuClick(object sender, RoutedEventArgs e)

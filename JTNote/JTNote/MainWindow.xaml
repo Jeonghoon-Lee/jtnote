@@ -117,7 +117,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" HorizontalAlignment="Left" Background="{DynamicResource PrimaryHueLightBrush}">
-                <TreeView Name="trvTags" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvNotebook_PreviewMouseRightButtonDown">
+                <TreeView Name="trvTags" FontSize="16" FontWeight="Regular" PreviewMouseLeftButtonDown="TrvTags_PreviewMouseLeftButtonDown" PreviewMouseRightButtonDown="TrvTags_PreviewMouseRightButtonDown">
                     <TreeView.Resources>
                         <ContextMenu x:Key="TagContext" StaysOpen="True">
                             <MenuItem Header="Rename..." Click="TagRename_PopupMenuClick"/>
@@ -164,7 +164,7 @@
                     </TreeViewItem>
                 </TreeView>
 
-                <TreeView Name="trvNotebook" FontSize="16" FontWeight="Regular" PreviewMouseRightButtonDown="TrvNotebook_PreviewMouseRightButtonDown">
+                <TreeView Name="trvNotebook" FontSize="16" FontWeight="Regular" PreviewMouseLeftButtonDown="TrvNotebook_PreviewMouseLeftButtonDown" PreviewMouseRightButtonDown="TrvNotebook_PreviewMouseRightButtonDown">
                     <TreeView.Resources>
                         <ContextMenu x:Key="NotebookContext" StaysOpen="True">
                             <MenuItem Header="Rename..." Click="NotebookRename_PopupMenuClick"/>
@@ -179,7 +179,12 @@
                                     <ColumnDefinition Width="30"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Width="170" Grid.Column="0" VerticalAlignment="Center">Notebooks</TextBlock>
+                                <DockPanel Width="170" Grid.Column="0">
+                                    <TextBlock VerticalAlignment="Center" Text="Notebooks" />
+                                    <TextBlock VerticalAlignment="Center" Text=" (" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                    <TextBlock Name="tblNotebookNumberOfNotes" VerticalAlignment="Center" Text="0" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                    <TextBlock VerticalAlignment="Center" Text=")" HorizontalAlignment="Stretch" Foreground="{DynamicResource SecondaryAccentForegroundBrush}" />
+                                </DockPanel>                                
                                 <Label Grid.Column="1" ToolTip="Create a new notebook." MouseLeftButtonUp="LblSidebarNewNotebook_MouseLeftButtonUp">
                                     <materialDesign:PackIcon Kind="PlusCircleOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                                 </Label>
