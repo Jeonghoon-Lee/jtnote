@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,13 +65,21 @@ namespace JTNote
 
         private void ButtonSharedNote_Click(object sender, RoutedEventArgs e)
         {
-            Globals.CurrentNote.SharedNotes.Clear();
-            foreach (SharedNote sharedNote in sharedList)
+            try
             {
-                Globals.CurrentNote.SharedNotes.Add(sharedNote);
+                Globals.CurrentNote.SharedNotes.Clear();
+                foreach (SharedNote sharedNote in sharedList)
+                {
+                    Globals.CurrentNote.SharedNotes.Add(sharedNote);
+                }
                 Globals.Ctx.SaveChanges();
+                DialogResult = true;
             }
-            DialogResult = true;
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error: unable to share document\nPlease try again\n" + ex.Message, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
         }
 
         private void ButtonRemoveUser_Click(object sender, RoutedEventArgs e)

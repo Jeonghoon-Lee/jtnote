@@ -86,7 +86,6 @@ namespace JTNote
                     }
                 }
 
-                // FIXME: Need to implement error handling
                 switch (dialogType)
                 {
                     case ETagNotebookDlgType.CreateTag:
@@ -111,7 +110,7 @@ namespace JTNote
             }
             catch (SqlException ex)
             {
-                MessageBox.Show(string.Format("Fatal error: unable to create tag.{0}{1}", Environment.NewLine, ex.Message), "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format("Fatal error: unable to update database.{0}{1}", ex.Message, Environment.NewLine), "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

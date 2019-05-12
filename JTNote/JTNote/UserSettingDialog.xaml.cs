@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -33,12 +34,18 @@ namespace JTNote
         private void BtSaveChanges_Click(object sender, RoutedEventArgs e)
         {
             // TODO: need to implement Regex to filter special character
-            // FIXME: implement to handle error
-            if (Globals.LoginUser.UserName != tbUsername.Text)
+            try
             {
-                Globals.LoginUser.UserName = tbUsername.Text;
-                Globals.Ctx.SaveChanges();
-                DialogResult = true;
+                if (Globals.LoginUser.UserName != tbUsername.Text)
+                {
+                    Globals.LoginUser.UserName = tbUsername.Text;
+                    Globals.Ctx.SaveChanges();
+                    DialogResult = true;
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(string.Format("Fatal error: unable to update database.{0}{1}", ex.Message, Environment.NewLine), "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -70,7 +77,7 @@ namespace JTNote
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Error: Can't update database\n" + ex.Message, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Fatal error: unable to change password\n" + ex.Message, "JTNotes", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
@@ -120,11 +127,18 @@ namespace JTNote
 
             if (MessageBox.Show(string.Format("Are you sure you want to permanently delete your account \"{0}\"?\nAll of your data will be deleted and this is not reversible.", Globals.LoginUser.Email), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                Globals.Ctx.Users.Remove(Globals.LoginUser);
-                Globals.Ctx.SaveChanges();
+                try
+                {
+                    Globals.Ctx.Users.Remove(Globals.LoginUser);
+                    Globals.Ctx.SaveChanges();
 
-                Globals.LoginUser = null;
-                DialogResult = true;
+                    Globals.LoginUser = null;
+                    DialogResult = true;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(string.Format("Fatal error: unable to delete user.{0}{1}", ex.Message, Environment.NewLine), "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
