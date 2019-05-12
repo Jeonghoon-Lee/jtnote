@@ -37,11 +37,14 @@ namespace JTNote
             userList = Globals.Ctx.Users.Where(user => user.Id != Globals.LoginUser.Id).ToList();
 
             sharedList = note.SharedNotes?.ToList();
-            foreach (SharedNote item in sharedList)
+            if (sharedList != null)
             {
-                if (userList.Contains(item.User))
+                foreach (SharedNote item in sharedList)
                 {
-                    userList.Remove(item.User);
+                    if (userList.Contains(item.User))
+                    {
+                        userList.Remove(item.User);
+                    }
                 }
             }
 
