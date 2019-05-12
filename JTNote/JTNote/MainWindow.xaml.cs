@@ -22,17 +22,18 @@ namespace JTNote
     public partial class MainWindow : Window
     {
         // Create lists of items for main window display
-        List<Note> notesList = new List<Note>();
-        List<Note> trashList = new List<Note>();
+        /*
+                List<Note> notesList = new List<Note>();
+                List<Note> trashList = new List<Note>();
+        */
+        // List<TagsOnUser> tagListOnUser = new List<TagsOnUser>();
 
-        List<TagsOnUser> tagListOnUser = new List<TagsOnUser>();
+        List<Note> centerPaneNoteList = new List<Note>();
 
         // States for centre and right panels
-        enum ListState {
-            Notes = 0,
-            Trash = 1
-        };
-        ListState listState = ListState.Notes;
+        enum EListState { Tags, Notes, Notebooks, SharedNotes, Trash, Search };
+
+        EListState listState = EListState.Notes;        // set default left treeview item
 
         public MainWindow()
         {
@@ -45,120 +46,125 @@ namespace JTNote
 
             InitializeComponent();
 
-            // bind Tags Tree View
-            trvTags.ItemsSource = tagListOnUser;
-
             // Set login user information onto title bar
             Title = string.Format("JTNote - {0}", Globals.LoginUser);
-            ReloadTagTreeView();
 
-            // TODO: need to test
+            // Reload Tags and Notebooks
+            ReloadTagTreeView();
             ReloadNotebookTreeView();
 
             // Set default bindings for window elements
-            lvCentrePane.ItemsSource = notesList;
+            //            lvCentrePane.ItemsSource = notesList;
+            lvCentrePane.ItemsSource = centerPaneNoteList;
 
             // Load all notes for logged in user
             LoadAllNotes();
-
-            if (notesList.Count > 0)
-                spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
-            else
-                HideRightPaneControls();
-
-
-/*
- * TESTING
-            trvSharedNote.ItemsSource = Globals.LoginUser.Tags.ToList();
-
-
-            List<ITreeNode> TagViewList = new List<ITreeNode>();
-            foreach (Tag tag in Globals.LoginUser.Tags)
-            {
-                TagViewList.Add(new TagNode { Name = tag.Name, Tag = tag });
-            }
-
-            List<TreeMenuItem> leftTreeMenu = new List<TreeMenuItem> {
-                new TreeMenuItem { Name = "Tag" , ChildNodes = TagViewList },
-                new TreeMenuItem { Name = "Note" },
-                new TreeMenuItem { Name = "Notebook" },
-                new TreeMenuItem { Name = "Shared With Me" },
-                new TreeMenuItem { Name = "Trash" }
-            };
-            tvLeftMenu.ItemsSource = leftTreeMenu;
-*/
         }
 
         private void ReloadTagTreeView()
         {
-            TagsOnUser tagsOnUser = new TagsOnUser();
+            // FIXME: Try to use binding for tree view
+            TreeViewItem ParentNode = (TreeViewItem)trvTags.Items[0];
+            ParentNode.Items.Clear();
 
-            foreach (Tag tag in Globals.Ctx.Tags.Where(item => item.UserId == Globals.LoginUser.Id).ToList())
+            foreach (Tag tag in Globals.LoginUser.Tags)
             {
-                tag.NumberOfNotes = tag.Notes.Count;
-                tagsOnUser.TagList.Add(tag);
+                TreeViewItem newItem = new TreeViewItem()
+                {
+                    Tag = tag.Id.ToString(),
+                    Header = string.Format("{0} ({1})", tag.Name, tag.Notes.Count)
+                };
+                ParentNode.Items.Add(newItem);
+                newItem.ContextMenu = trvNotebook.Resources["TagContext"] as System.Windows.Controls.ContextMenu;
             }
-            tagListOnUser.Clear();
-            tagListOnUser.Add(tagsOnUser);
-            trvTags.Items.Refresh();
+        }
+
+        private void ReloadNotebookTreeView()
+        {
+            // FIXME: Try to use binding for tree view
+            TreeViewItem ParentNode = (TreeViewItem)trvNotebook.Items[0];
+            ParentNode.Items.Clear();
+
+            foreach (Notebook notebook in Globals.LoginUser.Notebooks)
+            {
+                TreeViewItem newItem = new TreeViewItem()
+                {
+                    Tag = notebook.Id.ToString(),
+                    Header = string.Format("{0} ({1})", notebook.Name, notebook.Notes.Count)
+                };
+                ParentNode.Items.Add(newItem);
+                newItem.ContextMenu = trvNotebook.Resources["NotebookContext"] as System.Windows.Controls.ContextMenu;
+            }
         }
 
         public void LoadAllNotes()
         {
-            notesList.Clear(); // Clear existing notes list to refresh
-            trashList.Clear(); // Clear existing trash list to refresh
+            // clear existing notes list from Center pane to refresh
+            centerPaneNoteList.Clear();
 
-            // FIXME: Error handling
-            try
-            {
-                // Populate notes lists from DB
-                //                Globals.Db.GetAllNotesByUserId(Globals.LoginUser.Id)
-                // Updated with EF
-                Globals.Ctx.Notes.Where(note => note.UserId == Globals.LoginUser.Id).ToList()
-                    .ForEach(note => {
-                        // if (note.IsDeleted)
-                        if (note.IsDeleted == 1)
-                            trashList.Add(note); // Add notes flagged for deletion to trash
-                        else
-                            notesList.Add(note); // Add all other notes to main notes list
-                        });
-            }
-            catch (Exception ex)
-            {
-                // Check for known fatal exceptions, notify user and terminate program if they occur
-                ErrorNotifyDbConnection(ex);
-            }
-
-            // Sort notes list and trash list by last modified date
-            notesList = notesList.OrderByDescending(item => item.LastUpdatedDate).ToList();
-            trashList = trashList.OrderByDescending(item => item.LastUpdatedDate).ToList();
-
-            // update number of items
-            tblNumberOfNotes.Text = notesList.Count.ToString();
-            tblNumberOfTrash.Text = trashList.Count.ToString();
+            tblNumberOfNotes.Text = Globals.LoginUser.Notes.Where(note => note.IsDeleted == 0).ToList().Count().ToString();
+            tblNumberOfTrash.Text = Globals.LoginUser.Notes.Where(note => note.IsDeleted == 1).ToList().Count().ToString();
             tblNumberOfSharedNote.Text = Globals.LoginUser.SharedNotes.Count.ToString();
 
             // Set correct data source and refresh centre pane
             switch (listState)
             {
-                case ListState.Notes:
-                    lvCentrePane.ItemsSource = notesList;
+                case EListState.Tags:
                     break;
-                case ListState.Trash:
-                    lvCentrePane.ItemsSource = trashList;
+                case EListState.Notes:
+                    centerPaneNoteList.AddRange(Globals.LoginUser.Notes.Where(note => note.IsDeleted == 0).OrderByDescending(item => item.LastUpdatedDate));
+                    break;
+                case EListState.Notebooks:
+                    break;
+                case EListState.SharedNotes:
+                    centerPaneNoteList.AddRange(Globals.LoginUser.SharedNotes.Select(shared => shared.Note).OrderByDescending(item => item.LastUpdatedDate));
+                    break;
+                case EListState.Trash:
+                    centerPaneNoteList.AddRange(Globals.LoginUser.Notes.Where(note => note.IsDeleted == 1).OrderByDescending(item => item.LastUpdatedDate));
+                    break;
+                case EListState.Search:
                     break;
                 default:
                     MessageBox.Show("Unknown error when loading notes selection!", "JTNote", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
             }
+            // Refresh pane
             lvCentrePane.Items.Refresh();
 
-            if (lvCentrePane.Items.Count > 0)
+            if (centerPaneNoteList.Count > 0)
             {
                 lvCentrePane.SelectedIndex = 0;
+                spRightPane.DataContext = centerPaneNoteList[0];
+            }
+            else
+            {
+                HideRightPaneControls();
             }
 
-            spRightPane.DataContext = lvCentrePane.SelectedItem as Note;
+            // Change tooltip text for delete button and switch between share and restore buttons in right pane, as appropriate
+            if (listState == EListState.Trash)
+            {
+                btnRightPaneDelete.ToolTip = "Delete this note permanently";
+                btnRightPaneEdit.Visibility = Visibility.Visible;
+                btnRightPaneDelete.Visibility = Visibility.Visible;
+                btnRightPaneRestore.Visibility = Visibility.Visible;
+                btnRightPaneShare.Visibility = Visibility.Hidden;
+            }
+            else if (listState == EListState.SharedNotes)
+            {
+                btnRightPaneEdit.Visibility = Visibility.Hidden;
+                btnRightPaneDelete.Visibility = Visibility.Hidden;
+                btnRightPaneRestore.Visibility = Visibility.Hidden;
+                btnRightPaneShare.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                btnRightPaneDelete.ToolTip = "Send this note to trash.";
+                btnRightPaneEdit.Visibility = Visibility.Visible;
+                btnRightPaneDelete.Visibility = Visibility.Visible;
+                btnRightPaneRestore.Visibility = Visibility.Hidden;
+                btnRightPaneShare.Visibility = Visibility.Visible;
+            }
         }
 
         void ErrorNotifyDbConnection(Exception ex)
@@ -189,48 +195,9 @@ namespace JTNote
             lblRightPaneNoContentMessage.Visibility = Visibility.Visible;
         }
 
-        void ChangeSidebarSelection(List<Note> newList, string newHighlight)
-        {
-            // Change data source for centre pane, highlighting correct item in right pane
-            lvCentrePane.ItemsSource = newList;
-
-            // If there are no notes in the currently selected list, deselect notes.
-            if (newList.Count > 0)
-                lvCentrePane.SelectedIndex = 0;
-            else
-                HideRightPaneControls();
-
-            // TODO: Need to modify after applying tree view
-/*
-            // Highlight correct menu item
-            foreach (MenuItem curItem in mnuSidebar.Items)
-            {
-                if (curItem.Name == newHighlight)
-                    curItem.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
-                else
-                    curItem.Background = null;
-            }
-*/
-
-            // Change tooltip text for delete button and switch between share and restore buttons in right pane, as appropriate
-            if (newHighlight == "miSidebarTrashItem")
-            {
-                HideRightPaneControls();
-            }
-            else
-            {
-                btnRightPaneDelete.ToolTip = "Send this note to trash.";
-                btnRightPaneRestore.Visibility = Visibility.Hidden;
-                btnRightPaneShare.Visibility = Visibility.Visible;
-                listState = ListState.Notes;
-            }
-
-            lvCentrePane.Items.Refresh();
-        }
-
         private void LvCentrePane_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lvCentrePane.SelectedItem == null)
+            if (lvCentrePane.SelectedIndex == -1)
             {
                 HideRightPaneControls();
             }
@@ -261,8 +228,7 @@ namespace JTNote
         private void BtnRightPaneDelete_Click(object sender, RoutedEventArgs e)
         {
             Note currentNote = lvCentrePane.SelectedItem as Note;
-            // if (currentNote.IsDeleted == true)
-            // updated with EF
+
             if (currentNote.IsDeleted == 1)
             {
                 // Item is already in trash, permanently delete
@@ -270,7 +236,6 @@ namespace JTNote
                 {
                     if (MessageBox.Show(string.Format("Are you sure you want to permanently delete the note \"{0}\"? This is not reversible.", currentNote.Title), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        // FIXME: Need to test
                         Globals.Ctx.Notes.Remove(currentNote);
                         Globals.Ctx.SaveChanges();
                         // Reload
@@ -287,12 +252,9 @@ namespace JTNote
                 // Item is not yet in trash, move it there                
                 try
                 {
-                    // FIXME: Error handling
-                    // Need to test more
-                    //    Note updateNote = Globals.Ctx.Notes.Where(note => note.Id == currentNote.Id).ToList()[0];
-                    //    updateNote.IsDeleted = 1;
                     currentNote.IsDeleted = 1;
                     Globals.Ctx.SaveChanges();
+                    // Reload
                     LoadAllNotes();
                 }
                 catch (Exception ex)
@@ -310,7 +272,6 @@ namespace JTNote
             {
                 if (MessageBox.Show(string.Format("Would you like to restore the note \"{0}\"?", currentNote.Title), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    // FIXME: Error handling
                     currentNote.IsDeleted = 0;
                     Globals.Ctx.SaveChanges();
                     // reload
@@ -335,10 +296,9 @@ namespace JTNote
             // Permanently delete all trash
             try
             {
-                if (MessageBox.Show(string.Format("Are you sure you want to permanently delete these {0} notes? This is not reversible.", trashList.Count), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                if (MessageBox.Show(string.Format("Are you sure you want to permanently delete these {0} notes? This is not reversible.", centerPaneNoteList.Count), "JTNote", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    // FIXME: Need to test
-                    trashList.ForEach(currentNote => Globals.Ctx.Notes.Remove(currentNote));
+                    centerPaneNoteList.ForEach(currentNote => Globals.Ctx.Notes.Remove(currentNote));
                     Globals.Ctx.SaveChanges();
                     LoadAllNotes();
                 }
@@ -347,6 +307,12 @@ namespace JTNote
             {
                 ErrorNotifyDbConnection(ex);
             }
+        }
+
+        private void LblSidebarNewNote_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            NoteEdit newNoteWindow = new NoteEdit(this);
+            newNoteWindow.Show();
         }
 
         private void LblSidebarNewTag_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -362,12 +328,6 @@ namespace JTNote
         private void NewTag_MenuClick(object sender, RoutedEventArgs e)
         {
             LblSidebarNewTag_PreviewMouseLeftButtonDown(sender, null);
-        }
-
-        private void LblSidebarNewNote_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            NoteEdit newNoteWindow = new NoteEdit(this);
-            newNoteWindow.Show();
         }
 
         private void TagRename_PopupMenuClick(object sender, RoutedEventArgs e)
@@ -420,27 +380,41 @@ namespace JTNote
 
             switch (((TreeViewItem)sender).Tag.ToString())
             {
+                case "tviTags":
+                    listState = EListState.Tags;
+                    trvNotes.Background = null;
+                    trvSharedNote.Background = null;
+                    trvTrash.Background = null;
+                    break;
                 case "tviNotes":
-                    ChangeSidebarSelection(notesList, "miSidebarNotesItem");
-                //    trvTags.Background = null;
+                    listState = EListState.Notes;
                     trvNotes.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
-                //    trvNotebook.Background = null;
+                    trvSharedNote.Background = null;
                     trvTrash.Background = null;
                     break;
                 case "tviNotebook":
-                //    trvNotebook.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                    listState = EListState.Notebooks;
                     trvNotes.Background = null;
+                    trvSharedNote.Background = null;
                     trvTrash.Background = null;
                     break;
-                case "tviTrash":
-                    ChangeSidebarSelection(trashList, "miSidebarTrashItem");
+                case "tviShared":
+                    listState = EListState.SharedNotes;
                     trvNotes.Background = null;
-                //    trvNotebook.Background = null;
+                    trvTrash.Background = null;
+                    trvSharedNote.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
+                    break;
+                case "tviTrash":
+                    listState = EListState.Trash;
+                    trvNotes.Background = null;
+                    trvSharedNote.Background = null;
                     trvTrash.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
                     break;
                 default:
                     break;
             }
+
+            LoadAllNotes();
         }
 
         private void TrvTags_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -457,7 +431,6 @@ namespace JTNote
                 treeViewItem.Background = null;
                 //                treeViewItem.IsSelected = false;
                 //                treeViewItem.Background = Application.Current.Resources["PrimaryHueMidBrush"] as Brush;
-
             }
         }
 
@@ -479,22 +452,6 @@ namespace JTNote
             {
                 ReloadNotebookTreeView();
             }
-        }
-
-        private void ReloadNotebookTreeView()
-        {
-            TreeViewItem ParentNode = (TreeViewItem)trvNotebook.Items[0];
-            ParentNode.Items.Clear();
-
-            foreach (var notebook in Globals.LoginUser.Notebooks)
-            {
-                TreeViewItem newItem = new TreeViewItem() {
-                    Tag = notebook.Id.ToString(),
-                    Header = string.Format("{0} ({1})", notebook.Name, notebook.Notes.Count)
-                };
-                ParentNode.Items.Add(newItem);
-                newItem.ContextMenu = trvNotebook.Resources["NotebookContext"] as System.Windows.Controls.ContextMenu;
-            } 
         }
 
         private void TrvNotebook_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -570,7 +527,7 @@ namespace JTNote
             {
                 LoadAllNotes();
             }
-        }
+        }    
     }
 }
 
